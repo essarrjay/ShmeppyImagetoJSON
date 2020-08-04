@@ -26,7 +26,7 @@ Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper
 ### Prerequisites: Python
 You'll need a Python interpreter - this is basically a program that lets you run scripts/programs written in the programming language of Python.
 
-###### Install Instructions:
+#### Install Instructions:
 Guide here:  https://wiki.python.org/moin/BeginnersGuide/Download  
 (or plenty of other guides if you google "Installing Python for Windows/Linux/Etc")
 
