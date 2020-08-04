@@ -37,7 +37,7 @@ Save this page in the same folder you have your map image, and name it `shmeppif
 
 ### **Running the script**
 
-##### Open a terminal window.
+#### Open a terminal window.
 
 **Linux**:  
 If you use Linux you probably know how already.
@@ -47,7 +47,7 @@ If you use Linux you probably know how already.
 
  Having trouble? [More ways to access PowerShell](https://www.tenforums.com/tutorials/25581-open-windows-powershell-windows-10-a.html)
 
-##### Run the script
+#### Run the script
 In the terminal window, navigate to the folder where you saved both the script and your image file. For example, if you were using Windows and saved both on your desktop the command would be:   
 `cd desktop` or `cd C:\users\<your_username>\desktop`
 
