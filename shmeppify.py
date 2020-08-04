@@ -60,7 +60,7 @@ def run():
     try:
         img_file = sys.argv[1]
     except:
-        img_file = input("Image File Path: ")
+        img_file = input("Image File Path/Name: ")
 
     map_x = input("Map horizontal size in pixels (default 50): ")
     map_y = input("Map vertical size in pixels (default 50): ")
