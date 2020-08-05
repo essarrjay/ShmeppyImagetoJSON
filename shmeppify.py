@@ -40,15 +40,14 @@ class Fill_Operation:
 
         return result
 
-def process_img(image_path,mapsize):
+def process_img(image_path,max_map_dim):
     #mapsize as a tuple
-    im = Image.open(image_path)
-    map_img = im.resize(mapsize)
+    map_img = Image.open(image_path)
+    map_img.thumbnail((max_map_dim,max_map_dim),resample=Image.BOX)
     pixels = map_img.convert('RGB').load()
-    width, height = mapsize
     output_op = Fill_Operation(id='4321')
-    for x in range(width):
-        for y in range(height):
+    for x in range(map_img.width):
+        for y in range(map_img.height):
             r,g,b = pixels[x,y]
             output_op.add_pixel(x,y,rgb_to_hex(r,g,b))
     print(output_op.export_json())
@@ -56,18 +55,24 @@ def process_img(image_path,mapsize):
 def rgb_to_hex(r, g, b):
     return '#{:02x}{:02x}{:02x}'.format(r, g, b)
 
+def get_max_dim_input():
+    dim = -1
+    while dim <= 0:
+        print("Please enter a numerical value of 1 or more.")
+        try:
+            dim = int(input("Maximum map dimension in squares (default 50): ") or '50')
+        except:
+            print("Please enter a numerical value greater than 0.")
+    return dim
+
 def run():
     try:
         img_file = sys.argv[1]
     except:
         img_file = input("Image File Path/Name: ")
 
-    map_x = input("Map horizontal size in pixels (default 50): ")
-    map_y = input("Map vertical size in pixels (default 50): ")
-    map_x = 50 if map_x == '' else int(map_x)
-    map_y = 50 if map_y == '' else int(map_y)
-
-    process_img(img_file,(map_x,map_y))
+    max_map_dim = get_max_dim_input()
+    process_img(img_file,max_map_dim)
 
 if __name__ == '__main__':
     run()
