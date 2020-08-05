@@ -5,6 +5,7 @@ from datetime import datetime
 from pathlib import Path
 from PIL import Image
 import sys
+from pyfiglet import Figlet
 
 export_obj = {"exportFormatVersion":1,"operations":[]}
 
@@ -32,7 +33,6 @@ class Fill_Operation:
 
         try:
             result = f"Exporting mapfile to {str(export_path)}"
-            print(f"process_image.py: {result}")
             with export_path.open(mode='w') as json_file:
                 json.dump(export_obj,json_file)
         except:
@@ -40,10 +40,10 @@ class Fill_Operation:
 
         return result
 
-def process_img(image_path,max_map_dim):
+def process_img(image_path,max_map_dim, filter_option):
     #mapsize as a tuple
     map_img = Image.open(image_path)
-    map_img.thumbnail((max_map_dim,max_map_dim),resample=Image.BOX)
+    map_img.thumbnail((max_map_dim,max_map_dim),resample=filter_option)
     pixels = map_img.convert('RGB').load()
     output_op = Fill_Operation(id='4321')
     for x in range(map_img.width):
@@ -57,22 +57,42 @@ def rgb_to_hex(r, g, b):
 
 def get_max_dim_input():
     dim = -1
+    print("-= Maximum map dimension in squares =-")
     while dim <= 0:
-        print("Please enter a numerical value of 1 or more.")
         try:
-            dim = int(input("Maximum map dimension in squares (default 50): ") or '50')
+            dim = int(input("Please enter a numerical value of 1 or more (default 50): ") or '50')
         except:
-            print("Please enter a numerical value greater than 0.")
+            print("Sorry, let's try that again.\n")
     return dim
 
+def get_filter_option():
+    option = -1
+    filters_map = {1:Image.BOX,2:Image.NEAREST} #uses Image resampling options
+    while option <= 0:
+        print("-= Filter Options =-")
+        print("1. BOX (smooth, but some blur)\n2. NEAREST (crisp, artifacts)\n")
+        try:
+            option = int(input("Please select a filter option by number (default BOX): ") or '1')
+            output = filters_map[option]
+        except:
+            print("Sorry, please select a option from the menu.\n")
+    return output
+
 def run():
+    f = Figlet(font='larry3d')
+    print(f.renderText('Shemppy Map Maker'))
+
     try:
         img_file = sys.argv[1]
     except:
         img_file = input("Image File Path/Name: ")
 
     max_map_dim = get_max_dim_input()
-    process_img(img_file,max_map_dim)
+    print('\n')
+    filter_option = get_filter_option()
+    print('\n')
+    process_img(img_file,max_map_dim, filter_option)
+    print('\n')
 
 if __name__ == '__main__':
     run()
