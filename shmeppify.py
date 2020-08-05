@@ -79,8 +79,13 @@ def get_filter_option():
     return output
 
 def run():
+<<<<<<< HEAD
     f = Figlet(font='slant')
     print(f.renderText('Shemppy Image\nto JSON'))
+=======
+    f = Figlet(font='larry3d')
+    print(f.renderText('Shemppy Map Maker'))
+>>>>>>> 502c8325e21b78f10f5cda60489a2189f8a8eebf
 
     try:
         img_file = sys.argv[1]
