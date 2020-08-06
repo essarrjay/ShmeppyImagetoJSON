@@ -14,7 +14,7 @@ def progressbar(it, prefix="", suffix="", width=60, file=sys.stdout):
         bar = "#"*x
         remaining = "."*(width-x)
         num = j
-        file.write(f"{prefix} [{bar}{remaining}] {suffix}{num}/{count}\r")
+        file.write(f"{prefix}[{bar}{remaining}]{suffix}{num}/{count}\r")
         file.flush()
     show(0)
     for i, item in enumerate(it):
