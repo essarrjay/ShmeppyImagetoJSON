@@ -26,9 +26,20 @@ questions = [
     {
        'type': 'input',
         'name': 'palette_size',
-        'message': '-= Palette Size for the Map Image in # of Colors: ',
+        'message': '-= Palette Size for the Map Image in # of Colors (8 max): ',
+        'default': '4',
         'filter': lambda val: int(val),
-        'when': lambda answers: answers['process_option'] == 'limited palette'}
+        'when': lambda answers: answers['process_option'] == 'limited palette'
+    },
+    {
+       'type': 'confirm',
+        'name': 'debug',
+        'message': 'Debug Mode? ',
+        'default': False,
+        #'filter': lambda val: bool(val),
+        #'when': lambda answers: answers['process_option'] == 'limited palette'
+    }
+
 ]
 
 image_file_question = {

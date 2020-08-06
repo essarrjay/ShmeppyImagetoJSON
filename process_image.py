@@ -3,7 +3,11 @@ from haishoku.haishoku import Haishoku
 from PIL import Image
 from os import remove
 from math import floor
+from pathlib import Path
 import time
+import sys
+
+
 
 #internal modules
 from palette import *
@@ -45,20 +49,30 @@ def get_tile_size(img_obj, max_map_dim):
 
 def image_to_operation(img_path, max_map_dim, palette_size, debug=False):
     fill_op = shmoperations.Fill_Operation(id='4321')
-    palette = get_palette(img_path, palette_size)
+    try:
+        palette = get_palette(img_path, palette_size, debug)
+        print(f'Restricted Palette = {palette}')
+        if debug: Haishoku.showPalette(img_path)
+    except FileNotFoundError:
+        print(f"File {img_path} not found, be sure this includes the full or relative path - the folders containing the file, not just the file's name.")
+        sys.exit()
+
     with Image.open(img_path) as im:
         tile_size = get_tile_size(im,max_map_dim)
         tiles_array = slice_to_tiles(im,*tile_size)
-        temp_path = '.temp_img.png'
+        temp_path = 'temp_img.png'
         x, y = 0,0
         import time
         print()
         for row in progress_bar.progressbar(tiles_array, "Processing: ",36):
             for tile in row:
+                if debug:
+                    temp_path = f'{x}x{y}y_temp_img.png'
+                    temp_path = str(Path(r'./test_tiles' + temp_path))
                 tile.save(temp_path,"PNG")
                 dominant = Haishoku.getDominant(temp_path)
                 tile_color = nearest_color_from_palette(palette,dominant)
-                if debug: print(f'Tile Address: {x}, {y}   |   Tile Color: {tile_color}')
+                if debug: print(f'Tile Address: {x}, {y}   |   Tile Color: {tile_color}                    ')
                 fill_op.add_fill(x,y,rgb_to_hex(*tile_color))
                 y += 1
             x += 1
@@ -67,4 +81,4 @@ def image_to_operation(img_path, max_map_dim, palette_size, debug=False):
     return fill_op
 
 if __name__ == '__main__':
-    image_to_operation(r"ShmeppyImagetoJSON\test_images\3x3_test_master.png",3,8,debug=True)
+    image_to_operation(r"test_im\3x3_test_master.png",3,8,debug=True)

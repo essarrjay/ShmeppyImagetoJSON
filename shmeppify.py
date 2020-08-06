@@ -86,7 +86,7 @@ def run():
         img_path = False
     answers.update(menu.main(img_path))
     process_option = answers.pop('process_option')
-    print(answers)
+    if answers['debug']: print(answers)
     fill_op = process_image.image_to_operation(**answers)
     print()
     print(fill_op.export_json())
