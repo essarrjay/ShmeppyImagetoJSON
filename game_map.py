@@ -51,9 +51,9 @@ class Game_Map:
         tiles = []
         tile_w,tile_h = self.tile_size
         with Image.open(self.path) as img_obj:
-            for x in range(0,img_obj.width,tile_w):
+            for y in range(0,img_obj.height,tile_h):
                 tiles_row = []
-                for y in range(0,img_obj.height,tile_h):
+                for x in range(0,img_obj.width,tile_w):
                     im_crop = img_obj.crop((x,y,x+tile_w,y+tile_h))
                     tiles_row.append(im_crop)
                 tiles.append(tiles_row)
@@ -67,19 +67,20 @@ class Game_Map:
         tiles_array = self.slice_to_tiles()
         temp_path = 'temp_img.png'
         x, y = 0,0
-        for row in progress_bar.progressbar(tiles_array[:-1], "Processing: ",36):
-            for tile in row[:-1]:
+        for col in progress_bar.progressbar(tiles_array[:-1], "Processing: ", " On Map Row: ",36):
+            for tile in col[:-1]:
                 if debug:
                     temp_path = f'{x}x{y}y_temp_img.png'
-                    temp_path = str(Path(r'./test_tiles' + temp_path))
+                    temp_path = str(Path(r'./test_tiles/' + temp_path))
+                    print(f"Saving debug tile to: {temp_path}")
                 tile.save(temp_path,"PNG")
                 dominant = Haishoku.getDominant(temp_path)
                 tile_color = nearest_color_from_palette(palette,dominant)
                 if debug: print(f'Tile Address: {x}, {y}   |   Tile Color: {tile_color}                    ')
                 fill_op.add_fill(x,y,rgb_to_hex(*tile_color))
-                y += 1
-            x += 1
-            y = 0
+                x += 1
+            y += 1
+            x = 0
 
         remove(temp_path)
         return fill_op
