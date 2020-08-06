@@ -3,11 +3,12 @@ from haishoku.haishoku import Haishoku
 from PIL import Image
 from os import remove
 from math import floor
+import time
 
 #internal modules
 from palette import *
 import shmoperations
-#from shmoperations import Fill_operation
+import progress_bar
 
 def rgb_to_hex(r, g, b):
     return '#{:02x}{:02x}{:02x}'.format(r, g, b)
@@ -37,6 +38,7 @@ def get_tile_size(img_obj, max_map_dim):
     tile_width = int(w / x_tiles)
     tile_height = int(h / y_tiles)
 
+    print("-= Conversion Info =- ")
     print(f'Image Dimensions: {w} x {h} px\n Tile Dimensions: {tile_width} x {tile_height} px\n  Map Dimensions: {max_map_dim} x {y_tiles} tiles')
 
     return (tile_width,tile_height)
@@ -49,7 +51,9 @@ def image_to_operation(img_path, max_map_dim, palette_size, debug=False):
         tiles_array = slice_to_tiles(im,*tile_size)
         temp_path = '.temp_img.png'
         x, y = 0,0
-        for row in tiles_array:
+        import time
+        print()
+        for row in progress_bar.progressbar(tiles_array, "Processing: ",36):
             for tile in row:
                 tile.save(temp_path,"PNG")
                 dominant = Haishoku.getDominant(temp_path)

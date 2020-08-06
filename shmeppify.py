@@ -8,6 +8,7 @@ from pyfiglet import Figlet
 #internal modules
 import process_image
 
+
 def get_max_dim_input():
     dim = -1
     print("-= Maximum map dimension in squares =-")
@@ -53,8 +54,8 @@ def run():
     max_map_dim = get_max_dim_input()
     print()
     palette_size = get_palette_size_input()
-    #filter_option = get_filter_option()
     print()
+    #filter_option = get_filter_option()
     fill_op = process_image.image_to_operation(img_path, max_map_dim, palette_size)
     print()
     print(fill_op.export_json())
