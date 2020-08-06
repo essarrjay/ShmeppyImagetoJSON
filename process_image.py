@@ -30,16 +30,16 @@ def get_tile_size(img_obj, max_map_dim):
 
     if w >= h:
         x_tiles = max_map_dim
-        y_tiles = int(floor(h / w * max_map_dim))
+        y_tiles = int(round(h / w * max_map_dim))
     else:
-        x_tiles = floor(h / w * max_map_dim)
+        x_tiles = int(round(w / h * max_map_dim))
         y_tiles = max_map_dim
 
     tile_width = int(w / x_tiles)
     tile_height = int(h / y_tiles)
 
-    print("-= Conversion Info =- ")
-    print(f'Image Dimensions: {w} x {h} px\n Tile Dimensions: {tile_width} x {tile_height} px\n  Map Dimensions: {max_map_dim} x {y_tiles} tiles')
+    print("\n-= Conversion Info =- ")
+    print(f'Image Dimensions: {w} x {h} px\n Tile Dimensions: {tile_width} x {tile_height} px\n  Map Dimensions: {x_tiles} x {y_tiles} tiles')
 
     return (tile_width,tile_height)
 
