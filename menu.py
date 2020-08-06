@@ -6,21 +6,22 @@ global answers
 questions = [
     {
         'type': 'list',
-        'name': 'process_option',
+        'name': 'process_action',
         'message': '-= How would you like to process this image? =-',
         'choices': [
-            'Limited Palette',
-            'Blended (BOX filter)',
+            'Palette - sharp tiles',
+            'BOX filter - blended tiles',
             Separator(),
-            'Learn MOre'
+            'Learn More'
         ],
-        'default': 'Limited Palette',
+        'default': 'Palette',
         'filter': lambda val: val.lower()
     },
     {
         'type': 'input',
         'name': 'max_map_dim',
         'message': '-= Maximum map dimension in squares: ',
+        'default': '23',
         'filter': lambda val: int(val)
     },
     {
@@ -29,15 +30,13 @@ questions = [
         'message': '-= Palette Size for the Map Image in # of Colors (8 max): ',
         'default': '4',
         'filter': lambda val: int(val),
-        'when': lambda answers: answers['process_option'] == 'limited palette'
+        'when': lambda answers: answers['process_action'] == 'palette'
     },
     {
        'type': 'confirm',
         'name': 'debug',
         'message': 'Debug Mode? ',
         'default': False,
-        #'filter': lambda val: bool(val),
-        #'when': lambda answers: answers['process_option'] == 'limited palette'
     }
 
 ]
