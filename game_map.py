@@ -31,7 +31,6 @@ class Game_Map:
             w,h = img_obj.size
 
         mmd = self.max_map_dim
-
         if w >= h:
             x_tiles = mmd
             y_tiles = int(round(h / w * mmd))
@@ -68,8 +67,8 @@ class Game_Map:
         tiles_array = self.slice_to_tiles()
         temp_path = 'temp_img.png'
         x, y = 0,0
-        for row in progress_bar.progressbar(tiles_array, "Processing: ",36):
-            for tile in row:
+        for row in progress_bar.progressbar(tiles_array[:-1], "Processing: ",36):
+            for tile in row[:-1]:
                 if debug:
                     temp_path = f'{x}x{y}y_temp_img.png'
                     temp_path = str(Path(r'./test_tiles' + temp_path))
