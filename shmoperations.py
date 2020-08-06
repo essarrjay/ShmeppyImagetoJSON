@@ -15,7 +15,7 @@ class Fill_Operation:
         fill_data = [coordinates,color]
         self.cellFills.append(fill_data)
 
-    def export_json(self, data_dir=r'./'):
+    def export_json(self, data_dir=r'./output_files/'):
         #exports table_data as JSON
         if data_dir[-1] != '/': data_dir += '/'
 
