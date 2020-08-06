@@ -5,9 +5,6 @@ from os import remove
 from math import floor
 from pathlib import Path
 import time
-import sys
-
-
 
 #internal modules
 from palette import *
@@ -49,13 +46,9 @@ def get_tile_size(img_obj, max_map_dim):
 
 def image_to_operation(img_path, max_map_dim, palette_size, debug=False):
     fill_op = shmoperations.Fill_Operation(id='4321')
-    try:
-        palette = get_palette(img_path, palette_size, debug)
-        print(f'Restricted Palette = {palette}')
-        if debug: Haishoku.showPalette(img_path)
-    except FileNotFoundError:
-        print(f"File {img_path} not found, be sure this includes the full or relative path - the folders containing the file, not just the file's name.")
-        sys.exit()
+
+
+    palette = get_palette(img_path, palette_size, debug)
 
     with Image.open(img_path) as im:
         tile_size = get_tile_size(im,max_map_dim)
@@ -78,6 +71,8 @@ def image_to_operation(img_path, max_map_dim, palette_size, debug=False):
             x += 1
             y = 0
         remove(temp_path)
+
+
     return fill_op
 
 if __name__ == '__main__':
