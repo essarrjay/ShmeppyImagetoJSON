@@ -26,13 +26,13 @@ def run():
     answers.update(menu.main(img_path))
 
     #process user inputs
-    #process_action = answers.pop('process_action')
+    #op_type = answers.pop('op_type')
     if answers['debug']: print(answers)
     gm = Game_Map(answers['img_path'],answers['max_map_dim'])
 
-    if answers['process_action'].startswith('pal'):
+    if answers['op_type'].startswith('pal'):
         op = gm.palette_op(answers['palette_size'],answers['debug'])
-    elif answers['process_action'].startswith('box'):
+    elif answers['op_type'].startswith('box'):
         op = gm.filter_op(Image.BOX,answers['debug'])
     else:
         print("Sorry, something went wrong.")

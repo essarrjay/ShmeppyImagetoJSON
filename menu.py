@@ -6,7 +6,7 @@ global answers
 questions = [
     {
         'type': 'list',
-        'name': 'process_action',
+        'name': 'op_type',
         'message': '-= How would you like to process this image? =-',
         'choices': [
             'Palette - sharp tiles',
@@ -30,7 +30,7 @@ questions = [
         'message': '-= Palette Size for the Map Image in # of Colors (8 max): ',
         'default': '4',
         'filter': lambda val: int(val),
-        'when': lambda answers: answers['process_action'] == 'palette'
+        'when': lambda answers: answers['op_type'] == 'palette'
     },
     {
        'type': 'confirm',
