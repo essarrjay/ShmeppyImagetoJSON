@@ -42,7 +42,7 @@ class Game_Map:
         tile_w = int(w / x_tiles)
         tile_h = int(h / y_tiles)
 
-        print("\n-= Conversion Info =- ")
+        print("\n-= Import Info =- ")
         print(f'Image Dimensions: {w} x {h} px\n Tile Dimensions: {tile_w} x {tile_h} px\n  Map Dimensions: {x_tiles} x {y_tiles} tiles')
 
         return (tile_w,tile_h)
@@ -60,7 +60,7 @@ class Game_Map:
                 tiles.append(tiles_row)
         return tiles
 
-    def palette_operation(self, palette_size, debug=False):
+    def palette_op(self, palette_size, debug=False):
         fill_op = shmops.Fill_Operation(id='4321')
 
         palette = get_palette(self.path, palette_size, debug)
@@ -85,7 +85,7 @@ class Game_Map:
         remove(temp_path)
         return fill_op
 
-    def filter_operation(self, filter_option, debug=False):
+    def filter_op(self, filter_option, debug=False):
         #generates an shmops.fill_operation using a resize/filter operation
         map_img = Image.open(self.path)
         map_img.thumbnail((self.max_map_dim, self.max_map_dim),resample=filter_option)
@@ -97,7 +97,7 @@ class Game_Map:
                 fill_op.add_fill(x,y,rgb_to_hex(r,g,b))
         return fill_op
 
-    def operation_to_json(self, operation, data_dir=r'./output_files/'):
+    def op_to_json(self, op, data_dir=r'./output_files/'):
         #exports map as shmeppy compatible JSON
         if data_dir[-1] != '/': data_dir += '/'
 
@@ -107,7 +107,7 @@ class Game_Map:
         export_path = Path(data_dir + filename)
 
         export_obj = deepcopy(self.shmeppy_json)
-        export_obj["operations"].append(operation.__dict__)
+        export_obj["operations"].append(op.__dict__)
 
         try:
             result_str = f"Exporting mapfile to {str(export_path)}"
@@ -119,8 +119,8 @@ class Game_Map:
         return result_str
 
 if __name__ == '__main__':
-    GM = Game_Map(r"est_im\3x3_test_master.png",3)
-    op = GM.palette_operation(4,debug=True)
-    print(GM.operation_to_json(op))
+    GM = Game_Map(r"est_im\3x3_test_master.png",max_map_dim=3)
+    op = GM.palette_op(4,debug=True)
+    print(GM.op_to_json(op))
     #GM = Game_Map(r"test_im\dragonsmaw.png",max_map_dim=31)
-    #GM.operation_to_json(GM.filter_operation(Image.BOX,debug=True))
+    #GM.op_to_json(GM.filter_op(Image.BOX,debug=True))
