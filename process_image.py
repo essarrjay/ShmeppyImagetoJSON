@@ -4,7 +4,6 @@ from PIL import Image
 from os import remove
 from math import floor
 from pathlib import Path
-import time
 
 #internal modules
 from palette import *
@@ -52,7 +51,6 @@ def image_to_operation(img_path, max_map_dim, palette_size, debug=False):
         tiles_array = slice_to_tiles(im,*tile_size)
         temp_path = 'temp_img.png'
         x, y = 0,0
-        import time
         print()
         for row in progress_bar.progressbar(tiles_array, "Processing: ",36):
             for tile in row:
