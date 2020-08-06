@@ -79,6 +79,18 @@ class Game_Map:
         remove(temp_path)
         return fill_op
 
+    def filter_operation(self, filter_option, debug=False):
+        #generates an shmops.fill_operation using a resize/filter operation
+        map_img = Image.open(self.path)
+        map_img.thumbnail((self.max_map_dim, self.max_map_dim),resample=filter_option)
+        pixels = map_img.convert('RGB').load()
+        fill_op = shmops.Fill_Operation(id='4321')
+        for x in progress_bar.progressbar(range(map_img.width), "Processing: ",36):
+            for y in range(map_img.height):
+                r,g,b = pixels[x,y]
+                fill_op.add_fill(x,y,rgb_to_hex(r,g,b))
+        return fill_op
+
     def operation_to_json(self, operation, data_dir=r'./output_files/'):
         #exports map as shmeppy compatible JSON
         if data_dir[-1] != '/': data_dir += '/'
@@ -101,5 +113,8 @@ class Game_Map:
         return result_str
 
 if __name__ == '__main__':
-    GM = Game_Map(r"test_im\3x3_test_master.png",3)
-    GM.operation_to_json(GM.palette_operation(4,debug=True))
+    GM = Game_Map(r"est_im\3x3_test_master.png",3)
+    op = GM.palette_operation(4,debug=True)
+    print(GM.operation_to_json(op))
+    #GM = Game_Map(r"test_im\dragonsmaw.png",max_map_dim=31)
+    #GM.operation_to_json(GM.filter_operation(Image.BOX,debug=True))
