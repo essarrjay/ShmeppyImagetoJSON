@@ -6,6 +6,7 @@ from math import floor
 from pathlib import Path
 from datetime import datetime
 from copy import deepcopy
+import json
 
 #internal modules
 from palette import *
@@ -107,8 +108,8 @@ class Game_Map:
             result_str = f"Exporting mapfile to {str(export_path)}"
             with export_path.open(mode='w') as json_file:
                 json.dump(export_obj, json_file)
-        except:
-            result_str = "Error, unable to export."
+        except Exception as e:
+            result_str = f"Error: {str(e)}, unable to export."
 
         return result_str
 
