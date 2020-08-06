@@ -6,6 +6,7 @@ from math import floor
 from pathlib import Path
 from datetime import datetime
 from copy import deepcopy
+from sys import exit
 import json
 
 #internal modules
@@ -18,7 +19,11 @@ class Game_Map:
         self.path = img_path
         self.shmeppy_json = {"exportFormatVersion":1,"operations":[]}
         self.max_map_dim = max_map_dim
-        self.tile_size = self.get_tile_size()
+        try:
+            self.tile_size = self.get_tile_size()
+        except FileNotFoundError:
+            print(f"File {img_path} not found, be sure this includes the full or relative path - the folders containing the file, not just the file's name.")
+            exit()
 
     def get_tile_size(self):
         #determines tile size, stretching the smaller dimension to match
