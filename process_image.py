@@ -11,9 +11,6 @@ from palette import *
 import shmoperations
 import progress_bar
 
-def rgb_to_hex(r, g, b):
-    return '#{:02x}{:02x}{:02x}'.format(r, g, b)
-
 def slice_to_tiles(img_obj,tile_width,tile_height):
     #returns list of image objects as tiles
     tiles = []

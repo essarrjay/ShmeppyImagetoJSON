@@ -22,3 +22,6 @@ def nearest_color_from_palette(palette, in_color):
     #returns nearest RGB color in palette
     out_color = min( palette, key = lambda palette_entry: sum((pe - c) ** 2 for pe, c in zip(palette_entry, in_color)))
     return out_color
+
+def rgb_to_hex(r, g, b):
+    return '#{:02x}{:02x}{:02x}'.format(r, g, b)
