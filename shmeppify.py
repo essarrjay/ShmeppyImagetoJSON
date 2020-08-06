@@ -9,12 +9,28 @@ from pyfiglet import Figlet
 from game_map import Game_Map
 import menu
 
+def help():
+    """    ████████████████████████████████████
+    █               HELP               █
+    ████████████████████████████████████"""
 
+def run(title=True):
+    """
+    • Palette operation attempts to convert image to tiles, using a palette
+        of a user-specified number of colors (maximum of 8 colors).
+      - Result is an image with sharp color transitions, and but does not
+         do well with images using many colors.
+    • BOX filter operation resizes the image then converts to shmeppy tiles.
+      - Result is an image with more of a color gradient. Good for
+         landscapes with similar gradients, e.g. beaches.
+        --------
+    Both preserve the aspect ratio of the map.
+        """
 
-def run():
     #title
-    f = Figlet(font='slant')
-    print(f.renderText('Shemppy Image\nto JSON'))
+    if title:
+        f = Figlet(font='slant')
+        print(f.renderText('Shemppy Image\nto JSON'))
 
     #get user inputs from menu
     answers = {}
@@ -25,8 +41,15 @@ def run():
         img_path = False
     answers.update(menu.main(img_path))
 
+    #exit if exit
+    if answers['op_type'].startswith('exit'):
+        sys.exit()
+    elif answers['op_type'].startswith('help'):
+        print(help.__doc__)
+        print(run.__doc__)
+        return run(title=False)
+
     #process user inputs
-    #op_type = answers.pop('op_type')
     if answers['debug']: print(answers)
     gm = Game_Map(answers['img_path'],answers['max_map_dim'])
 
@@ -39,6 +62,7 @@ def run():
 
     result = gm.op_to_json(op)
     print(result)
+
 
 if __name__ == '__main__':
     run()

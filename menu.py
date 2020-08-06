@@ -12,7 +12,8 @@ questions = [
             'Palette - sharp tiles',
             'BOX filter - blended tiles',
             Separator(),
-            'Learn More'
+            'Help: Learn More',
+            'Exit'
         ],
         'default': 'Palette',
         'filter': lambda val: val.lower()
@@ -22,7 +23,8 @@ questions = [
         'name': 'max_map_dim',
         'message': '-= Maximum map dimension in squares: ',
         'default': '23',
-        'filter': lambda val: int(val)
+        'filter': lambda val: int(val),
+        'when': lambda answers: check_for_continue(answers)
     },
     {
        'type': 'input',
@@ -30,13 +32,14 @@ questions = [
         'message': '-= Palette Size for the Map Image in # of Colors (8 max): ',
         'default': '4',
         'filter': lambda val: int(val),
-        'when': lambda answers: answers['op_type'] == 'palette'
+        'when': lambda answers: answers['op_type'].startswith('pal')
     },
     {
        'type': 'confirm',
         'name': 'debug',
         'message': 'Debug Mode? ',
         'default': False,
+        'when': lambda answers: check_for_continue(answers)
     }
 
 ]
@@ -45,6 +48,10 @@ image_file_question = {
     'type': 'input',
     'name': 'img_path',
     'message': '-= Image File Path/Name: '}
+
+def check_for_continue(answers):
+    r = answers['op_type'].startswith('exit') or answers['op_type'].startswith('help')
+    return not r
 
 def check_for_filename():
     global questions
