@@ -9,24 +9,9 @@ from pyfiglet import Figlet
 from game_map import Game_Map
 import menu
 
-def help():
-
-    return'    ╔══════════════════════════════════╗\n    ║               HELP               ║\n    ╚══════════════════════════════════╝\n'
-
 def run(title=True):
-    """Converts an image into an import-ready shmeppy map.
+    """Converts an image into an import-ready shmeppy map."""
 
-► Menu Options: ◄
-    • Palette operation attempts to convert image to tiles, using a palette
-        of a user-specified number of colors (maximum of 8 colors).
-      - Result is an image with sharp color transitions, and but does not
-         do well with images using many colors.
-    • BOX filter operation resizes the image then converts to shmeppy tiles.
-      - Result is an image with more of a color gradient. Good for
-         landscapes with similar gradients, e.g. beaches.
-        --------
-    Both preserve the aspect ratio of the map.
-        """
 
     #title
     if title:

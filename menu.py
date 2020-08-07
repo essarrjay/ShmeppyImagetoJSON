@@ -1,9 +1,12 @@
 from PyInquirer import prompt, Separator
 from pyfiglet import Figlet
-import sys
+from PIL import Image
+from sys import exit
+from pathlib import Path
 
 global answers
-questions = [
+
+start = [
     {
         'type': 'list',
         'name': 'op_type',
@@ -18,6 +21,9 @@ questions = [
         'default': 'Palette',
         'filter': lambda val: val.lower()
     },
+]
+
+questions = [
     {
         'type': 'list',
         'name': 'filter_type',
@@ -69,6 +75,16 @@ def check_for_continue(answers):
     r = answers['op_type'].startswith('exit') or answers['op_type'].startswith('help')
     return not r
 
+def check_for_early_exit(answers):
+    if answers['op_type'].startswith('help'):
+        p = Path("help.txt")
+        with open(p, encoding="utf8") as t:
+            print(t.read())
+        exit()
+
+    elif answers['op_type'].startswith('exit'):
+        exit()
+
 def check_for_filename():
     global questions
     questions = [image_file_question, *questions]
@@ -80,8 +96,9 @@ def lookup_filter(val):
 
 def main(have_file=False):
     if not have_file: check_for_filename()
-    answers = prompt(questions)
-    #print(answers)
+    answers = prompt(start)
+    check_for_early_exit(answers)
+    answers.update(prompt(questions))
     return(answers)
 
 if __name__ == '__main__':
