@@ -4,10 +4,11 @@
 
 ► Processing Options ◄
 
-    ► PALETTE attempts to convert image to Shmeppy fill tiles, using a
-        palette of a user-specified number of colors (maximum of 8
+    ► PALETTE attempts to convert image to Shmeppy fill tiles, using
+        user-specified number of palette colors (maximum of 8
         colors).
-      Result is an image with sharp color transitions, but has a poor result processing images containing many similar colors.
+      Result is a map with sharp color transitions, but has a poor
+        result processing images containing many similar colors.
 
     ► FILTER RESIZE scales the image to the map size then converts
         pixels to Shmeppy tiles.
