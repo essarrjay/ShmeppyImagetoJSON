@@ -56,8 +56,9 @@ def run(title=True):
 
     if answers['op_type'].startswith('pal'):
         op = gm.palette_op(answers['palette_size'])
-    elif answers['op_type'].startswith('box'):
-        op = gm.filter_op(Image.BOX)
+    elif answers['op_type'].startswith('fil'):
+        print(f"filter type {answers['filter_type']}")
+        op = gm.filter_op(answers['filter_type'])
     else:
         print("Sorry, something went wrong.")
 

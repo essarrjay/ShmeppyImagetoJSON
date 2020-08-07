@@ -9,14 +9,30 @@ questions = [
         'name': 'op_type',
         'message': '-= How would you like to process this image? =-',
         'choices': [
-            'Palette - sharp tiles',
-            'BOX filter - blended tiles',
+            'Palette - sharp tiles, slow',
+            'Filter resize - faster, blended tiles',
             Separator(),
             'Help: Learn More',
             'Exit'
         ],
         'default': 'Palette',
         'filter': lambda val: val.lower()
+    },
+    {
+        'type': 'list',
+        'name': 'filter_type',
+        'message': '-= Which filter would you like to use? =-',
+        'choices': [
+            'NEAREST - sharp tiles, some artifacts',
+            'BOX - idential weight',
+            'BILINEAR - linear interpolation',
+            'HAMMING - sharper than BILINEAR, less distortion than BOX',
+            'BICUBIC - cubic interpolation',
+            'LANCZOS - trucated sinc',
+        ],
+        'default': 'BOX',
+        'filter': lambda val: lookup_filter(val.lower()),
+        'when': lambda answers: answers['op_type'].startswith('fil')
     },
     {
         'type': 'input',
@@ -56,6 +72,11 @@ def check_for_continue(answers):
 def check_for_filename():
     global questions
     questions = [image_file_question, *questions]
+
+def lookup_filter(val):
+    f = val.split()[0]
+    filter_dict = {"bicubic":Image.BICUBIC, "bilinear":Image.BILINEAR, "box":Image.BOX, "hamming":Image.HAMMING, "lanczos":Image.LANCZOS, "nearest":Image.NEAREST, }
+    return filter_dict[f]
 
 def main(have_file=False):
     if not have_file: check_for_filename()
