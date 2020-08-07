@@ -77,9 +77,9 @@ class Game_Map:
             for tile in col:
                 if self.debug:
                     temp_path = f'{x}x{y}y_temp_img.png'
-                    temp_path = str(Path(r'./test_tiles/' + temp_path))
+                    temp_path = Path(r'./output_files/' + temp_path)
                 tile.save(temp_path,"PNG")
-                dominant = Haishoku.getDominant(temp_path)
+                dominant = Haishoku.getDominant(str(temp_path))
                 tile_color = nearest_color_from_palette(palette,dominant)
                 if self.debug: print(f'Tile Address: {x}, {y}   |   Tile Color: {tile_color}   |  Saved to:  {temp_path}               ')
                 fill_op.add_fill(x,y,rgb_to_hex(*tile_color))
