@@ -4,8 +4,8 @@ from sys import exit
 def get_palette(img_path, palette_size, debug=False):
     #gets a palette of palette_size number of color, by maximum use
     try:
-        full_palette = Haishoku.getPalette(img_path)
-        if debug: Haishoku.showPalette(img_path)
+        full_palette = Haishoku.getPalette(str(img_path))
+        if debug: Haishoku.showPalette(str(img_path))
     except FileNotFoundError:
         print(f"File {img_path} not found, be sure this includes the full or relative path - the folders containing the file, not just the file's name.")
         exit()
