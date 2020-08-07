@@ -2,7 +2,6 @@
 from haishoku.haishoku import Haishoku
 from PIL import Image
 from os import remove
-from math import floor
 from pathlib import Path
 from datetime import datetime
 from copy import deepcopy
