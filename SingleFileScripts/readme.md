@@ -35,6 +35,21 @@ Oh, tons of ways to do this. Click on the `shmeppify.py` link in the list above.
 
 Save this page in the same folder you have your map image, and name it `shmeppify.py`.
 
+#### Install any missing packages
+Python includes a strong standard libary, but this program uses an additional package you may not have installed:  
+
+Pillow
+
+A full list of packages and their purposes can be found at the bottom of this document (or heck, the first few lines of code).
+
+You can see all installed packages by using the following commands in a terminal (see next section if you need help):  
+`pip list` or `python -m pip list`
+
+Install a package using:  
+`pip install <package name>` or `python -m pip install <package name>`
+
+Package names are case sensitive.
+
 ### **Running the script**
 
 #### Open a terminal window.
