@@ -52,12 +52,12 @@ def run(title=True):
 
     #process user inputs
     if answers['debug']: print(answers)
-    gm = Game_Map(answers['img_path'],answers['max_map_dim'])
+    gm = Game_Map(answers['img_path'],answers['max_map_dim'],answers['debug'])
 
     if answers['op_type'].startswith('pal'):
-        op = gm.palette_op(answers['palette_size'],answers['debug'])
+        op = gm.palette_op(answers['palette_size'])
     elif answers['op_type'].startswith('box'):
-        op = gm.filter_op(Image.BOX,answers['debug'])
+        op = gm.filter_op(Image.BOX)
     else:
         print("Sorry, something went wrong.")
 
