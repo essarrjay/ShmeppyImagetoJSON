@@ -10,18 +10,61 @@ More info on Shmeppy here: https://shmeppy.com/about
 ## **Overview**
 This script takes an image (`.jpeg`, `.png` or probably plenty others) and converts it into a form recognized by Shemppy's new import function.
 
-To use, call from a command line:
+To use, call from a command line:  
 `python shmeppify.py <*image_file_path>`
 
 The image can also be specified later from an input prompt.
 
-You will then see two prompts to specify the map size. The result will look nicest if you use the same aspect ratio as the original image.
+You will then see prompts to specify the processing method, and the length of the longest map edge.
+
+The maximum map dimension sets the scale of the Shmeppy map - typically one 5x5 ft map square = one Shmeppy tile, but some players use a different scale (e.g. one map square equal to 2x2 Shmeppy tiles).
 
 Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper left.
 
 **Note:** This script will only generate a map using 'fill' - not any 'edges'
 
-## **Detailed Instructions:**
+### ► Processing Options ◄
+
+##### **PALETTE**
+Attempts to convert image to Shmeppy fill tiles, using a palette of a user-specified number of colors (maximum of 8 colors).
+- Sharp color transitions when processing an image with fixed color palette.
+- Many similar colors in a single image returns a poor result.
+
+##### **FILTER RESIZE**
+Scales the image to the map size then converts pixels to Shmeppy tiles.  
+
+- Much faster than Palette
+- Color gradient. Good for landscapes with similar gradients, e.g. beaches, grass fields
+
+Both methods preserve the aspect ratio of the map.
+
+### FILTER TYPES
+(from https://pillow.readthedocs.io/en/stable/handbook/concepts.html#filters)
+
+Listed in order increasing order of fidelity, decreasing order of speed.
+
+**NEAREST** - Pick one nearest pixel from the input image.
+    Ignore all other input pixels.
+
+**BOX** - Each pixel of source image contributes to one pixel of
+    the destination image with identical weights
+
+**BILINEAR** - Calculate the output pixel value using linear
+    interpolation on all pixels that may contribute to the output
+    value.
+
+**HAMMING** - Produces a sharper image than BILINEAR, doesn’t have
+    dislocations on local level like with BOX.
+
+**BICUBIC** - Calculate the output pixel value using cubic
+    interpolation on all pixels that may contribute to the output
+    value.
+
+**LANCZOS** - Calculate the output pixel value using a high-quality
+    Lanczos filter (a truncated sinc) on all pixels that may
+    contribute to the output value.
+
+## **Detailed Instructions on Getting Started:**
 
 ### Prerequisites: Python
 You'll need a Python interpreter - this is basically a program that lets you run scripts/programs written in the programming language of Python.
@@ -30,10 +73,29 @@ You'll need a Python interpreter - this is basically a program that lets you run
 Guide here:  https://wiki.python.org/moin/BeginnersGuide/Download  
 (or plenty of other guides if you google "Installing Python for Windows/Linux/Etc")
 
-### **Download this file**
-Oh, tons of ways to do this. Click on the `shmeppify.py` link in the list above. Then click on the `Raw` button on the right side of the screen.
+### **Download these files**
+Oh, tons of ways to do this. Click on the green `Code ▼` button toward the upper right, click "download zip". Unzip folder someplace convenient on your computer (we'll assume your desktop).
 
-Save this page in the same folder you have your map image, and name it `shmeppify.py`.
+### **Download the needed libraries**
+[Upgrade or install Pip](https://pip.pypa.io/en/stable/installing/#upgrading-pip)
+
+#### Install any missing packages
+Python includes a strong standard libary, but this program uses a few additional packages you may not have installed:  
+
+haishoku  
+Pillow  
+pyfiglet  
+PyInquirer  
+
+A full list of packages and their purposes can be found at the bottom of this document.
+
+You can see all installed packages by using the following commands in a terminal (see next section if you need help):  
+`pip list` or `python -m pip list`
+
+Install a package using:  
+`pip install <package name>` or `python -m pip install <package name>`
+
+Package names are case sensitive.
 
 ### **Running the script**
 
@@ -46,17 +108,20 @@ Save this page in the same folder you have your map image, and name it `shmeppif
  Having trouble? [More ways to access PowerShell](https://www.tenforums.com/tutorials/25581-open-windows-powershell-windows-10-a.html)
 
 #### Run the script
-In the terminal window, navigate to the folder where you saved both the script and your image file. For example, if you were using Windows and saved both on your desktop the command would be:   
-`cd desktop` or `cd C:\users\<your_username>\desktop`
+In the terminal window, navigate to the folder where you saved both the script and your image file. For example, if you were using Windows and saved both on your desktop the command would be:    
+`cd desktop\ShmeppyImagetoJSON` or   
+`cd C:\users\<your_username>\desktop\ShmeppyImagetoJSON`
 
-Call the script by entering the following command:
+Call the script by entering the following command:  
 `python shmeppify.py`
 
-You will be prompted to enter the path for the image file. If it's in the same location as the script, just enter the file name, including the file extension. (e.g. `example_file.jpg`)
+You will be prompted to enter the path for the image file. If it's in the same folder as the script, just enter the file name, including the file extension. (e.g. `example_file.jpg`)
 
-You will then see two prompts to specify the map size. The result will look nicest if you use the same aspect ratio as the original image.
+You will then see prompts to specify the processing method, and the length of the longest map edge.
 
-The file will named something like `Game_Map_2020...` Rename if you like.
+The maximum map dimension sets the scale of the Shmeppy map - typically one 5x5 ft map square = one Shmeppy tile, but some players use a different scale (e.g. one map square equal to 2x2 Shmeppy tiles).
+
+The map file  you file will named something like `game_map_2020...` and located in the `./ShmeppyImagetoJSON/output_files/` folder. Rename if you like.
 
 ### Import into Shmeppy  
 Navigate to Shmeppy.com, click on the `Games >>` button in the upper right. At the bottom of the side panel, click on `Import Backup` and select the file you created earlier with the script.
@@ -73,9 +138,16 @@ https://shmeppy.com/help-and-community
 The last time I did serious programming was on a Commodore64 (or feels like it at least). I sure hope it works!
 
 ## **Notes:**
-#### Uses libraries/modules:  
-json  
-datetime  
-pathlib  
-Pillow (PIL)  
-sys  
+#### Uses packages:  
+json  (for exporting the map)  
+datetime (used for map file names)  
+pathlib (to aid in compatibility across different operating systems)  
+sys (system stuff like take command line arguments and exit the program)  
+haishoku (palette related functions)  
+Pillow (also known as PIL, used for general image processing)  
+pyfiglet (title)  
+PyInquirer (user input menu)  
+
+#### Versions:
+V1 basic BOX and NEAREST filter/resize processing  
+V2 Palette processing and additional filters
