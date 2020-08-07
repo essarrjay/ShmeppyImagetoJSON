@@ -14,10 +14,11 @@ import shmops
 import progress_bar
 
 class Game_Map:
-    def __init__(self, img_path, max_map_dim, debug=False):
+    def __init__(self, img_path, max_map_dim, debug=False, name=None):
         self.path = Path(img_path)
         with Image.open(self.path) as img_obj:
             self.img_size = img_obj.size
+        self.name = name if name else self.path.stem
         self.shmeppy_json = {"exportFormatVersion":1,"operations":[]}
         self.max_map_dim = int(max_map_dim)
         self.debug = debug
@@ -113,9 +114,11 @@ class Game_Map:
         #exports map as shmeppy compatible JSON
         if data_dir[-1] != '/': data_dir += '/'
 
-        #generate export path
-        timestamp_str = str(datetime.now())[:-7].replace(':','').replace(' ','_')
-        filename = f'game_map_{timestamp_str}.json'
+        #generate export filename and export path
+        ts = str(datetime.now())[:-7]
+        ts = ts.replace(':','').replace('-','').replace(' ','_')
+        ms = self.map_size
+        filename = f"{self.name}_{ms[0]}x{ms[1]}_{ts}.json"
         export_path = Path(data_dir + filename)
 
         export_obj = deepcopy(self.shmeppy_json)
