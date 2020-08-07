@@ -15,21 +15,21 @@ import progress_bar
 
 class Game_Map:
     def __init__(self, img_path, max_map_dim, debug=False):
-        self.path = img_path
+        self.path = Path(img_path)
+        with Image.open(self.path) as img_obj:
+            self.img_size = img_obj.size
         self.shmeppy_json = {"exportFormatVersion":1,"operations":[]}
         self.max_map_dim = int(max_map_dim)
         self.debug = debug
         try:
-            self.tile_size = self.get_tile_size()
+            self.set_map_size()
+            self.set_tile_size()
         except FileNotFoundError:
             print(f"File {img_path} not found, be sure this includes the full or relative path - the folders containing the file, not just the file's name.")
             exit()
 
-    def get_tile_size(self):
-        #determines tile size, stretching the smaller dimension to match
-        with Image.open(self.path) as img_obj:
-            w,h = img_obj.size
-
+    def set_map_size(self):
+        w, h = self.img_size
         mmd = self.max_map_dim
         if w >= h:
             x_tiles = mmd
@@ -38,19 +38,26 @@ class Game_Map:
             x_tiles = round(w / h * mmd)
             y_tiles = mmd
 
-        tile_w = w / x_tiles
-        tile_h = h / y_tiles
+        self.map_size = (x_tiles, y_tiles)
+
+    def set_tile_size(self):
+        #determines tile size, stretching the smaller dimension to match
+        w,h = self.img_size
+        x_tiles,y_tiles = self.map_size
+
+        t_w = w / x_tiles
+        t_h = h / y_tiles
 
         if self.debug:
-            print(f'Raw tile width: {tile_w}\nRaw tile height: {tile_h}')
+            print(f'Raw tile width: {t_w}\nRaw tile height: {t_h}')
 
-        tile_w = int(round(tile_w))
-        tile_h = int(round(tile_h))
+        tile_w = int(round(t_w))
+        tile_h = int(round(t_h))
 
         print("\n-= Processing Info =- ")
         print(f'Image Dimensions: {w} x {h} px\n Tile Dimensions: {tile_w} x {tile_h} px\n  Map Dimensions: {x_tiles} x {y_tiles} tiles')
 
-        return (tile_w,tile_h)
+        self.tile_size = (tile_w,tile_h)
 
     def slice_to_tiles(self):
         #returns list of image objects as tiles
