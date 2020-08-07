@@ -4,6 +4,7 @@
 from PIL import Image
 import sys
 from pyfiglet import Figlet
+from pathlib import Path
 
 #internal modules
 from game_map import Game_Map
@@ -31,8 +32,9 @@ def run(title=True):
     if answers['op_type'].startswith('exit'):
         sys.exit()
     elif answers['op_type'].startswith('help'):
-        print(help())
-        print(run.__doc__)
+        p = Path("help.txt")
+        with open(p, encoding="utf8") as ht:
+            print(ht.read())
         return run(title=False)
 
     #process user inputs
@@ -42,7 +44,6 @@ def run(title=True):
     if answers['op_type'].startswith('pal'):
         op = gm.palette_op(answers['palette_size'])
     elif answers['op_type'].startswith('fil'):
-        print(f"filter type {answers['filter_type']}")
         op = gm.filter_op(answers['filter_type'])
     else:
         print("Sorry, something went wrong.")
