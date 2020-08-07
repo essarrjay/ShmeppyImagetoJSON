@@ -47,7 +47,7 @@ class Game_Map:
         tile_w = int(round(tile_w))
         tile_h = int(round(tile_h))
 
-        print("\n-= Import Info =- ")
+        print("\n-= Processing Info =- ")
         print(f'Image Dimensions: {w} x {h} px\n Tile Dimensions: {tile_w} x {tile_h} px\n  Map Dimensions: {x_tiles} x {y_tiles} tiles')
 
         return (tile_w,tile_h)
