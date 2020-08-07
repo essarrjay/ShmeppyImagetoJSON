@@ -10,12 +10,13 @@ from game_map import Game_Map
 import menu
 
 def help():
-    """    ████████████████████████████████████
-    █               HELP               █
-    ████████████████████████████████████"""
+
+    return'    ╔══════════════════════════════════╗\n    ║               HELP               ║\n    ╚══════════════════════════════════╝\n'
 
 def run(title=True):
-    """
+    """Converts an image into an import-ready shmeppy map.
+
+► Menu Options: ◄
     • Palette operation attempts to convert image to tiles, using a palette
         of a user-specified number of colors (maximum of 8 colors).
       - Result is an image with sharp color transitions, and but does not
@@ -45,7 +46,7 @@ def run(title=True):
     if answers['op_type'].startswith('exit'):
         sys.exit()
     elif answers['op_type'].startswith('help'):
-        print(help.__doc__)
+        print(help())
         print(run.__doc__)
         return run(title=False)
 

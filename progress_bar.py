@@ -1,7 +1,9 @@
 import sys
 
 def progressbar(it, prefix="", suffix="", width=60, file=sys.stdout):
-    """Usage:
+    """An iterable-like obj for command line progressbar
+
+    Usage:
     for i in progressbar(range(15), "Processing: ",  "Part ", 40):
         <some long running calculation>
 
