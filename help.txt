@@ -1,0 +1,49 @@
+     ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+                   HELP
+     ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+
+► Processing Options ◄
+
+    ► PALETTE attempts to convert image to Shmeppy fill tiles, using
+        user-specified number of palette colors (maximum of 8
+        colors).
+      Result is a map with sharp color transitions, but has a poor
+        result processing images containing many similar colors.
+
+    ► FILTER RESIZE scales the image to the map size then converts
+        pixels to Shmeppy tiles.
+      Much faster, and result is an image with more of a color
+        gradient. Good for landscapes with similar gradients,
+        e.g. beaches, grass fields
+
+        --------
+
+    FILTER TYPES
+      (from https://pillow.readthedocs.io/en/stable/handbook/concepts.html#filters)
+
+      Listed in order increasing order of fidelity, decreasing order of speed.
+
+      NEAREST - Pick one nearest pixel from the input image.
+          Ignore all other input pixels.
+
+      BOX - Each pixel of source image contributes to one pixel of
+          the destination image with identical weights
+
+      BILINEAR - Calculate the output pixel value using linear
+          interpolation on all pixels that may contribute to the output
+          value.
+
+      HAMMING - Produces a sharper image than BILINEAR, doesn’t have
+          dislocations on local level like with BOX.
+
+      BICUBIC - Calculate the output pixel value using cubic
+          interpolation on all pixels that may contribute to the output
+          value.
+
+      LANCZOS - Calculate the output pixel value using a high-quality
+          Lanczos filter (a truncated sinc) on all pixels that may
+          contribute to the output value.
+
+        --------
+
+    All methods preserve the aspect ratio of the map.
