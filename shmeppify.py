@@ -3,7 +3,7 @@
 #external modules
 from PIL import Image
 import sys
-from pyfiglet import Figlet
+#from pyfiglet import Figlet
 from pathlib import Path
 
 #internal modules
@@ -15,9 +15,10 @@ def run(title=True):
 
 
     #title
-    if title:
-        f = Figlet(font='slant')
-        print(f.renderText('Shemppy Image\nto JSON'))
+    #if title:
+    #    f = Figlet(font='slant')
+    #    print(f.renderText('Shemppy Image\nto JSON'))
+    
 
     #get user inputs from menu
     answers = {}
