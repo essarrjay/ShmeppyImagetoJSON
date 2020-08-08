@@ -48,6 +48,7 @@ class Game_Map:
 
         t_w = w / x_tiles
         t_h = h / y_tiles
+        self.tile_true_size = (t_w,t_h)
 
         if self.debug:
             print(f'Raw tile width: {t_w}\nRaw tile height: {t_h}')
@@ -58,19 +59,35 @@ class Game_Map:
         print("\n-= Processing Info =- ")
         print(f'Image Dimensions: {w} x {h} px\n Tile Dimensions: {tile_w} x {tile_h} px\n  Map Dimensions: {x_tiles} x {y_tiles} tiles')
 
+        error_w = tile_w - t_w
+        error_h = tile_h - t_h
+
+        print(f'\n-= ERROR INFO =-\nTile Size  Width Error: {round(error_w,4)} px \nTile Size Height Error: {round(error_h,4)} px \nTotal  Width Rounding Error: {round(error_w * x_tiles,4)} px \nTotal Height Rounding Error: {round(error_h * y_tiles,4)} px \n')
+
         self.tile_size = (tile_w,tile_h)
 
     def slice_to_tiles(self):
         #returns list of image objects as tiles
         tiles = []
         tile_w,tile_h = self.tile_size
+        w,h = self.img_size
+
+        true_x, true_y = (0,0)
+        true_w, true_h = self.tile_true_size
+
         with Image.open(self.path) as img_obj:
-            for y in range(0,img_obj.height,tile_h):
+            for y_px in range(0,h,tile_h):
                 tiles_row = []
-                for x in range(0,img_obj.width,tile_w):
+                y = round(true_y)
+                for x_px in range(0,w,tile_w):
+                    x = round(true_x)
                     im_crop = img_obj.crop((x,y,x+tile_w,y+tile_h))
                     tiles_row.append(im_crop)
+                    true_x += true_w
                 tiles.append(tiles_row)
+                true_y += true_h
+                true_x = 0
+
         return tiles
 
     def palette_op(self, palette_size):
@@ -89,7 +106,7 @@ class Game_Map:
                 tile.save(temp_path,"PNG")
                 dominant = Haishoku.getDominant(str(temp_path))
                 tile_color = nearest_color_from_palette(palette,dominant)
-                if self.debug: print(f'Tile Address: {x}, {y}   |   Tile Color: {tile_color}   |  Saved to:  {temp_path}               ')
+                if self.debug: print(f'Tile Address: {x}, {y} | Tile Color: {tile_color} | Saved to:  {temp_path}')
                 fill_op.add_fill(x,y,rgb_to_hex(*tile_color))
                 x += 1
             y += 1
@@ -134,7 +151,7 @@ class Game_Map:
         return result_str
 
 if __name__ == '__main__':
-    GM = Game_Map(r"est_im\3x3_test_master.png",max_map_dim=3, debug=True)
+    GM = Game_Map(r"test_im\3x3_test_master.png",max_map_dim=3, debug=True)
     op = GM.palette_op(4)
     print(GM.op_to_json(op))
     #GM = Game_Map(r"test_im\dragonsmaw.png",max_map_dim=31)
