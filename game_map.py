@@ -95,10 +95,10 @@ class Game_Map:
 
         palette = get_palette(self.path, palette_size, self.debug)
 
-        tiles_array = self.slice_to_tiles()
+        tiles = self.slice_to_tiles()
         temp_path = 'temp_img.png'
         x, y = 0,0
-        for col in progress_bar.progressbar(tiles_array, "Processing: ", " On Map Row: ",36):
+        for col in progress_bar.progressbar(tiles, "Processing: ", " On Map Row: ",36):
             for tile in col:
                 if self.debug:
                     temp_path = f'{x}x{y}y_temp_img.png'
