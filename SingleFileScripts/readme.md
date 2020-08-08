@@ -1,6 +1,8 @@
 
 # **Simple Shmeppy Mapfile (JSON) Generator**
 
+**This file is maintained (less regularly) for those interested in the simplicity of a script which uses a single python file.**
+
 For the most excellent [shmeppy.com](https://shmeppy.com/) minimalist virtual tabletop application.
 
 Many thanks to John Sullivan for their awesome, thoughfully designed and currently free!?! product.
