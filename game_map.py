@@ -17,14 +17,14 @@ import progress_bar
 
 class Game_Map:
     def __init__(self, img_path, map_size=None, debug=False, name=None):
-        print("===||| Initializing Game Map |||===")
+        print("\n||||| Initializing Game Map |||||\n")
         self.path = Path(img_path)
         try:
             with Image.open(self.path) as im:
                 self.img_size = im.size
-            print(f"   Input Image File: {self.path.name}")
+            print(f"   Input File: {self.path.name}")
         except FileNotFoundError:
-            print(f"File {img_path} not found, be sure this includes the full or relative path - the folders containing the file, not just the file's name.")
+            print(f"File {img_path} not found, be sure this includes the full or relative path - the folders containing the file, not just the file's name.\n")
             exit()
 
         self.name = name if name else self.path.stem
@@ -68,12 +68,11 @@ class Game_Map:
         tile_h = int(round(tile_raw_h))
 
         if show_info:
-            print(f"-= Processing {show_info} Info =- ")
-            print(f'   Image Size: {w} x {h} px\n    Tile Size: {tile_w} x {tile_h} px\n     Map Size: {x_tiles} x {y_tiles} tiles')
+            print(f'   Image Size: {w} x {h} px\n   Tile  Size: {tile_w} x {tile_h} px\n   Map   Size: {x_tiles} x {y_tiles} tiles')
 
             error_w = tile_w - tile_raw_w
             error_h = tile_h - tile_raw_h
-            print(f'\n-= ERROR INFO =-\n   Tile Size  Width Error: {round(error_w,4)} px \n   Tile Size Height Error: {round(error_h,4)} px \n   Total  Width Rounding Error: {round(error_w * x_tiles,4)} px \n   Total Height Rounding Error: {round(error_h * y_tiles,4)} px\n')
+            print(f'\n -=ERROR INFO=-\n   Tile Size  Width Error: {round(error_w,4)} px \n   Tile Size Height Error: {round(error_h,4)} px \n   Total  Width Rounding Error: {round(error_w * x_tiles,4)} px \n   Total Height Rounding Error: {round(error_h * y_tiles,4)} px\n')
 
         return (tile_raw_w,tile_raw_h)
 
@@ -85,10 +84,8 @@ class Game_Map:
         w,h = self.img_size
 
         if show_info:
-            print(f"===Slicing {show_info} Tiles===")
-            #print(f'Tile size === {tile_size}')
-            #print(f'self tile size === {self.tile_size}')
-            print(f'Tile raw size: {tile_raw_size} \n')
+            print(f" ==Slicing {show_info} Tiles==")
+            print(f'   Tile raw size: {tile_raw_size[0]} x {tile_raw_size[1]} px\n')
 
         tiles = []
         true_x, true_y = (0,0)
@@ -108,20 +105,14 @@ class Game_Map:
         return tiles
 
     def get_palette(self, palette_size, sampling_map_size):
-        print("=== Setting Palette ===")
-        sample_raw_size = self.get_tile_size(sampling_map_size, show_info="Sample Tile")
-        tiles = self.slice_to_tiles(tile_raw_size=sample_raw_size, show_info="Palette Samples")
+        print("==|Generating Palette|==")
+        sample_raw_size = self.get_tile_size(sampling_map_size, show_info="Sample Tiles")
+        tiles = self.slice_to_tiles(tile_raw_size=sample_raw_size, show_info="Palette Sample")
         temp_path = Path('temp_img.png')
         data = []
 
-
-        print(f'get palette Map size: {sampling_map_size}')
-        print(f'get palette: tile raw size: {sample_raw_size}')
-        print(f'Palette tiles rows? {len(tiles)}')
-        print(f'Palette tiles cols? {len(tiles[0])}')
-
         #iterate through Image Objects, get palettes, combine
-        for row in progress_bar.progressbar(tiles, "Processing Image for Palette: ", " Samples Row: ",36):
+        for row in progress_bar.progressbar(tiles, " Processing Image for Palette: ", " Samples Row: ",36):
             for tile in row:
                 tile.save(temp_path,"PNG")
                 pal = get_palette(temp_path, palette_size, debug=False)
@@ -134,13 +125,13 @@ class Game_Map:
         #print palette info
         tile_raw_w,tile_raw_h = sample_raw_size
         x_tiles,y_tiles = sampling_map_size
-        print(f'-= PALETTE INFO =- \nSample Grid: {x_tiles} x {y_tiles} tiles \nSample Tile Size: {tile_raw_w} x {tile_raw_h} px \nTotal Palette Size: {len(data)} colors\n')
+        print(f'\n -=PALETTE INFO=- \n   Sample Grid: {x_tiles} x {y_tiles} tiles \n   Sample Tile Size: {tile_raw_w} x {tile_raw_h} px \n   Total Palette Size: {len(data)} colors\n')
 
         return data
 
     def palette_op(self, palette_size, sample_factor = 4):
         #generates an shmops.fill_operation obj
-        print("===||| Initiating Palette Fill Operation |||===")
+        print("||||| Initiating Palette Fill Operation |||||")
         fill_op = shmops.Fill_Operation(id='4321')
 
         tiles = self.slice_to_tiles(show_info="Image to Map")
@@ -148,8 +139,6 @@ class Game_Map:
         sampling_map_size = (3,4)
         #get palette to be used in the process
         palette = self.get_palette(palette_size, sampling_map_size)
-        #palette = self.palette_from_resize(palette_size)
-        print(f'Map Palette Size = {len(palette)} colors')
 
         temp_path = 'temp_img.png'
         x, y = 0,0
@@ -199,11 +188,11 @@ class Game_Map:
         export_obj["operations"].append(op.__dict__)
 
         try:
-            result_str = f"Exporting mapfile to {str(export_path)}"
+            result_str = f"Exporting mapfile: {str(export_path)}\n"
             with export_path.open(mode='w') as json_file:
                 json.dump(export_obj, json_file)
         except Exception as e:
-            result_str = f"Error: {str(e)}, unable to export."
+            result_str = f"Error: {str(e)}, unable to export.\n"
 
         return result_str
 

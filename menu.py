@@ -39,14 +39,14 @@ questions = [
     {
         'type': 'input',
         'name': 'map_dim_x',
-        'message': '-= Map Dimension in X Direction: ',
+        'message': '-= Map Dimension - Horizontal: ',
         'default': '47',
         'filter': lambda val: int(val),
     },
     {
         'type': 'input',
         'name': 'map_dim_y',
-        'message': '-= Map Dimension in Y Direction: ',
+        'message': '-= Map Dimension -   Vertical: ',
         'default': '58',
         'filter': lambda val: int(val),
     },
