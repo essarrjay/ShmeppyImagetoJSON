@@ -38,16 +38,31 @@ questions = [
     },
     {
         'type': 'input',
-        'name': 'max_map_dim',
-        'message': '-= Maximum map dimension in squares: ',
-        'default': '23',
+        'name': 'map_dim_x',
+        'message': '-= Map Dimension in X Direction: ',
+        'default': '47',
+        'filter': lambda val: int(val),
+    },
+    {
+        'type': 'input',
+        'name': 'map_dim_y',
+        'message': '-= Map Dimension in Y Direction: ',
+        'default': '58',
         'filter': lambda val: int(val),
     },
     {
        'type': 'input',
-        'name': 'palette_size',
-        'message': '-= Palette Size for the Map Image in # of Colors (8 max): ',
+        'name': 'sample_factor',
+        'message': f'-= Palette sample maximum map dimension (integer): ',
         'default': '4',
+        'filter': lambda val: int(val),
+        'when': lambda answers: answers['op_type'].startswith('pal')
+    },
+    {
+       'type': 'input',
+        'name': 'palette_size',
+        'message': '-= Number of Palette Colors to Return per Sample (8 max): ',
+        'default': '8',
         'filter': lambda val: int(val),
         'when': lambda answers: answers['op_type'].startswith('pal')
     },
@@ -80,6 +95,7 @@ def main(have_file=False):
     answers = prompt(start)
     if is_not_process(answers): return answers
     answers.update(prompt(questions, answers))
+    #answers['sample_factor'] = min(answers['sample_factor'],answers['max_map_dim'])
     return answers
 
 if __name__ == '__main__':

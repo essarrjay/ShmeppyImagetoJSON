@@ -13,13 +13,6 @@ import menu
 def run(title=True):
     """Converts an image into an import-ready shmeppy map."""
 
-
-    #title
-    #if title:
-    #    f = Figlet(font='slant')
-    #    print(f.renderText('Shemppy Image\nto JSON'))
-    
-
     #get user inputs from menu
     answers = {}
     try:
@@ -40,10 +33,11 @@ def run(title=True):
 
     #process user inputs
     if answers['debug']: print(answers)
-    gm = Game_Map(answers['img_path'],answers['max_map_dim'],answers['debug'])
+    map_size = (answers['map_dim_x'],answers['map_dim_y'])
+    gm = Game_Map(answers['img_path'],map_size,answers['debug'])
 
     if answers['op_type'].startswith('pal'):
-        op = gm.palette_op(answers['palette_size'])
+        op = gm.palette_op(answers['palette_size'], sample_factor = answers['sample_factor'])
     elif answers['op_type'].startswith('fil'):
         op = gm.filter_op(answers['filter_type'])
     else:
