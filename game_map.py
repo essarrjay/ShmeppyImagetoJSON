@@ -136,7 +136,7 @@ class Game_Map:
 
         tiles = self.slice_to_tiles(show_info="Image to Map")
 
-        sampling_map_size = (3,4)
+        sampling_map_size = self.get_map_size(sample_factor)
         #get palette to be used in the process
         palette = self.get_palette(palette_size, sampling_map_size)
 
