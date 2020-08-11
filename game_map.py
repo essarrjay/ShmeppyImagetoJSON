@@ -34,7 +34,7 @@ class Game_Map:
             self.map_size = self.get_map_size(int(map_size))
         except TypeError:
             self.map_size = map_size
-
+        self.max_map_dim = max(self.map_size)
         self.debug = debug
 
         self.tile_raw_size = self.get_tile_size(show_info="Input Image")
