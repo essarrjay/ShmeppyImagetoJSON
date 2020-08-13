@@ -10,26 +10,16 @@ from pathlib import Path
 from game_map import Game_Map
 import menu
 
-def run(title=True):
+def main(title=True):
     """Converts an image into an import-ready shmeppy map."""
 
     #get user inputs from menu
-    answers = {}
     try:
         img_path = sys.argv[1]
-        answers['img_path'] = img_path
     except:
-        img_path = False
-    answers.update(menu.main(img_path))
-
-    #exit if exit
-    if answers['op_type'].startswith('exit'):
-        sys.exit()
-    elif answers['op_type'].startswith('help'):
-        p = Path("help.txt")
-        with open(p, encoding="utf8") as ht:
-            print(ht.read())
-        return run(title=False)
+        print("Image file not provided.")
+        img_path=None
+    answers = menu.main_menu(img_path)
 
     #process user inputs
     if answers['debug']: print(answers)
@@ -48,4 +38,4 @@ def run(title=True):
 
 
 if __name__ == '__main__':
-    run()
+    main()
