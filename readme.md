@@ -23,10 +23,30 @@ Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper
 
 **Note:** This script will only generate a map using 'fill' - not any 'edges'
 
+<<<<<<< HEAD
 -----
 
 ## **Processing Options**
 
+=======
+## ► Processing Options ◄
+
+### **PALETTE**
+Attempts to convert image to Shmeppy fill tiles, using a palette of colors.
+- Sharp color transitions when processing an image with fixed color palette.
+- Many similar colors in a single image may return a poor result.
+
+#### **Palette Sampling**
+The palette is generated (slowly, improved method in progress) by slicing the map image into smaller images, then fetching the most commonly used colors in those images.
+
+The sample grid is autoscaled from the image's largest dimension using the provided sample maximum map dimension. For example, using a sample grid maximum map dimension of 4 on an image of 1600x1200px would result in a sample grid of 4x3 tiles, each 400x300px.
+
+The most used colors of each sample tile (exact number specified by user as palette size) is added to the overall palette for the final map.
+
+Obviously, the options for **palette sampling** can drastically affect the map processing speed, but provides the more control than the **filter-resize** method.
+
+-----
+>>>>>>> d9d060e503705a5dd4c62e0a5c1cc5ae7d4ca28c
 ### **FILTER RESIZE**
 Scales the image to the map size then converts pixels to Shmeppy tiles.  
 
