@@ -10,48 +10,54 @@ from pathlib import Path
 from game_map import Game_Map
 import menu
 
-def run(title=True):
+def main(title=True):
     """Converts an image into an import-ready shmeppy map."""
 
-
-    #title
-    #if title:
-    #    f = Figlet(font='slant')
-    #    print(f.renderText('Shemppy Image\nto JSON'))
-    
-
     #get user inputs from menu
-    answers = {}
     try:
         img_path = sys.argv[1]
-        answers['img_path'] = img_path
     except:
-        img_path = False
-    answers.update(menu.main(img_path))
-
-    #exit if exit
-    if answers['op_type'].startswith('exit'):
-        sys.exit()
-    elif answers['op_type'].startswith('help'):
-        p = Path("help.txt")
-        with open(p, encoding="utf8") as ht:
-            print(ht.read())
-        return run(title=False)
+        print("Image file not provided.")
+        img_path=None
+    answers = menu.main_menu(img_path)
 
     #process user inputs
     if answers['debug']: print(answers)
-    gm = Game_Map(answers['img_path'],answers['max_map_dim'],answers['debug'])
+    try:
+        map_size = (answers['map_dim_x'],answers['map_dim_y'])
+        map_major_dim = max(map_size)
+    except:
+        map_major_dim = answers['map_major_dim']
+        map_size = (answers['map_major_dim'])
 
     if answers['op_type'].startswith('pal'):
-        op = gm.palette_op(answers['palette_size'])
+        #process palette operation
+        if answers['palette_rescale']:
+            #resize image before processing
+            in_path = Path(answers['img_path'])
+            temp_path = Path('resized_'+in_path.name)
+            with Image.open(in_path) as im:
+                size = min(16*map_major_dim,*im.size)
+                im.thumbnail((size,size),resample=Image.LANCZOS)
+                im.save(temp_path)
+            answers['img_path'] = str(temp_path)
+
+        #create Game_Map and Fill_Operation
+        gm = Game_Map(answers['img_path'],map_size,answers['debug'])
+        op = gm.palette_op(answers['palette_size'], sample_factor = answers['sample_factor'])
+
+        #remove palette_rescale file if present
+        temp_path.unlink(missing_ok=True)
+
     elif answers['op_type'].startswith('fil'):
+        gm = Game_Map(answers['img_path'],map_size,answers['debug'])
         op = gm.filter_op(answers['filter_type'])
     else:
         print("Sorry, something went wrong.")
 
+    #Export to Shmeppy map as a JSON file
     result = gm.op_to_json(op)
     print(result)
 
-
 if __name__ == '__main__':
-    run()
+    main()
