@@ -87,6 +87,12 @@ Obviously, the options for **palette sampling** can drastically affect the map p
 
 This is not very efficient process, and will probably be improved upon (or re-implemented) in the future. But it currently works, and still only takes 30 seconds or so. It works really well with images using a limited palette already, rather than many gradients.
 
+#### **Rescale before Palette**
+
+To speed up operation, you may rescale an image prior to processing through palette operations. This is identical to resizing an image to a lower resolution, then passing that image to this script.
+
+The image will be resized such that each square of the final Shmeppy map is generated from a 16x16px area of the resized image. The Shmeppy map size (in squares) is still set by the user and the image aspect ratio (if autoscaled).
+
 -----
 
 ## **Detailed Instructions on Getting Started**
@@ -141,7 +147,7 @@ Call the script by entering the following command:
 
 You will be prompted to enter the path for the image file. If it's in the same folder as the script, just enter the file name, including the file extension. (e.g. `example_file.jpg`)
 
-You will then see prompts to specify the processing method, and the length of the longest map edge.
+You will then see prompts to specify the processing method, and the map dimensions.
 
 The maximum map dimension sets the scale of the Shmeppy map - typically one 5x5 ft map square = one Shmeppy tile, but some players use a different scale (e.g. one map square equal to 2x2 Shmeppy tiles).
 
