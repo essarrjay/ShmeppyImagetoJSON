@@ -81,19 +81,20 @@ class Game_Map:
         if not tile_raw_size: tile_raw_size = self.tile_raw_size
         tile_raw_w,tile_raw_h = tile_raw_size
         tile_w,tile_h = round(tile_raw_w),round(tile_raw_h)
-        w,h = self.img_size
 
         if show_info:
             print(f" ==Slicing {show_info} Tiles==")
             print(f'   Tile raw size: {tile_raw_size[0]} x {tile_raw_size[1]} px\n')
 
+        #process into list of image objects
         tiles = []
         true_x, true_y = (0,0)
         with Image.open(self.path) as img_obj:
-            for y_px in range(0,h,tile_h):
+            w,h = img_obj.size
+            for row in range(0,h,tile_h):
                 tiles_row = []
                 y = round(true_y)
-                for x_px in range(0,w,tile_w):
+                for col in range(0,w,tile_w):
                     x = round(true_x)
                     im_crop = img_obj.crop((x,y,x+tile_w,y+tile_h))
                     tiles_row.append(im_crop)
