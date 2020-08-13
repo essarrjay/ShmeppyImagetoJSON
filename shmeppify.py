@@ -37,7 +37,7 @@ def main(title=True):
             in_path = Path(answers['img_path'])
             temp_path = Path('resized_'+in_path.name)
             with Image.open(in_path) as im:
-                size = min(10*map_major_dim,*im.size)
+                size = min(16*map_major_dim,*im.size)
                 im.thumbnail((size,size),resample=Image.LANCZOS)
                 im.save(temp_path)
             answers['img_path'] = str(temp_path)
