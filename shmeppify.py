@@ -23,7 +23,10 @@ def main(title=True):
 
     #process user inputs
     if answers['debug']: print(answers)
-    map_size = (answers['map_dim_x'],answers['map_dim_y'])
+    try:
+        map_size = (answers['map_dim_x'],answers['map_dim_y'])
+    except:
+        map_size = (answers['map_major_dim'])
     gm = Game_Map(answers['img_path'],map_size,answers['debug'])
 
     if answers['op_type'].startswith('pal'):

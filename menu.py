@@ -4,7 +4,7 @@ from pathlib import Path
 from PIL import Image
 
 def main_menu(img_path=None):
-    answers={'img_path':img_path}
+    answers={'img_path':img_path, 'map_dim_y':None}
     if not img_path:
         answers['img_path'] = input("-= Image File Path/Name: ")
     # Get the op_type
@@ -29,17 +29,10 @@ def main_menu(img_path=None):
             print(ht.read())
         return main_menu(img_path = answers['img_path'])
 
-    answers['map_dim_x'] = cutie.get_number(
-        '-= Map Dimension - Horizontal:',
-        min_value=1,
-        max_value=999,
-        allow_float=False)
-
-    answers['map_dim_y'] = cutie.get_number(
-        '-= Map Dimension -   Vertical:',
-        min_value=1,
-        max_value=999,
-        allow_float=False)
+    print()
+    #prompt map dimensions or fetch major dimension
+    answers['autoscale'] = cutie.prompt_yes_or_no('Autoscale with the map\'s major dimension?',yes_text="Yes, autoscale", no_text="No, I will provide two dimensions", default_is_yes=True)
+    answers.update(map_size_menu(answers['autoscale']))
 
     if answers['op_type'].startswith('fil'):
         answers.update(filter_menu())
@@ -48,16 +41,39 @@ def main_menu(img_path=None):
         answers.update(palette_menu())
 
     print()
-    answers['debug'] = cutie.prompt_yes_or_no('Debug Mode? ',default_is_yes=False)
+    answers['debug'] = cutie.prompt_yes_or_no('Debug Mode? ')
 
     return answers
+
+def map_size_menu(autoscale=True):
+    response = {}
+    if autoscale:
+        response['map_major_dim'] = cutie.get_number(
+            '-= Map Major Dimension:',
+            min_value=1,
+            max_value=999,
+            allow_float=False)
+    else:
+        response['map_dim_x'] = cutie.get_number(
+            '-= Map Dimension - Horizontal:',
+            min_value=1,
+            max_value=999,
+            allow_float=False)
+
+        response['map_dim_y'] = cutie.get_number(
+            '-= Map Dimension -   Vertical:',
+            min_value=1,
+            max_value=999,
+            allow_float=False)
+    return response
 
 def filter_menu():
     response = {}
     print('\n-= Which filter would you like to use? =-')
-    choices = ['NEAREST - sharp tiles, some artifacts','BOX - idential weight','BILINEAR - linear interpolation',           'HAMMING - sharper than BILINEAR, less distortion than BOX','BICUBIC - cubic interpolation','LANCZOS - trucated sinc']
+    choices = ['NEAREST - sharp tiles, some artifacts','BOX - idential weight','BILINEAR - linear interpolation','HAMMING - sharper than BILINEAR, less distortion than BOX','BICUBIC - cubic interpolation','LANCZOS - trucated sinc']
     val = choices[cutie.select(choices,selected_index=1)].lower()
     response['filter_type'] = lookup_filter(val)
+
     return response
 
 def palette_menu():
