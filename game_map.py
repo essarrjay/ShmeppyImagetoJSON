@@ -164,13 +164,13 @@ class Game_Map:
         print("===||| Initiating Filter-Resize Fill Operation |||===")
         fill_op = shmops.Fill_Operation(id='4321')
 
-        map_img = Image.open(self.path)
-        map_img.thumbnail((self.max_map_dim, self.max_map_dim),resample=filter_option)
-        pixels = map_img.convert('RGB').load()
-        for x in progress_bar.progressbar(range(map_img.width), "Processing: ",width=36):
-            for y in range(map_img.height):
-                r,g,b = pixels[x,y]
-                fill_op.add_fill(x,y,rgb_to_hex(r,g,b))
+        with Image.open(self.path) as map_img:
+            map_img.thumbnail((self.max_map_dim, self.max_map_dim),resample=filter_option)
+            pixels = map_img.convert('RGB').load()
+            for x in progress_bar.progressbar(range(map_img.width), "Processing: ",width=36):
+                for y in range(map_img.height):
+                    r,g,b = pixels[x,y]
+                    fill_op.add_fill(x,y,rgb_to_hex(r,g,b))
         return fill_op
 
     def op_to_json(self, op, data_dir=r'./output_files/'):
