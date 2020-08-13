@@ -81,7 +81,7 @@ def palette_menu():
     print()
 
     response['sample_factor'] = cutie.get_number(
-        '-= Palette sample maximum map dimension (integer):',
+        '-= Palette sample factor for the longest map dimension (integer):',
         min_value=1,
         max_value=999,
         allow_float=False)
