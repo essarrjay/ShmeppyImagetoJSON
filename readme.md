@@ -7,7 +7,7 @@ Many thanks to John Sullivan for their awesome, thoughfully designed and current
 
 More info on Shmeppy here: https://shmeppy.com/about
 
-## **Overview**
+# **Overview**
 This script takes an image (`.jpeg`, `.png` or probably plenty others) and converts it into a form recognized by Shemppy's new import function.
 
 To use, call from a command line:  
@@ -15,7 +15,7 @@ To use, call from a command line:
 
 The image can also be specified later from an input prompt.
 
-You will then see prompts to specify the processing method, and the length of the longest map edge.
+You will then see prompts to specify the processing method, and the map dimensions.
 
 The maximum map dimension sets the scale of the Shmeppy map - typically one 5x5 ft map square = one Shmeppy tile, but some players use a different scale (e.g. one map square equal to 2x2 Shmeppy tiles).
 
@@ -23,14 +23,24 @@ Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper
 
 **Note:** This script will only generate a map using 'fill' - not any 'edges'
 
-### ► Processing Options ◄
+## ► Processing Options ◄
 
-##### **PALETTE**
-Attempts to convert image to Shmeppy fill tiles, using a palette of a user-specified number of colors (maximum of 8 colors).
+### **PALETTE**
+Attempts to convert image to Shmeppy fill tiles, using a palette of colors.
 - Sharp color transitions when processing an image with fixed color palette.
-- Many similar colors in a single image returns a poor result.
+- Many similar colors in a single image may return a poor result.
 
-##### **FILTER RESIZE**
+#### **Palette Sampling**
+The palette is generated (slowly, improved method in progress) by slicing the map image into smaller images, then fetching the most commonly used colors in those images.
+
+The sample grid is autoscaled from the image's largest dimension using the provided sample maximum map dimension. For example, using a sample grid maximum map dimension of 4 on an image of 1600x1200px would result in a sample grid of 4x3 tiles, each 400x300px.
+
+The most used colors of each sample tile (exact number specified by user as palette size) is added to the overall palette for the final map.
+
+Obviously, the options for **palette sampling** can drastically affect the map processing speed, but provides the more control than the **filter-resize** method.
+
+-----
+### **FILTER RESIZE**
 Scales the image to the map size then converts pixels to Shmeppy tiles.  
 
 - Much faster than Palette
@@ -38,7 +48,8 @@ Scales the image to the map size then converts pixels to Shmeppy tiles.
 
 Both methods preserve the aspect ratio of the map.
 
-### FILTER TYPES
+#### **Filter Types**
+
 (from https://pillow.readthedocs.io/en/stable/handbook/concepts.html#filters)
 
 Listed in order increasing order of fidelity, decreasing order of speed.
@@ -84,8 +95,7 @@ Python includes a strong standard libary, but this program uses a few additional
 
 haishoku  
 Pillow  
-pyfiglet  
-PyInquirer  
+cutie
 
 A full list of packages and their purposes can be found at the bottom of this document.
 
@@ -145,8 +155,7 @@ pathlib (to aid in compatibility across different operating systems)
 sys (system stuff like take command line arguments and exit the program)  
 haishoku (palette related functions)  
 Pillow (also known as PIL, used for general image processing)  
-pyfiglet (title)  
-PyInquirer (user input menu)  
+cutie (user input menu)  
 
 #### Versions:
 V1 basic BOX and NEAREST filter/resize processing  
