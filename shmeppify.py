@@ -31,6 +31,7 @@ def main(title=True):
         map_size = (answers['map_major_dim'])
 
     if answers['op_type'].startswith('pal'):
+        temp_path = Path()
         #process palette operation
         if answers['palette_rescale']:
             #resize image before processing
@@ -47,7 +48,7 @@ def main(title=True):
         op = gm.palette_op(answers['palette_size'], sample_factor = answers['sample_factor'])
 
         #remove palette_rescale file if present
-        temp_path.unlink(missing_ok=True)
+        if answers['palette_rescale']: temp_path.unlink(missing_ok=True) 
 
     elif answers['op_type'].startswith('fil'):
         gm = Game_Map(answers['img_path'],map_size,answers['debug'])
