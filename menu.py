@@ -87,8 +87,8 @@ def palette_menu():
         allow_float=False)
 
     response['palette_size'] = cutie.get_number(
-        '-= Number of Palette Colors to Return per Sample (8 max):',
-        min_value=1,
+        '-= Number of Palette Colors to Return per Sample (8 max, enter 0 for automatic selection):',
+        min_value=0,
         max_value=8,
         allow_float=False)
 
