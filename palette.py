@@ -12,8 +12,8 @@ def get_palette(img_path, palette_size, debug=False, show_palette=False):
         exit()
 
     if debug:
-        print(f'Full Palette = {full_palette}')
-        print(f'Map Reduced Palette = {map_palette}')
+        print(f' ► Full Palette (Freq,RGB) = {full_palette}')
+        print(f' ► Map Reduced Palette (Freq,RGB) = {map_palette}')
 
     #return only the RGB values
     return dict(map_palette).values()

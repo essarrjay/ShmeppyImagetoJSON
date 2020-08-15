@@ -22,7 +22,7 @@ def main(title=True):
     answers = menu.main_menu(img_path)
 
     #process user inputs
-    if answers['debug']: print(answers)
+    if answers['debug']: print(f' ► Answers: {answers}')
     try:
         map_size = (answers['map_dim_x'],answers['map_dim_y'])
         map_major_dim = max(map_size)

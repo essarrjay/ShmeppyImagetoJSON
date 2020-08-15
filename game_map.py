@@ -18,6 +18,9 @@ import progress_bar
 class Game_Map:
     def __init__(self, img_path, map_size=None, debug=False, name=None):
         print("\n||||| Initializing Game Map |||||\n")
+        self.debug = debug
+        dbset = "ON" if debug is True else "OFF"
+        print(f' ► Debug mode is {dbset}')
         self.path = Path(img_path)
         try:
             with Image.open(self.path) as im:
@@ -35,7 +38,7 @@ class Game_Map:
         except TypeError:
             self.map_size = map_size
         self.max_map_dim = max(self.map_size)
-        self.debug = debug
+
 
         self.tile_raw_size = self.get_tile_size(show_info="Input Image")
 
@@ -62,7 +65,7 @@ class Game_Map:
         tile_raw_h = h / y_tiles
 
         if self.debug:
-            print(f'Raw tile width: {tile_raw_w}\nRaw tile height: {tile_raw_h}')
+            print(f' ► Raw tile width: {tile_raw_w}\n ► Raw tile height: {tile_raw_h}')
 
         tile_w = int(round(tile_raw_w))
         tile_h = int(round(tile_raw_h))
@@ -116,9 +119,10 @@ class Game_Map:
         for row in progress_bar.progressbar(tiles, " Processing Image for Palette: ", " Samples Row: ",36):
             for tile in row:
                 tile.save(temp_path,"PNG")
-                pal = get_palette(temp_path, palette_size, debug=False)
+                pal = get_palette(temp_path, palette_size, debug=self.debug)
                 data += pal
                 os.remove(temp_path)
+                if debug: print(f' ► Sample tile palette length: {len(pal)}')
 
         #remove duplicates
         data = list(dict.fromkeys(data))
@@ -145,13 +149,13 @@ class Game_Map:
         x, y = 0,0
         for row in progress_bar.progressbar(tiles, "Processing Map: ", " Row: ",36):
             for tile in row:
-                if self.debug:
-                    temp_path = f'{x}x{y}y_temp_img.png'
-                    temp_path = Path('./test_tiles/' + temp_path)
+                #if self.debug:
+                #    temp_path = f'{x}x{y}y_temp_img.png'
+                #    temp_path = Path('./test_tiles/' + temp_path)
                 tile.save(temp_path,"PNG")
                 dominant = Haishoku.getDominant(str(temp_path))
                 tile_color = nearest_color_from_palette(palette,dominant)
-                if self.debug: print(f'Tile Address: {x}, {y} | Tile Color: {tile_color} | Saved to:  {temp_path}')
+                #if self.debug: print(f'Tile Address: {x}, {y} | Tile Color: {tile_color} | Saved to:  {temp_path}')
                 fill_op.add_fill(x,y,rgb_to_hex(*tile_color))
                 x += 1
             y += 1
