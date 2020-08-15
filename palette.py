@@ -1,8 +1,12 @@
 from haishoku.haishoku import Haishoku
 from sys import exit
 
-def get_palette(img_path, palette_size, debug=False, show_palette=False):
+def get_palette(img_path, palette_size, debug=False, show_palette=False, autothreshold = None):
     #returns a list of RGB tuples representing a palette of palette_size numbers of color, by maximum use
+    if palette_size == 0:
+        palette_size = 8
+        autothreshold = 1 / palette_size
+
     try:
         full_palette = Haishoku.getPalette(str(img_path))
         map_palette = full_palette[:palette_size]
@@ -14,9 +18,26 @@ def get_palette(img_path, palette_size, debug=False, show_palette=False):
     if debug:
         print(f' ► Full Palette (Freq,RGB) = {full_palette}')
         print(f' ► Map Reduced Palette (Freq,RGB) = {map_palette}')
+        print(f' ► Autothreshold = {autothreshold}')
 
-    #return only the RGB values
-    return dict(map_palette).values()
+    if autothreshold:
+        output = []
+        if map_palette[0][0] < autothreshold:
+            #return dominant color if no colors exceed threshold
+            output = [map_palette[0][1]]
+            print('  =Sample Warning: ')
+            print(f'   No color exceeds in {round(autothreshold*100,1)}% sample tile. Color {output[0]} represents highest porportion of sample ({map_palette[0][0]*100}%) and will be used as result.')
+        else:
+            #filter colors below autothreshold
+            for freq,rgb in map_palette:
+                if freq >= autothreshold:
+                    output.append(rgb)
+
+    else:
+        #return only the RGB values
+        output = dict(map_palette).values()
+
+    return output
 
 def nearest_color_from_palette(palette, in_color):
     #returns nearest RGB color in palette
