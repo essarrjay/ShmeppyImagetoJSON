@@ -31,6 +31,7 @@ def main(title=True):
         map_size = (answers['map_major_dim'])
 
     if answers['op_type'].startswith('pal'):
+        temp_path = Path()
         #process palette operation
         if answers['palette_rescale']:
             #resize image before processing

@@ -1,13 +1,11 @@
 #external modules
 from haishoku.haishoku import Haishoku
 from PIL import Image
-from os import remove
 from pathlib import Path
 from datetime import datetime
 from copy import deepcopy
 from sys import exit
 import json
-import os
 
 #internal modules
 from palette import *
@@ -121,7 +119,7 @@ class Game_Map:
                 tile.save(temp_path,"PNG")
                 pal = get_palette(temp_path, palette_size, debug=self.debug)
                 data += pal
-                os.remove(temp_path)
+                temp_path.unlink()
 
         #remove duplicates
         data = list(dict.fromkeys(data))
@@ -144,7 +142,7 @@ class Game_Map:
         #get palette to be used in the process
         palette = self.get_combined_palette(palette_size, sampling_map_size)
 
-        temp_path = 'temp_img.png'
+        temp_path = Path('temp_img.png')
         x, y = 0,0
         for row in progress_bar.progressbar(tiles, "Processing Map: ", " Row: ",36):
             for tile in row:
@@ -159,7 +157,7 @@ class Game_Map:
                 x += 1
             y += 1
             x = 0
-        if not self.debug: remove(temp_path)
+        if not self.debug: temp_path.unlink()
 
         return fill_op
 
