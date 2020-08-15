@@ -60,7 +60,7 @@ class Game_Map:
         tile_raw_h = h / y_tiles
 
         if self.debug:
-            print(f'Raw tile width: {tile_raw_w}\nRaw tile height: {tile_raw_h}')
+            print(f' ►Raw tile width: {tile_raw_w}\n ►Raw tile height: {tile_raw_h}')
 
         tile_w = int(round(tile_raw_w))
         tile_h = int(round(tile_raw_h))
@@ -114,7 +114,7 @@ class Game_Map:
         for row in progress_bar.progressbar(tiles, " Processing Image for Palette: ", " Samples Row: ",36):
             for tile in row:
                 tile.save(temp_path,"PNG")
-                pal = get_palette(temp_path, palette_size, debug=False)
+                pal = get_palette(temp_path, palette_size, debug=self.debug)
                 data += pal
                 temp_path.unlink()
 
