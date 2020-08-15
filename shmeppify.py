@@ -22,7 +22,7 @@ def main(title=True):
     answers = menu.main_menu(img_path)
 
     #process user inputs
-    if answers['debug']: print(answers)
+    if answers['debug']: print(f' ► Answers: {answers}')
     try:
         map_size = (answers['map_dim_x'],answers['map_dim_y'])
         map_major_dim = max(map_size)
@@ -48,7 +48,7 @@ def main(title=True):
         op = gm.palette_op(answers['palette_size'], sample_factor = answers['sample_factor'])
 
         #remove palette_rescale file if present
-        if answers['palette_rescale']: temp_path.unlink(missing_ok=True) 
+        if answers['palette_rescale']: temp_path.unlink(missing_ok=True)
 
     elif answers['op_type'].startswith('fil'):
         gm = Game_Map(answers['img_path'],map_size,answers['debug'])

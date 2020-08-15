@@ -4,11 +4,14 @@ from pathlib import Path
 from PIL import Image
 
 def main_menu(img_path=None):
+    print("\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬")
+    print("  Image to Shmeppy JSON Converter ")
+    print("▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬")
     answers={'img_path':img_path, 'map_dim_y':None}
     if not img_path:
         answers['img_path'] = input("-= Image File Path/Name: ")
     # Get the op_type
-    print("\n-= How would you like to process this image? =-")
+    print("-= How would you like to process this image? =-")
     # List of op_types to select from, including some captions
     op_types = ['Palette - sharp tiles, slow',
         'Filter resize - faster, blended tiles',
@@ -81,7 +84,7 @@ def palette_menu():
     print()
 
     response['sample_factor'] = cutie.get_number(
-        '-= Palette sample factor for the longest map dimension (integer):',
+        '-= Sample grid major dimension (integer):',
         min_value=1,
         max_value=999,
         allow_float=False)
