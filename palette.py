@@ -32,6 +32,7 @@ def get_palette(img_path, palette_size, debug=False, show_palette=False, autothr
             for freq,rgb in map_palette:
                 if freq >= autothreshold:
                     output.append(rgb)
+        if debug: print(f' ► Sample tile palette length: {len(output)}')
 
     else:
         #return only the RGB values

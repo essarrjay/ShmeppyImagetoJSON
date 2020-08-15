@@ -122,7 +122,6 @@ class Game_Map:
                 pal = get_palette(temp_path, palette_size, debug=self.debug)
                 data += pal
                 os.remove(temp_path)
-                if debug: print(f' ► Sample tile palette length: {len(pal)}')
 
         #remove duplicates
         data = list(dict.fromkeys(data))
