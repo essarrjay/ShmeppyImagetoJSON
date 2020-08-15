@@ -46,6 +46,12 @@ def main_menu(img_path=None):
     print()
     answers['debug'] = cutie.prompt_yes_or_no('Debug Mode? ')
 
+    answers['confirm'] = cutie.prompt_yes_or_no('Proceed with Processing? ', default_is_yes=True)
+
+    if not answers['confirm']: 
+        print("Processing terminated, exiting program.")
+        exit()
+
     return answers
 
 def map_size_menu(autoscale=True):
