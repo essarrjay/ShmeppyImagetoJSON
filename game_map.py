@@ -108,7 +108,7 @@ class Game_Map:
 
         return tiles
 
-    def get_palette(self, palette_size, sampling_map_size):
+    def get_combined_palette(self, palette_size, sampling_map_size):
         print("==|Generating Palette|==")
         sample_raw_size = self.get_tile_size(sampling_map_size, show_info="Sample Tiles")
         tiles = self.slice_to_tiles(tile_raw_size=sample_raw_size, show_info="Palette Sample")
@@ -142,7 +142,7 @@ class Game_Map:
 
         sampling_map_size = self.get_map_size(sample_factor)
         #get palette to be used in the process
-        palette = self.get_palette(palette_size, sampling_map_size)
+        palette = self.get_combined_palette(palette_size, sampling_map_size)
 
         temp_path = 'temp_img.png'
         x, y = 0,0
