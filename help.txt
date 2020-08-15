@@ -49,3 +49,7 @@
       LANCZOS - Calculate the output pixel value using a high-quality
           Lanczos filter (a truncated sinc) on all pixels that may
           contribute to the output value.
+
+        --------
+
+More info: https://github.com/essarrjay/ShmeppyImagetoJSON
