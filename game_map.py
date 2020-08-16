@@ -12,10 +12,11 @@ from palette import *
 import shmops
 import progress_bar
 
-#config
+#init globals
 with open('config.json') as f:
     config_dict = json.load(f)
 autopalette_threshold = config_dict["autopalette_threshold"]
+shmeppy_json = { "exportFormatVersion":1,"operations":[]}
 
 class Game_Map:
     """Represents all data needed to create shmeppy game maps.
@@ -30,8 +31,6 @@ class Game_Map:
         x,y dimensions of image at path, in px
     name : str
         name of map, pulled from image file if not provided
-    shmeppy_json: dict
-        the structure of the json output file as used by shmeppy
     map_size : (int,int)
         x,y dimensions of output map in squares
     map_major_dim : int
@@ -221,7 +220,7 @@ class Game_Map:
         filename = f"{self.name}_{ms[0]}x{ms[1]}_{ts}.json"
         export_path = Path(data_dir + filename)
 
-        export_obj = deepcopy(self.shmeppy_json)
+        export_obj = deepcopy(shmeppy_json)
         export_obj["operations"].append(op.__dict__)
 
         try:
