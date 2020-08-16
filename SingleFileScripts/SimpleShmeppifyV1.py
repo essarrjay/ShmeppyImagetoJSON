@@ -40,7 +40,10 @@ class Fill_Operation:
 
 def process_img(image_path,map_major_dim, filter_option):
     #mapsize as a tuple
-    map_img = Image.open(image_path)
+    try:
+        map_img = Image.open(image_path)
+    except:
+        print(f"File {image_path} not found, be sure this includes the full or relative path - the folders containing the file, not just the file's name.\n")
     map_img.thumbnail((map_major_dim,map_major_dim),resample=filter_option)
     pixels = map_img.convert('RGB').load()
     output_op = Fill_Operation(id='4321')
