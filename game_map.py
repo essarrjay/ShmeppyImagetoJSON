@@ -14,6 +14,28 @@ import progress_bar
 
 
 class Game_Map:
+    """Represents all data needed to create shmeppy game maps.
+
+    Attributes
+    ----------
+    debug : boolean
+        flags additional outputs
+    path : pathlib.Path obj
+        points to input image file
+    img_size : (int,int)
+        x,y dimensions of image at path, in px
+    name : str
+        name of map, pulled from image file if not provided
+    shmeppy_json: dict
+        the structure of the json output file as used by shmeppy
+    map_size : (int,int)
+        x,y dimensions of output map in squares
+    map_major_dim : int
+        largest dimension of map_size (in squares)
+    tile_raw_size : (float,float)
+        dimensions of each tile in px. tiles are an area of input image representing a single output square of the Shmeppy map.
+    """
+
     def __init__(self, img_path, map_size=None, debug=False, name=None):
         print("\n||||| Initializing Game Map |||||\n")
 
@@ -38,13 +60,13 @@ class Game_Map:
         except TypeError:
             self.map_size = map_size
 
-        self.max_map_dim = max(self.map_size)
+        self.map_major_dim = max(self.map_size)
         self.tile_raw_size = self.get_tile_size(show_info="Input Image")
 
-    def get_map_size(self, max_map_dim=None):
-        #returns x,y tuple of map size in tiles units
+    def get_map_size(self, map_major_dim=None):
+        """Returns x,y tuple of map size in tiles units"""
         w, h = self.img_size
-        mmd = max_map_dim
+        mmd = map_major_dim
         if w >= h:
             x_tiles = mmd
             y_tiles = round(h / w * mmd)
@@ -55,7 +77,7 @@ class Game_Map:
         return (x_tiles, y_tiles)
 
     def get_tile_size(self, map_size = None, show_info = None):
-        #returns a tuple of unrounded tile size
+        """Returns a tuple of unrounded tile size"""
         if not map_size: map_size = self.map_size
         w,h = self.img_size
         x_tiles,y_tiles = map_size
@@ -79,7 +101,7 @@ class Game_Map:
         return (tile_raw_w,tile_raw_h)
 
     def slice_to_tiles(self, tile_raw_size=None, show_info=""):
-        #returns list of image objects as 2d list.
+        """Returns list of image objects as 2d list"""
         if not tile_raw_size: tile_raw_size = self.tile_raw_size
         tile_raw_w,tile_raw_h = tile_raw_size
         tile_w,tile_h = round(tile_raw_w),round(tile_raw_h)
@@ -108,6 +130,7 @@ class Game_Map:
         return tiles
 
     def get_combined_palette(self, palette_size, sampling_map_size):
+        """Returns a combined list of RGB colors from sampled map slices"""
         print("==|Generating Palette|==")
         sample_raw_size = self.get_tile_size(sampling_map_size, show_info="Sample Tiles")
         tiles = self.slice_to_tiles(tile_raw_size=sample_raw_size, show_info="Palette Sample")
@@ -133,7 +156,7 @@ class Game_Map:
         return data
 
     def palette_op(self, palette_size, sample_factor = 4):
-        #generates an shmops.fill_operation obj
+        """Generates an shmops.fill_operation obj"""
         print("||||| Initiating Palette Fill Operation |||||")
         fill_op = shmops.Fill_Operation(id='4321')
 
@@ -163,12 +186,12 @@ class Game_Map:
         return fill_op
 
     def filter_op(self, filter_option):
-        #generates an shmops.fill_operation obj using a resize/filter operation
+        """Returns a shmops.fill_operation obj using a resize/filter operation"""
         print("===||| Initiating Filter-Resize Fill Operation |||===")
         fill_op = shmops.Fill_Operation(id='4321')
 
         with Image.open(self.path) as map_img:
-            map_img.thumbnail((self.max_map_dim, self.max_map_dim),resample=filter_option)
+            map_img.thumbnail((self.map_major_dim, self.map_major_dim),resample=filter_option)
             pixels = map_img.convert('RGB').load()
             for x in progress_bar.progressbar(range(map_img.width), "Processing: ",width=36):
                 for y in range(map_img.height):
@@ -177,7 +200,7 @@ class Game_Map:
         return fill_op
 
     def op_to_json(self, op, data_dir=r'./output_files/'):
-        #exports map as shmeppy compatible JSON
+        """Exports Fill_Operation as shmeppy compatible JSON"""
         if data_dir[-1] != '/': data_dir += '/'
 
         #generate export filename and export Path obj
