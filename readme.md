@@ -8,8 +8,9 @@ Many thanks to John Sullivan for their awesome, thoughfully designed and current
 More info on Shmeppy here: https://shmeppy.com/about
 
 # **Overview**
-This script takes an image (`.jpeg`, `.png` or probably plenty others) and converts it into a form recognized by Shemppy's new import function.
+This Python script takes an image (`.jpeg`, `.png` or probably plenty others) and converts it into a form recognized by Shemppy's new import function.
 
+#### Use:
 To use, call from a command line:  
 `python shmeppify.py <*image_file_path>`
 
@@ -22,6 +23,9 @@ The maximum map dimension sets the scale of the Shmeppy map - typically one 5x5 
 Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper left.
 
 **Note:** This script will only generate a map using 'fill' - not any 'edges'
+
+#### Alternative:
+For a stand-alone application (with less functionality) see https://github.com/essarrjay/ShmeppyImagetoJSON/tree/master/SingleFileScripts
 
 -----
 
