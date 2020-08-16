@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import json
 from datetime import datetime
 from pathlib import Path
@@ -79,13 +78,13 @@ def get_filter_option():
 
 def simple_title():
     lines = ["\n"]
-    lines += ["  =================="]
-    lines += ["  Shmeppify an Image"]
-    lines += ["  =================="]
+    lines += ["==============================="]
+    lines += ["Convert an Image to Shmeppy Map"]
+    lines += ["==============================="]
     lines += ["\n"]
     return "\n".join(lines)
 
-def run():
+def main():
     print(simple_title())
 
     try:
@@ -98,7 +97,7 @@ def run():
     filter_option = get_filter_option()
     print()
     process_img(img_file,max_map_dim, filter_option)
-    print()
+    input("Press Enter to Quit...")
 
 if __name__ == '__main__':
-    run()
+    main()
