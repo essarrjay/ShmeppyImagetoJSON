@@ -29,10 +29,13 @@ Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper
 
 ## **Detailed Instructions:**
 
-### Download Executable
+### Download the Tool
+Navigate to the [`simple_shmeppify_v...exe`](https://github.com/essarrjay/ShmeppyImagetoJSON/blob/master/SingleFileScripts/simple_shmeppify_v1.1.0.exe) file above, and click on the `Download` button on the right side of the panel.
+
 Save `simple_shmeppify.exe` to your computer in the same folder as the image you will be using to create a map.
 
-Double-click to run the program.
+### Run the Tool
+Double-click to run the application.
 
 You will be prompted to enter the path for the image file. If it's in the same location as the script (as suggested), just enter the file name, including the file extension. (e.g. `example_file.jpg`)
 
@@ -47,14 +50,14 @@ Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper
 
 **Note:** This script will only generate a map using 'fill' - not any 'edges'
 
-### **Need Help?**
+## **Need Help?**
 Don't bug John! But jump on the discord and try asking there:
 https://shmeppy.com/help-and-community
 
-### **Want more features?**
+## **Want more features?**
 Check out the main project, which has more processing options and control:  https://github.com/essarrjay/ShmeppyImagetoJSON/
 
-### **Other feedback is welcome!**
+## **Other feedback is welcome!**
 The last time I did serious programming was on a Commodore64 (or feels like it at least). I sure hope it works!
 
 ## **Notes:**
