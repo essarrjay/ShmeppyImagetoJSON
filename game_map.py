@@ -16,9 +16,11 @@ import progress_bar
 class Game_Map:
     def __init__(self, img_path, map_size=None, debug=False, name=None):
         print("\n||||| Initializing Game Map |||||\n")
+
         self.debug = debug
         dbset = "ON" if debug is True else "OFF"
         print(f' ► Debug mode is {dbset}')
+
         self.path = Path(img_path)
         try:
             with Image.open(self.path) as im:
@@ -35,9 +37,8 @@ class Game_Map:
             self.map_size = self.get_map_size(int(map_size))
         except TypeError:
             self.map_size = map_size
+
         self.max_map_dim = max(self.map_size)
-
-
         self.tile_raw_size = self.get_tile_size(show_info="Input Image")
 
     def get_map_size(self, max_map_dim=None):
@@ -92,10 +93,10 @@ class Game_Map:
         true_x, true_y = (0,0)
         with Image.open(self.path) as img_obj:
             w,h = img_obj.size
-            for row in range(0,h,tile_h):
+            for row in range(0,h-tile_h,tile_h):
                 tiles_row = []
                 y = round(true_y)
-                for col in range(0,w,tile_w):
+                for col in range(0,w-tile_w,tile_w):
                     x = round(true_x)
                     im_crop = img_obj.crop((x,y,x+tile_w,y+tile_h))
                     tiles_row.append(im_crop)
@@ -199,9 +200,8 @@ class Game_Map:
         return result_str
 
 if __name__ == '__main__':
-    #GM = Game_Map(r"test_im\3x3_test_master.png",map_size=(3,3), debug=True)
-    GM = Game_Map(r"test_im\toa_58.png",map_size=(47,58), debug=False)
+    GM = Game_Map(r"test_im\dragonsmaw.png",map_size=(31))
     op = GM.palette_op(4)
     print(GM.op_to_json(op))
-    GM = Game_Map(r"test_im\dragonsmaw.png",max_map_dim=31)
-    #GM.op_to_json(GM.filter_op(Image.BOX,debug=True))
+    GM.op_to_json(GM.filter_op(Image.BOX,debug=True))
+    print(GM.op_to_json(op))
