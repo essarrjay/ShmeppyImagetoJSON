@@ -1,10 +1,7 @@
 from haishoku.haishoku import Haishoku
 from sys import exit
 
-def get_palette(img_path, palette_size, debug=False, show_palette=False, autothreshold = None):
-    if palette_size == 0:
-        palette_size = 8
-        autothreshold = 1 / palette_size
+def get_palette(img_path, palette_size, freq_min=None, debug=False, show_palette=False):
     """returns a list of RGB tuples representing a palette of palette_size numbers of color, by maximum use"""
 
     try:
@@ -18,19 +15,19 @@ def get_palette(img_path, palette_size, debug=False, show_palette=False, autothr
     if debug:
         print(f' ► Full Palette (Freq,RGB) = {full_palette}')
         print(f' ► Map Reduced Palette (Freq,RGB) = {map_palette}')
-        print(f' ► Autothreshold = {autothreshold}')
+        print(f' ► Autopalette threshold = {freq_min}')
 
-    if autothreshold:
+    if freq_min:
         output = []
-        if map_palette[0][0] < autothreshold:
+        if map_palette[0][0] < freq_min:
             #return dominant color if no colors exceed threshold
             output = [map_palette[0][1]]
             print('  =Sample Warning: ')
-            print(f'   No color exceeds in {round(autothreshold*100,1)}% sample tile. Color {output[0]} represents highest porportion of sample ({map_palette[0][0]*100}%) and will be used as result.')
+            print(f'   No color exceeds in {round(freq_min*100,1)}% sample tile. Color {output[0]} represents highest porportion of sample ({map_palette[0][0]*100}%) and will be used as result.')
         else:
-            #filter colors below autothreshold
+            #filter colors below freq_min
             for freq,rgb in map_palette:
-                if freq >= autothreshold:
+                if freq >= freq_min:
                     output.append(rgb)
         if debug: print(f' ► Sample tile palette length: {len(output)}')
 

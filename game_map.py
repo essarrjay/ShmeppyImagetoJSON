@@ -12,6 +12,10 @@ from palette import *
 import shmops
 import progress_bar
 
+#config
+with open('config.json') as f:
+    config_dict = json.load(f)
+autopalette_threshold = config_dict["autopalette_threshold"]
 
 class Game_Map:
     """Represents all data needed to create shmeppy game maps.
@@ -137,11 +141,18 @@ class Game_Map:
         temp_path = Path('temp_img.png')
         data = []
 
+        #set autopalette values
+        if palette_size == 0:
+            freq_min = autopalette_threshold
+            palette_size = 8
+        else:
+            freq_min = None
+
         #iterate through Image Objects, get palettes, combine
         for row in progress_bar.progressbar(tiles, " Processing Image for Palette: ", " Samples Row: ",36):
             for tile in row:
                 tile.save(temp_path,"PNG")
-                pal = get_palette(temp_path, palette_size, debug=self.debug)
+                pal = get_palette(temp_path, palette_size, freq_min=freq_min, debug=self.debug)
                 data += pal
                 temp_path.unlink()
 
