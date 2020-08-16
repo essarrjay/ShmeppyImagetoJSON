@@ -1,7 +1,7 @@
 
 # **Simple Shmeppy Mapfile (JSON) Generator**
 
-**This file is maintained (less regularly) for those interested in the simplicity of a script which uses a single python file.**
+**This file is maintained (less regularly) for those interested in the simplicity of single file.**
 
 For the most excellent [shmeppy.com](https://shmeppy.com/) minimalist virtual tabletop application.
 
@@ -12,10 +12,14 @@ More info on Shmeppy here: https://shmeppy.com/about
 ## **Overview**
 This script takes an image (`.jpeg`, `.png` or probably plenty others) and converts it into a form recognized by Shemppy's new import function.
 
-To use, call from a command line:
-`python shmeppify.py <*image_file_path>`
+To use, you have two options:
+1. **Windows:**  
+  Run `simple_shmeppify.exe`
 
-The image can also be specified later from an input prompt.
+1. **Python:**  
+  Call from a command line: `python shmeppify.py <*image_file_path>`  
+  * The image can also be specified later from an input prompt.
+  * If you're comfortable or interested in learning to use the Python version, the main branch of this project has more functionality.
 
 You will then see two prompts to specify the map size. The result will look nicest if you use the same aspect ratio as the original image.
 
@@ -25,55 +29,16 @@ Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper
 
 ## **Detailed Instructions:**
 
-### Prerequisites: Python
-You'll need a Python interpreter - this is basically a program that lets you run scripts/programs written in the programming language of Python.
+### Download Executable
+Save `simple_shmeppify.exe` to your computer in the same folder as the image you will be using to create a map.
 
-#### Install Instructions:
-Guide here:  https://wiki.python.org/moin/BeginnersGuide/Download  
-(or plenty of other guides if you google "Installing Python for Windows/Linux/Etc")
+Double-click to run the program.
 
-### **Download this file**
-Oh, tons of ways to do this. Click on the `shmeppify.py` link in the list above. Then click on the `Raw` button on the right side of the screen.
-
-Save this page in the same folder you have your map image, and name it `shmeppify.py`.
-
-#### Install any missing packages
-Python includes a strong standard libary, but this program uses an additional package you may not have installed:  
-
-Pillow
-
-A full list of packages and their purposes can be found at the bottom of this document (or heck, the first few lines of code).
-
-You can see all installed packages by using the following commands in a terminal (see next section if you need help):  
-`pip list` or `python -m pip list`
-
-Install a package using:  
-`pip install <package name>` or `python -m pip install <package name>`
-
-Package names are case sensitive.
-
-### **Running the script**
-
-#### Open a terminal window.
-
-**Linux**: If you use Linux you probably know how already.
-
- **Windows**: `Win` + `x`, followed by `i` to open Windows PowerShell
-
- Having trouble? [More ways to access PowerShell](https://www.tenforums.com/tutorials/25581-open-windows-powershell-windows-10-a.html)
-
-#### Run the script
-In the terminal window, navigate to the folder where you saved both the script and your image file. For example, if you were using Windows and saved both on your desktop the command would be:   
-`cd desktop` or `cd C:\users\<your_username>\desktop`
-
-Call the script by entering the following command:
-`python shmeppify.py`
-
-You will be prompted to enter the path for the image file. If it's in the same location as the script, just enter the file name, including the file extension. (e.g. `example_file.jpg`)
+You will be prompted to enter the path for the image file. If it's in the same location as the script (as suggested), just enter the file name, including the file extension. (e.g. `example_file.jpg`)
 
 You will then see two prompts to specify the map size. The result will look nicest if you use the same aspect ratio as the original image.
 
-The file will named something like `Game_Map_2020...` Rename if you like.
+The file will named something like `<image_name>_<width>x<height>_2020...` and located in the same folder as the `.exe` file.
 
 ### Import into Shmeppy  
 Navigate to Shmeppy.com, click on the `Games >>` button in the upper right. At the bottom of the side panel, click on `Import Backup` and select the file you created earlier with the script.
@@ -85,6 +50,9 @@ Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper
 ### **Need Help?**
 Don't bug John! But jump on the discord and try asking there:
 https://shmeppy.com/help-and-community
+
+### **Want more features?**
+Check out the main project, which has more processing options and control:  https://github.com/essarrjay/ShmeppyImagetoJSON/
 
 ### **Other feedback is welcome!**
 The last time I did serious programming was on a Commodore64 (or feels like it at least). I sure hope it works!
