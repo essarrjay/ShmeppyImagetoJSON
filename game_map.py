@@ -52,7 +52,7 @@ class Game_Map:
                 self.img_size = im.size
             print(f"   Input File: {self.path.name}")
         except FileNotFoundError:
-            print(f"File {img_path} not found, be sure this includes the full or relative path - the folders containing the file, not just the file's name.\n")
+            print(f"File \"{img_path}\" not found, be sure this includes the full or relative path - the folders containing the file, not just the file's name.\n")
             exit()
 
         self.name = name if name else self.path.stem
