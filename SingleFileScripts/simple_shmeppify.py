@@ -36,13 +36,15 @@ class Fill_Operation:
         return result
 
 def process_img(image_path,map_major_dim, filter_option):
-    #mapsize as a tuple
+    """Converts image to shmeppy compatible JSON, returns str"""
     try:
-        map_img = Image.open(image_path)
+        im = Image.open(image_path)
     except:
-        print(f"File {image_path} not found, be sure this includes the full or relative path - the folders containing the file, not just the file's name.\n")
-    map_img.thumbnail((map_major_dim,map_major_dim),resample=filter_option)
-    pixels = map_img.convert('RGB').load()
+        print(f"File \"{image_path}\" not found, be sure this includes the full or relative path and the file extension.\n")
+        sys.exit()
+
+    im.thumbnail((map_major_dim,map_major_dim),resample=filter_option)
+    pixels = im.convert('RGB').load()
     output_op = Fill_Operation(id='4321')
     w,h = im.size
     for x in range(w):
@@ -61,7 +63,8 @@ def process_img(image_path,map_major_dim, filter_option):
 def rgb_to_hex(r, g, b):
     return '#{:02x}{:02x}{:02x}'.format(r, g, b)
 
-def get_max_dim_input():
+def get_major_dim_input():
+    """Prompts user to supply map's longest dimeension in squares"""
     dim = -1
     print("-= Map major (max) dimension in squares =-")
     while dim <= 0:
@@ -72,6 +75,7 @@ def get_max_dim_input():
     return dim
 
 def get_filter_option():
+    """Prompts user to select filter to be used when downscaling img"""
     option = -1
     filters_map = {1:Image.BOX,2:Image.NEAREST,3:Image.LANCZOS} #uses Image resampling options
     while option <= 0:
@@ -96,16 +100,16 @@ def main():
     print(simple_title())
 
     try:
-        img_file = sys.argv[1]
+        img_path = Path(sys.argv[1])
     except:
-        img_file = input("Image File Path/Name: ")
+        img_path = Path(input("Image File Path/Name: "))
 
-    map_major_dim = get_max_dim_input()
+    map_major_dim = get_major_dim_input()
     print()
     filter_option = get_filter_option()
     print()
-    process_img(img_file,map_major_dim, filter_option)
-    input("Press Enter to Quit...")
+    print(process_img(img_path,map_major_dim, filter_option))
+    input("Press Enter to Exit...")
 
 if __name__ == '__main__':
     main()
