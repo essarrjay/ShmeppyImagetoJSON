@@ -18,14 +18,11 @@ class Fill_Operation:
         pixel_data = [coordinates,color]
         self.cellFills.append(pixel_data)
 
-    def export_json(self, data_dir=r'./'):
-        #exports table_data as JSON
+    def export_json(self, filename, data_dir=r'./'):
+        """Exports the Fill_Operation data as shmeppy friendly JSON"""
         if data_dir[-1] != '/': data_dir += '/'
 
         #generate export path
-        timestamp_str = str(datetime.now())[:-7]
-        timestamp_str = timestamp_str.replace(':','').replace(' ','_')
-        filename = f'game_map_{timestamp_str}.json'
         export_path = Path(data_dir + filename)
         export_obj["operations"].append(self.__dict__)
 
@@ -47,11 +44,19 @@ def process_img(image_path,map_major_dim, filter_option):
     map_img.thumbnail((map_major_dim,map_major_dim),resample=filter_option)
     pixels = map_img.convert('RGB').load()
     output_op = Fill_Operation(id='4321')
-    for x in range(map_img.width):
-        for y in range(map_img.height):
+    w,h = im.size
+    for x in range(w):
+        for y in range(h):
             r,g,b = pixels[x,y]
             output_op.add_pixel(x,y,rgb_to_hex(r,g,b))
-    print(output_op.export_json())
+
+    #set filename
+    ts = str(datetime.now())[:-7]
+    ts = ts.replace(':','').replace('-','').replace(' ','_')
+    filename = f"{image_path.stem}_{w}x{h}_{ts}.json"
+
+    result = output_op.export_json(filename)
+    return result
 
 def rgb_to_hex(r, g, b):
     return '#{:02x}{:02x}{:02x}'.format(r, g, b)
