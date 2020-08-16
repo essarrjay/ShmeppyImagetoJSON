@@ -38,10 +38,10 @@ class Fill_Operation:
 
         return result
 
-def process_img(image_path,max_map_dim, filter_option):
+def process_img(image_path,map_major_dim, filter_option):
     #mapsize as a tuple
     map_img = Image.open(image_path)
-    map_img.thumbnail((max_map_dim,max_map_dim),resample=filter_option)
+    map_img.thumbnail((map_major_dim,map_major_dim),resample=filter_option)
     pixels = map_img.convert('RGB').load()
     output_op = Fill_Operation(id='4321')
     for x in range(map_img.width):
@@ -55,10 +55,10 @@ def rgb_to_hex(r, g, b):
 
 def get_max_dim_input():
     dim = -1
-    print("-= Maximum map dimension in squares =-")
+    print("-= Map major (max) dimension in squares =-")
     while dim <= 0:
         try:
-            dim = int(input("Please enter a numerical value of 1 or more (default 50): ") or '50')
+            dim = int(input("Please enter a numerical value of 1 or more (default 24): ") or '24')
         except:
             print("Sorry, let's try that again.\n")
     return dim
@@ -92,11 +92,11 @@ def main():
     except:
         img_file = input("Image File Path/Name: ")
 
-    max_map_dim = get_max_dim_input()
+    map_major_dim = get_max_dim_input()
     print()
     filter_option = get_filter_option()
     print()
-    process_img(img_file,max_map_dim, filter_option)
+    process_img(img_file,map_major_dim, filter_option)
     input("Press Enter to Quit...")
 
 if __name__ == '__main__':
