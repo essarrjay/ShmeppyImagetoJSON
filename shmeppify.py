@@ -63,5 +63,8 @@ def main(title=True):
     result = gm.op_to_json(op)
     print(result)
 
+    #pause before exiting - necessary for pyinstaller
+    input("Press Enter to Exit...")
+
 if __name__ == '__main__':
     main()
