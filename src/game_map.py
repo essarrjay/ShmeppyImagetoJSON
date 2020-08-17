@@ -17,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent
 config_path = BASE_DIR.joinpath('config.json')
 with open(config_path) as f:
     config_dict = json.load(f)
-autopalette_threshold = config_dict["autopalette_threshold"]
+AUTOPAL_THRESHOLD = config_dict["autopalette_threshold"]
 SHMEPPY_JSON = { "exportFormatVersion":1,"operations":[]}
 
 class Game_Map:
@@ -143,7 +143,7 @@ class Game_Map:
 
         #set autopalette values
         if palette_size == 0:
-            freq_min = autopalette_threshold
+            freq_min = AUTOPAL_THRESHOLD
             palette_size = 8
         else:
             freq_min = None
