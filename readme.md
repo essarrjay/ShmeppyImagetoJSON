@@ -10,24 +10,38 @@ More info on Shmeppy here: https://shmeppy.com/about
 # **Overview**
 This Python script takes an image (`.jpeg`, `.png` or probably plenty others) and converts it into a form recognized by Shemppy's new import function.
 
-#### Use:
-To use, call from a command line:  
-`python shmeppify.py <*image_file_path>`
+### **Launching Application**
+To use, you have two options:
+#### **Python** (Windows, Mac, Linux)
+  Download as a zip (or clone with Git), extract and run from a command line:  
+  `python ./src/shmeppify.py <*image_file_path>`  
+  * The image can also be specified later from an input prompt.
+  * Will likely need to install additional packages (see detailed instructions below)  
 
-The image can also be specified later from an input prompt.
+#### **Windows**
 
-You will then see prompts to specify the processing method, and the map dimensions.
+1. In [/build](https://github.com/essarrjay/ShmeppyImagetoJSON/tree/master/build) download Image_to_Shmeppy_JSON_v2.x.x.zip
+2. Extract
+2. (optional) place image file in `Image_to_Shmeppy_JSON_v2.x.x` or `Image_to_Shmeppy_JSON_v2.x.x\Maps`
+3. Run `Image_to_Shmeppy_JSON_v2.x.x.exe` from within Image_to_Shmeppy_JSON_v2.x.x folder.
+4. Output map will be in same folder as the input image.
+
+You will be prompted to supply the path of an input image, or can provide it directly from a command line:
+`Image_to_Shmeppy_JSON_v2.x.x.exe <*image_file_path>`
+
+#### **Use**
+After a possible prompt to provide an input file, you will see prompts to specify the processing method, and the map dimensions.
 
 The maximum map dimension sets the scale of the Shmeppy map - typically one 5x5 ft map square = one Shmeppy tile, but some players use a different scale (e.g. one map square equal to 2x2 Shmeppy tiles).
 
-Output file will be in the current working directory.  
+Output file will be in the same location as the input image.  
 
 Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper left.
 
 **Note:** This script will only generate a map using 'fill' - not any 'edges'
 
 #### Alternative:
-For a stand-alone application (with less functionality) see https://github.com/essarrjay/ShmeppyImagetoJSON/tree/master/SingleFileScripts
+For a stand-alone application (with less functionality) see [simple_shmeppify_v1.1.0.exe](https://github.com/essarrjay/ShmeppyImagetoJSON/blob/master/build/simple_shmeppify_v1.1.0.exe)
 
 -----
 
