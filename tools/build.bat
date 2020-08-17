@@ -1,10 +1,12 @@
 pyinstaller ^
 --console ^
 --noconfirm ^
---add-data "help.txt;." ^
---add-data "readme.md;." ^
---add-data "config.json;." ^
---add-data "./input_files/dragonsmaw.png;./input_files" ^
---add-data "./output_files/example_map_for_import.json;./output_files" ^
---name Image_to_Shmeppy_JSON ^
-./shmeppify.py
+--add-data "../src/help.txt;." ^
+--add-data "../src/config.json;." ^
+--add-data "../README.md;." ^
+--add-data "../examples/images/dragonsmaw.png;./Maps" ^
+--name Image_to_Shmeppy_JSON_v2.2.1 ^
+--distpath ../build ^
+--workpath ../pyinstaller_workfiles ^
+--specpath ../pyinstaller_workfiles ^
+../src/shmeppify.py
