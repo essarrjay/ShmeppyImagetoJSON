@@ -13,7 +13,9 @@ import shmops
 import progress_bar
 
 #init globals
-with open('config.json') as f:
+BASE_DIR = Path(__file__).parent
+config_path = BASE_DIR.joinpath('config.json')
+with open(config_path) as f:
     config_dict = json.load(f)
 autopalette_threshold = config_dict["autopalette_threshold"]
 shmeppy_json = { "exportFormatVersion":1,"operations":[]}
