@@ -24,7 +24,7 @@ To use, you have two options:
 2. Extract
 2. (optional) place image file in `Image_to_Shmeppy_JSON_v2.x.x` or `Image_to_Shmeppy_JSON_v2.x.x\Maps`
 3. Run `Image_to_Shmeppy_JSON_v2.x.x.exe` from within Image_to_Shmeppy_JSON_v2.x.x folder.
-4. Output map will be in same folder as the input image.
+4. Output map will be in the current working directory.
 
 You will be prompted to supply the path of an input image, or can provide it directly from a command line:
 `Image_to_Shmeppy_JSON_v2.x.x.exe <*image_file_path>`
@@ -34,7 +34,7 @@ After a possible prompt to provide an input file, you will see prompts to specif
 
 The maximum map dimension sets the scale of the Shmeppy map - typically one 5x5 ft map square = one Shmeppy tile, but some players use a different scale (e.g. one map square equal to 2x2 Shmeppy tiles).
 
-Output file will be in the same location as the input image.  
+Output map will be in the current working directory.  
 
 Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper left.
 
