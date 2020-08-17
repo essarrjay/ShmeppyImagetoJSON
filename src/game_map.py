@@ -13,7 +13,7 @@ import shmops
 import progress_bar
 
 #init globals
-BASE_DIR = Path(__file__).parent
+BASE_DIR = Path(__file__).resolve().parent
 config_path = BASE_DIR.joinpath('config.json')
 with open(config_path) as f:
     config_dict = json.load(f)
