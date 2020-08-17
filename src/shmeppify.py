@@ -62,7 +62,8 @@ def main(title=True):
         print("Sorry, something went wrong.")
 
     #Export to Shmeppy map as a JSON file
-    result = gm.op_to_json(op)
+    out_dir = Path.cwd()
+    result = gm.op_to_json(op,out_dir)
     print(result)
 
     #pause before exiting - necessary for pyinstaller
