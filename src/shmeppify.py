@@ -10,13 +10,15 @@ import json
 from game_map import Game_Map
 import menu
 
+#init globals
+BASE_DIR = Path(__file__).parent
+config_path = BASE_DIR.joinpath('config.json')
+with open(config_path) as f:
+    config_dict = json.load(f)
+rescaling_factor = config_dict["rescaling_factor"]
+
 def main(title=True):
     """Converts an image into an import-ready shmeppy map."""
-
-    with open('config.json') as f:
-        config_dict = json.load(f)
-    rescaling_factor = config_dict["rescaling_factor"]
-
     #get user inputs from menu
     try:
         img_path = sys.argv[1]
@@ -60,7 +62,8 @@ def main(title=True):
         print("Sorry, something went wrong.")
 
     #Export to Shmeppy map as a JSON file
-    result = gm.op_to_json(op)
+    out_dir = Path.cwd()
+    result = gm.op_to_json(op,out_dir)
     print(result)
 
     #pause before exiting - necessary for pyinstaller

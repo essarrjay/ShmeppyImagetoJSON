@@ -13,7 +13,9 @@ import shmops
 import progress_bar
 
 #init globals
-with open('config.json') as f:
+BASE_DIR = Path(__file__).parent
+config_path = BASE_DIR.joinpath('config.json')
+with open(config_path) as f:
     config_dict = json.load(f)
 autopalette_threshold = config_dict["autopalette_threshold"]
 shmeppy_json = { "exportFormatVersion":1,"operations":[]}
@@ -209,16 +211,15 @@ class Game_Map:
                     fill_op.add_fill(x,y,rgb_to_hex(r,g,b))
         return fill_op
 
-    def op_to_json(self, op, data_dir=r'./output_files/'):
+    def op_to_json(self, op, out_dir=r'./output_files/'):
         """Exports Fill_Operation as shmeppy compatible JSON"""
-        if data_dir[-1] != '/': data_dir += '/'
 
         #generate export filename and export Path obj
         ts = str(datetime.now())[:-7]
         ts = ts.replace(':','').replace('-','').replace(' ','_')
         ms = self.map_size
         filename = f"{self.name}_{ms[0]}x{ms[1]}_{ts}.json"
-        export_path = Path(data_dir + filename)
+        export_path = Path(out_dir).joinpath(filename)
 
         export_obj = deepcopy(shmeppy_json)
         export_obj["operations"].append(op.__dict__)
