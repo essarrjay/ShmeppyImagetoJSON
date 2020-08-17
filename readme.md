@@ -20,6 +20,8 @@ You will then see prompts to specify the processing method, and the map dimensio
 
 The maximum map dimension sets the scale of the Shmeppy map - typically one 5x5 ft map square = one Shmeppy tile, but some players use a different scale (e.g. one map square equal to 2x2 Shmeppy tiles).
 
+Output file will be in the current working directory.  
+
 Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper left.
 
 **Note:** This script will only generate a map using 'fill' - not any 'edges'
@@ -147,15 +149,15 @@ In the terminal window, navigate to the folder where you saved both the script a
 `cd C:\users\<your_username>\desktop\ShmeppyImagetoJSON`
 
 Call the script by entering the following command:  
-`python shmeppify.py`
+`.\src\python shmeppify.py`
 
-You will be prompted to enter the path for the image file. If it's in the same folder as the script, just enter the file name, including the file extension. (e.g. `example_file.jpg`)
+You will be prompted to enter the path for the image file. If it's in the `\ShmeppyImagetoJSON\` folder, just enter the file name, including the file extension. (e.g. `example_file.jpg`)
 
 You will then see prompts to specify the processing method, and the map dimensions.
 
 The maximum map dimension sets the scale of the Shmeppy map - typically one 5x5 ft map square = one Shmeppy tile, but some players use a different scale (e.g. one map square equal to 2x2 Shmeppy tiles).
 
-The map file  you file will named something like `game_map_2020...` and located in the `./ShmeppyImagetoJSON/output_files/` folder. Rename if you like.
+The map file will named something like `<image_name>_<width>x<height>_2020...` and current working directory. The console should also have an line describing where the file was saved.
 
 ### Import into Shmeppy  
 Navigate to Shmeppy.com, click on the `Games >>` button in the upper right. At the bottom of the side panel, click on `Import Backup` and select the file you created earlier with the script.
