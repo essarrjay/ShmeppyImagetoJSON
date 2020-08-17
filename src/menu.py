@@ -31,7 +31,8 @@ def main_menu(img_path=None):
     if answers['op_type'].startswith('exit'):
         exit()
     elif answers['op_type'].startswith('help'):
-        p = Path("help.txt")
+        base_dir = Path(__file__).resolve().parent
+        p = base_dir.joinpath("help.txt")
         with open(p, encoding="utf8") as ht:
             print(ht.read())
         return main_menu(img_path = answers['img_path'])
