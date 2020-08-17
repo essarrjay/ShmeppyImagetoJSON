@@ -18,7 +18,7 @@ config_path = BASE_DIR.joinpath('config.json')
 with open(config_path) as f:
     config_dict = json.load(f)
 autopalette_threshold = config_dict["autopalette_threshold"]
-shmeppy_json = { "exportFormatVersion":1,"operations":[]}
+SHMEPPY_JSON = { "exportFormatVersion":1,"operations":[]}
 
 class Game_Map:
     """Represents all data needed to create shmeppy game maps.
@@ -58,7 +58,6 @@ class Game_Map:
             exit()
 
         self.name = name if name else self.path.stem
-        self.shmeppy_json = {"exportFormatVersion":1,"operations":[]}
 
         try:
             self.map_size = self.get_map_size(int(map_size))
@@ -221,7 +220,7 @@ class Game_Map:
         filename = f"{self.name}_{ms[0]}x{ms[1]}_{ts}.json"
         export_path = Path(out_dir).joinpath(filename)
 
-        export_obj = deepcopy(shmeppy_json)
+        export_obj = deepcopy(SHMEPPY_JSON)
         export_obj["operations"].append(op.__dict__)
 
         try:
