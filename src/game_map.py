@@ -173,9 +173,13 @@ class Game_Map:
 
         tiles = self.slice_to_tiles(show_info="Image to Map")
 
-        sampling_map_size = self.get_map_size(sample_factor)
         #get palette to be used in the process
-        palette = self.get_combined_palette(palette_size, sampling_map_size)
+        if sample_factor == 1:
+            palette = get_palette(self.path, palette_size, debug=self.debug)
+        else:
+            #get combined palette by slicing map into sample tiles
+            sampling_map_size = self.get_map_size(sample_factor)
+            palette = self.get_combined_palette(palette_size, sampling_map_size)
 
         temp_path = Path('temp_img.png')
         x, y = 0,0
