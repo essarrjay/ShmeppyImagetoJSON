@@ -5,15 +5,12 @@ from pathlib import Path
 from collections import Counter
 from copy import deepcopy
 import sys
+from datetime import datetime
 
-PADDING = 2
+PADDING = 10
 BASE_PATH = Path(__file__).resolve().parent.parent
-MAP_PATH = BASE_PATH.joinpath('extra_files','investigation_files','asof_beach.json')
-WS_OLD = BASE_PATH.joinpath('extra_files','investigation_files','white_square.json')
-WS = BASE_PATH.joinpath('extra_files','investigation_files','2X2whitesquare1op.json')
 CELL_OPS = {'FillCells':['cellFills'], 'UpdateCellEdges':["top","left"]}
 OTHER_OPS = {'CreateToken':['color','position']}
-
 SHMEP_DICT = {"exportFormatVersion":1,"operations":[]}
 
 def get_map_bounding_box(map):
@@ -98,7 +95,6 @@ def get_updated_ops(map,offset):
 def combine_maps(map_list,layout=(0,1),padding=0):
     """combine maps in map_list with padding"""
     total_x,total_y = 0,0
-    outmap = deepcopy(SHMEP_DICT)
     h,v = layout
     layout = {}
     for map in map_list:
@@ -122,6 +118,7 @@ def combine_maps(map_list,layout=(0,1),padding=0):
     print(" +++++++++++++++++++++++++++++++")
 
     #translate maps
+    outmap = deepcopy(SHMEP_DICT)
     i = 1
     for offset,(map,md) in layout.items():
         print(f"Map #{i} of size {md[0]}x{md[1]} being offset by x,y={offset}.")
@@ -134,46 +131,70 @@ def import_map(inpath):
     """import json"""
     with open(inpath) as j_file:
         map_dict = json.load(j_file)
-    print(f"Successful Import of map: {inpath}")
+    print(f"Successful Import of Map: {inpath}")
     return map_dict
 
 def export_map(map, outpath):
     """exports map to outpath"""
-
-    print(f"\nExporting to {outpath}\n")
-    with outpath.open(mode='w') as j_file:
-        json.dump(map, j_file, indent=2)
-    return f"Exporting to {outpath}"
+    print(f"\nAttempting Export of:\n  {outpath}\n")
+    try:
+        with outpath.open(mode='w') as j_file:
+            json.dump(map, j_file, indent=2)
+        result = f"Exported {outpath.name} to:\n  {outpath}"
+    except FileNotFoundError as e:
+        result = f"Export failed, please enter a valid output destination."
+    except SyntaxError as e:
+        result = f"Export failed, check that you have entered a valid path name.\n {e}"
+    return result
 
 def main():
+    """helps"""
     print(" =================")
-    print("   COMBING MAPS")
+    print("   MAP COMBINER")
     print(" =================")
-    outpath = BASE_PATH.joinpath('test_json','test_outputs','combined_map.json')
+    print("Press ctrl+c or close window to quit.\n")
+    print("Will take any number of .json map files as command line arguments:")
+    print(" > combine_maps.exe <map-1 path> <map-2 path>...<map-n path>")
+    print("    OR")
+    print(" > python combine_maps.py <map-1 path> <map-2 path>...<map-n path>\n")
+
+    #maps from command line
     try:
+        if len(sys.argv) == 1: raise Exception("Did not find maps. Please provide below.")
         map_list = []
         for p in sys.argv[1:]:
-            print(f"p = {p}")
+            print(f"Provide Map Path: {p}")
             temp_p = BASE_PATH.joinpath(p)
-            print(f"temp p = {temp_p}")
+            print(f"Attempting to import map from: {temp_p}")
             map_list.append(import_map(temp_p))
     except Exception as e:
         print(e)
-        print("If maps are in the same folder, just list mapname including file extension .json")
-        mpath1 = input("Please provide relative path to map #1:")
-        mpath2 = input("Please provide relative path to map #2:")
-        map_list = [import_map(mpath1),import_map(mpath2)]
+        print("If maps are in the same folder as the .exe, just list mapname including file extension .json\n  E.g. mymap.json")
+        mpath1 = input("Please provide relative path to map #1: ")
+        mpath2 = input("Please provide relative path to map #2: ")
 
-    new_map = combine_maps(map_list,padding=PADDING)
-    export_map(new_map,outpath)
+        #import maps
+        print("Loading Mapfiles:")
+        try:
+            map_list = [import_map(mpath1),import_map(mpath2)]
+        except FileNotFoundError:
+            print(f"\n\nERROR: File not found, let's try again (or press ctrl+c to quit)\n\n")
+            return main()
+
+    pad = input(f"Spacing between maps in squares (or press enter for default value of {PADDING}): ")
+    pad = int(pad) if pad else PADDING
+
+    print(f"\nOutput destination currently set to:\n {BASE_PATH}")
+    outdest = input(f"Enter to continue, or enter full path to set output destination: ")
+    outdest = Path(outdest) if outdest else BASE_PATH
+
+    new_map = combine_maps(map_list,padding=pad)
+
+    ts = str(datetime.now())[:-7]
+    ts = ts.replace(':','').replace('-','').replace(' ','_')
+    filename = f"combined_map_{ts}.json"
+
+    print(export_map(new_map,outdest.joinpath(filename)))
 
 if __name__ == '__main__':
     main()
-
-#python ./src/combine_maps.py ./test_json/2x2whitesquare1op.json ./test_json/2x2whitesquare1op.json ./test_json/2x2whitesquare1op.json
-#python ./src/combine_maps.py ./test_json/2x2whitesquare1op.json ./test_json/2x2square4ops.json
-#python ./src/combine_maps.py ./test_json/2x2square4ops.json ./test_json/2x2square4ops.json
-
-#python ./src/combine_maps.py ./test_json/eandc10ops.json ./test_json/2x2square4ops.json ./test_json/eandc10ops.json
-
-#python ./src/combine_maps.py ./test_json/asof_bea.json ./test_json/2x2square4ops.json
