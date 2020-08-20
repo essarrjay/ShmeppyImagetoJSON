@@ -137,7 +137,7 @@ def palette_menu():
         allow_float=False)
 
     print()
-    response['palette_rescale'] = cutie.prompt_yes_or_no('-= Rescale Image before palette sample (reduces processing time)?',yes_text="Yes, rescale", no_text="No, use original image dimensions", default_is_yes=True)
+    response['palette_rescale'] = cutie.prompt_yes_or_no('-= Rescale Image before palette sample (reduces processing time)?',yes_text="Yes, rescale", no_text="No, use original image dimensions", default_is_yes=True, selected_prefix=CON_P, deselected_prefix=DECON_P)
 
     return response
 
