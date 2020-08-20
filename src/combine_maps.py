@@ -9,6 +9,7 @@ from datetime import datetime
 
 PADDING = 10
 BASE_PATH = Path(__file__).resolve().parent.parent
+SAME_PATH = Path(__file__).resolve().parent
 CELL_OPS = {'FillCells':['cellFills'], 'UpdateCellEdges':["top","left"]}
 OTHER_OPS = {'CreateToken':['color','position']}
 SHMEP_DICT = {"exportFormatVersion":1,"operations":[]}
@@ -148,9 +149,9 @@ def export_map(map, outpath):
     return result
 
 def main():
-    """helps"""
+    """combines .json format shmeppy maps into one .json file"""
     print(" =================")
-    print("   MAP COMBINER")
+    print("   MAP COMBINER   ")
     print(" =================")
     print("Press ctrl+c or close window to quit.\n")
     print("Will take any number of .json map files as command line arguments:")
@@ -169,15 +170,19 @@ def main():
             map_list.append(import_map(temp_p))
     except Exception as e:
         print(e)
-        print("If maps are in the same folder as the .exe, just list mapname including file extension .json\n  E.g. mymap.json")
+        print(f"Looking for maps in {SAME_PATH}")
+        print("If maps are in this folder, just list mapname including")
+        print("file extension (.json) otherwise include the folder name")
+        print("E.g. mymap.json or backup_maps/mymap.json")
         mpath1 = input("Please provide relative path to map #1: ")
         mpath2 = input("Please provide relative path to map #2: ")
 
         #import maps
         print("Loading Mapfiles:")
         try:
-            map_list = [import_map(mpath1),import_map(mpath2)]
-        except FileNotFoundError:
+            map_list = [import_map(SAME_PATH.joinpath(mpath1)), import_map(SAME_PATH.joinpath(mpath2))]
+        except:
+            print(f"tried: {BASE_PATH.joinpath(mpath1)}\n{BASE_PATH.joinpath(mpath2)}")
             print(f"\n\nERROR: File not found, let's try again (or press ctrl+c to quit)\n\n")
             return main()
 
@@ -186,7 +191,7 @@ def main():
 
     print(f"\nOutput destination currently set to:\n {BASE_PATH}")
     outdest = input(f"Enter to continue, or enter full path to set output destination: ")
-    outdest = Path(outdest) if outdest else BASE_PATH
+    outdest = Path(outdest) if outdest else SAME_PATH
 
     new_map = combine_maps(map_list,padding=pad)
 
