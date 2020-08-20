@@ -21,3 +21,5 @@ You'll be prompted for maps, or provide at the command line:
 It's a single file application. Save file to directory containing map exports, double click to run, you'll be prompted for maps.
 
 Also takes maps paths from the command line.
+
+Due to the structure of the "complier" you may have to provide input maps using a prefix of `./` e.g. `./mymap.json` or `./myfolder/mymap.json`
