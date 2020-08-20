@@ -165,12 +165,12 @@ def main():
         map_list = []
         for p in sys.argv[1:]:
             print(f"Provide Map Path: {p}")
-            temp_p = BASE_PATH.joinpath(p)
+            temp_p = SAME_PATH.joinpath(p)
             print(f"Attempting to import map from: {temp_p}")
             map_list.append(import_map(temp_p))
     except Exception as e:
         print(e)
-        print(f"Looking for maps in {SAME_PATH}")
+        print(f"Looking for maps in: {SAME_PATH.resolve()}")
         print("If maps are in this folder, just list mapname including")
         print("file extension (.json) otherwise include the folder name")
         print("E.g. mymap.json or backup_maps/mymap.json")
@@ -182,14 +182,14 @@ def main():
         try:
             map_list = [import_map(SAME_PATH.joinpath(mpath1)), import_map(SAME_PATH.joinpath(mpath2))]
         except:
-            print(f"tried: {BASE_PATH.joinpath(mpath1)}\n{BASE_PATH.joinpath(mpath2)}")
+            print(f"tried: {SAME_PATH.joinpath(mpath1)}\n{SAME_PATH.joinpath(mpath2)}")
             print(f"\n\nERROR: File not found, let's try again (or press ctrl+c to quit)\n\n")
             return main()
 
     pad = input(f"Spacing between maps in squares (or press enter for default value of {PADDING}): ")
     pad = int(pad) if pad else PADDING
 
-    print(f"\nOutput destination currently set to:\n {BASE_PATH}")
+    print(f"\nOutput destination currently set to:\n {SAME_PATH}")
     outdest = input(f"Enter to continue, or enter full path to set output destination: ")
     outdest = Path(outdest) if outdest else SAME_PATH
 
@@ -200,6 +200,9 @@ def main():
     filename = f"combined_map_{ts}.json"
 
     print(export_map(new_map,outdest.joinpath(filename)))
+
+    #pause before exiting - necessary for pyinstaller
+    input("Press Enter to Exit...")
 
 if __name__ == '__main__':
     main()
