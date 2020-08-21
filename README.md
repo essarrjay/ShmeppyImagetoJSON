@@ -7,8 +7,16 @@ Many thanks to John Sullivan for their awesome, thoughfully designed and current
 
 More info on Shmeppy here: https://shmeppy.com/about
 
-# **Overview**
-This Python script takes an image (`.jpeg`, `.png` or probably plenty others) and converts it into a form recognized by Shemppy's new import function.
+# **Overview of Tools**
+## Image Converter
+**Main documentation:** `docs/image_converter.md`
+The `shmeppify.py` script (in conjunction with others) takes an image  and converts it into a form recognized by Shemppy's new import function.
+
+## Map Combiner
+**Main documentation:** docs/map_combiner.md
+The `combine_maps.py` script creates a single Shmeppy `.json` map file from two (or more) other Shmeppy `.json` map files. Good for combining
+
+# Quickstart
 
 ### **Launching Application**
 To use, you have two options:
@@ -18,18 +26,26 @@ To use, you have two options:
   * The image can also be specified later from an input prompt.
   * Will likely need to install additional packages (see detailed instructions below)  
 
-#### **Windows**
+#### Alternative to Python:
+For a stand-alone application (with less functionality) see the `/build/` folder. The `.zip` and `.exe` files should work by themselves without installing Python. The `.exe` files are self-contained, whereas the `.zip` contains a `.exe` but contains multiple separate files which some users may find confusing. The `.zip` packages will run more quickly and contains bundled README files.
 
-1. In [/build](https://github.com/essarrjay/ShmeppyImagetoJSON/tree/master/build) download Image_to_Shmeppy_JSON_v2.x.x.zip
-2. Extract
-2. (optional) place image file in `Image_to_Shmeppy_JSON_v2.x.x` or `Image_to_Shmeppy_JSON_v2.x.x\Maps`
-3. Run `Image_to_Shmeppy_JSON_v2.x.x.exe` from within Image_to_Shmeppy_JSON_v2.x.x folder.
-4. Output map will be in the current working directory.
+See `build/README.md` for more info.
 
-You will be prompted to supply the path of an input image, or can provide it directly from a command line:
-`Image_to_Shmeppy_JSON_v2.x.x.exe <*image_file_path>`
+### **Use**
+See `/docs/` for information on using these tools.
 
-#### **Use**
+#### Use: Image Converter Summary
+Navigate to main project directory. Run the script using:  
+
+`python ./src/shmeppify.py <*image_file_path>`  
+or
+`./Image_to_Shmeppy_JSON_v2.2.1.exe <*image_file_path>`
+
+(depending on which file you have)
+
+* The image can also be specified later from an input prompt.
+* Will likely need to install additional packages (see detailed instructions below)  
+
 After a possible prompt to provide an input file, you will see prompts to specify the processing method, and the map dimensions.
 
 The maximum map dimension sets the scale of the Shmeppy map - typically one 5x5 ft map square = one Shmeppy tile, but some players use a different scale (e.g. one map square equal to 2x2 Shmeppy tiles).
@@ -40,82 +56,44 @@ Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper
 
 **Note:** This script will only generate a map using 'fill' - not any 'edges'
 
-#### Alternative:
-For a stand-alone application (with less functionality) see [simple_shmeppify_v1.1.0.exe](https://github.com/essarrjay/ShmeppyImagetoJSON/blob/master/build/simple_shmeppify_v1.1.0.exe)
+Navigate to main project directory. Run the converter script using:  
+
+#### Use: Map Combiner Summary
+
+Navigate to main project directory. Run the script using:
+`python ./src/combine_maps.py <map_path_1> <map_path_2>...<map_path_n>`
+or
+`./map_combiner_v0.2.3.exe <*image_file_path>`
+
+(depending on which file you have)
+
+* The maps can also be specified later from an input prompt.
+* Uses standard python packages
+* Minimum spacing between maps can be specified through a prompt.
 
 -----
 
-## **Processing Options**
+# **Detailed Instructions**
 
-### **FILTER RESIZE**
-Scales the image to the map size then converts pixels to Shmeppy tiles.  
+## Simple start for Windows (no Python)
+No need to install python, but you'll be limited to when specific builds are created.
 
-- Much faster than Palette
-- Color gradient. Good for landscapes with similar gradients, e.g. beaches, grass fields
+1. In [/build](https://github.com/essarrjay/ShmeppyImagetoJSON/tree/master/build) download Image_to_Shmeppy_JSON_v2.x.x.zip
+2. Extract
+2. (optional) place image file in `Image_to_Shmeppy_JSON_v2.x.x` or `Image_to_Shmeppy_JSON_v2.x.x\Maps`
+3. Run `Image_to_Shmeppy_JSON_v2.x.x.exe` from within Image_to_Shmeppy_JSON_v2.x.x folder.
+4. Output map will be in the current working directory.
 
-Both methods preserve the aspect ratio of the map.
+You will be prompted to supply the path of an input image, or can provide it directly from a command line:
+`Image_to_Shmeppy_JSON_v2.x.x.exe <*image_file_path>`
 
-#### **Filter Types**
+If you're new to command line usage, you can usually type just a few letter of a filename then hit `Tab` to autocomplete.
 
-(from https://pillow.readthedocs.io/en/stable/handbook/concepts.html#filters)
+Also, the arrow keys `↑`or`↓` will let you cycle through recent entries, which makes repeat operations (with different settings) a bit easier.
 
-Listed in order increasing order of fidelity, decreasing order of speed.
+## Python: Installing and Use
 
-**NEAREST** - Pick one nearest pixel from the input image.
-    Ignore all other input pixels.
-
-**BOX** - Each pixel of source image contributes to one pixel of
-    the destination image with identical weights
-
-**BILINEAR** - Calculate the output pixel value using linear
-    interpolation on all pixels that may contribute to the output
-    value.
-
-**HAMMING** - Produces a sharper image than BILINEAR, doesn’t have
-    dislocations on local level like with BOX.
-
-**BICUBIC** - Calculate the output pixel value using cubic
-    interpolation on all pixels that may contribute to the output
-    value.
-
-**LANCZOS** - Calculate the output pixel value using a high-quality
-    Lanczos filter (a truncated sinc) on all pixels that may
-    contribute to the output value.
-
------
-
-### **PALETTE**
-Attempts to convert image to Shmeppy fill tiles, using a palette of colors.
-- Sharp color transitions when processing an image with fixed color palette.
-- Many similar colors in a single image may return a poor result.
-- Terribly inefficient (dozens of seconds rather than seconds), but still a very effective timesaver when converting images to Shmeppy maps.
-
-#### **Palette Sampling**
-The palette is generated  by slicing the map image into smaller images, then fetching the most commonly used colors in those images.
-
-The sample grid is autoscaled from the image's largest dimension using the provided sample factor. For example, using a sample factor of 4 on a 1600x1200px image of would result in a 4x3 sample grid of  400x300px tiles.
-
-The most used colors of each sample tile (exact number specified by user as palette size) is added to the overall palette for the final map.
-
-Setting the sample factor to 1 generates an overall palette of up to 8 colors from the whole image.
-
-#### **Map Generation**
-
-The script then generates a Shmeppy map using a similar method as the palette sampling. The image is sliced into smaller images, with each image representing a single square or tile of the completed Shmeppy map. The Shmeppy square is colored using the previously generated palette - the palette color nearest the image slice's dominant color becomes the square color.
-
-Obviously, the options for **palette sampling** can drastically affect the map processing speed, but provides the more control than the **filter-resize** method.
-
-This is not very efficient process, and will probably be improved upon (or re-implemented) in the future. But it currently works, and still only takes 30 seconds or so. It works really well with images using a limited palette already, rather than many gradients.
-
-#### **Rescale before Palette**
-
-To speed up operation, you may rescale an image prior to processing through palette operations. This is identical to resizing an image to a lower resolution, then passing that image to this script.
-
-The image will be resized such that each square of the final Shmeppy map is generated from a 16x16px area of the resized image. The Shmeppy map size (in squares) is still set by the user and the image aspect ratio (if autoscaled).
-
------
-
-## **Detailed Instructions on Getting Started**
+Installing python will provide the most reliable use of this tool, as well as allow you to access the most recent updates to the script.
 
 ### Prerequisites: Python
 You'll need a Python interpreter - this is basically a program that lets you run scripts/programs written in the programming language of Python.
@@ -134,16 +112,24 @@ Oh, tons of ways to do this. Click on the green `Code ▼` button toward the upp
 Python includes a strong standard library, but this program uses a few additional packages you may not have installed:  
 
 haishoku  
-Pillow  
 cutie
+Pillow (commonly included with Python interpreters)
 
 A full list of packages and their purposes can be found at the bottom of this document.
 
+##### To install missing packages
+open a command line and run:
+`python -m pip install -r requirements.txt`
+
+##### more detailed instructions
 You can see all installed packages by using the following commands in a terminal (see next section if you need help):  
 `pip list` or `python -m pip list`
 
 Install a package using:  
 `pip install <package name>` or `python -m pip install <package name>`
+
+For example:  
+`python -m pip install haishoku cutie Pillow`
 
 Package names are case sensitive.
 
@@ -181,11 +167,11 @@ Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper
 **Note:** This script will only generate a map using 'fill' - not any 'edges'
 
 ### **Need Help?**
-Don't bug John! But jump on the discord and try asking there:
+Don't bug John! But feel free to bug me, or jump on the discord and try asking there:
 https://shmeppy.com/help-and-community
 
 ### **Other feedback is welcome!**
-The last time I did serious programming was on a Commodore64 (or feels like it at least). I sure hope it works!
+The last time I did serious programming was on a Commodore64 (or feels like it at least). Feel free to send a message if you're having any issues.
 
 ## **Notes:**
 #### Uses packages:  
@@ -197,7 +183,13 @@ haishoku (palette related functions)
 Pillow (also known as PIL, used for general image processing)  
 cutie (user input menu)  
 
+**For reference, build using these versions of the non-standard packages:**
+haishoku == 1.1.8
+cutie == 0.2.2
+Pillow == 7.2.0
+
 #### Versions:
 V1 basic BOX and NEAREST filter/resize processing  
 V2 Palette processing and additional filters  
 V2.2 Palette sampling introduced
+V2.3 Map combiner included
