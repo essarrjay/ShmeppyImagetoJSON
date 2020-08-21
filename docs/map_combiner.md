@@ -13,3 +13,7 @@ Navigate to main project directory. Run the converter script using:
 * Maps are combined one below the other, padded between (invisible) bounding boxes.
 * You can specify vertical padding between maps, or leave blank to default to 10 squares.
 * Previous deletions of fills or edges may cause excessive spacing. (i.e. at the moment the program cannot determine if a previously filled in cell is still filled)
+
+## Menu Option: *Padding*  
+**Default Value:** *10*  
+The minimum amount of space between maps (in squares).
