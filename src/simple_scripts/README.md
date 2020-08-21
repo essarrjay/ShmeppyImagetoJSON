@@ -1,7 +1,7 @@
 
 # **Simple Shmeppy Mapfile (JSON) Generator**
 
-**This file is maintained (less regularly) for those interested in the simplicity of single file.**
+**These files are maintained (less regularly) for those interested in the simplicity of single file.**
 
 For the most excellent [shmeppy.com](https://shmeppy.com/) minimalist virtual tabletop application.
 
@@ -10,7 +10,12 @@ Many thanks to John Sullivan for their awesome, thoughfully designed and current
 More info on Shmeppy here: https://shmeppy.com/about
 
 ## **Overview**
+
+### simple_shmeppify.py
 This script takes an image (`.jpeg`, `.png` or probably plenty others) and converts it into a form recognized by Shemppy's new import function.
+
+### simple_combine_maps.py
+This script takes 2 or more `.json` map files and combines them into a single map file. This can be useful to avoid players having to join a different shmeppy 'game' when changing scenes. Also saves the need to recreate many tokens.
 
 To use, you have two options:
 1. **Windows:**  

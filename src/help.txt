@@ -1,9 +1,7 @@
      ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
                    HELP
      ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-
 ► Processing Options ◄
-
     ► FILTER RESIZE scales the image to the map size then converts
         pixels to Shmeppy tiles.
       Much faster, and result is an image with more of a color
@@ -22,34 +20,17 @@
       For speed of processing, you may choose to resize the map image
         before palette processing.
 
+    ► MERGE will combine the edges and fills from two or more .json map
+        files into a single file. Padding between maps can be set by
+        the user. More than 2 maps can be specified if provided as
+        space separated command line arguments.
         --------
-
     FILTER TYPES
-      (from https://pillow.readthedocs.io/en/stable/handbook/concepts.html#filters)
-
-      Listed in order increasing order of fidelity, decreasing order of speed.
-
-      NEAREST - Pick one nearest pixel from the input image.
-          Ignore all other input pixels.
-
-      BOX - Each pixel of source image contributes to one pixel of
-          the destination image with identical weights
-
-      BILINEAR - Calculate the output pixel value using linear
-          interpolation on all pixels that may contribute to the output
-          value.
-
-      HAMMING - Produces a sharper image than BILINEAR, doesn’t have
-          dislocations on local level like with BOX.
-
-      BICUBIC - Calculate the output pixel value using cubic
-          interpolation on all pixels that may contribute to the output
-          value.
-
-      LANCZOS - Calculate the output pixel value using a high-quality
-          Lanczos filter (a truncated sinc) on all pixels that may
-          contribute to the output value.
-
+      More info can be found on the project readme.
+      Recommended filters (but consider trying a couple different ones):
+        NEAREST - most crude and works ok for limited palette maps, but
+            good for having sharp color transitions.
+        LANCZOS - good with color gradients, bad in that it can make
+            color gradients where you don't want them.
         --------
-
 More info: https://github.com/essarrjay/ShmeppyImagetoJSON
