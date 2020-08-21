@@ -186,7 +186,7 @@ def main():
             print(f"\n\nERROR: File not found, let's try again (or press ctrl+c to quit)\n\n")
             return main()
 
-    pad = input(f"Spacing between maps in squares (or press enter for default value of {PADDING}): ")
+    pad = input(f"Minimum PADDING between maps (in squares). Or press enter for default value of {PADDING}: ")
     pad = int(pad) if pad else PADDING
 
     print(f"\nOutput destination currently set to:\n {BASE_PATH}")
