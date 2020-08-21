@@ -33,17 +33,17 @@ Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper
 
 # General Menu Options
 
-### Menu Options: *Autoscale*
+### Menu Option: *Autoscale*  
 **Default Value:** *YES*  
 If yes, provide the number of squares to use for the longest (major) map dimension (horizontal or vertical) - the other dimension will be automatically calculated.  
 
 If no, you will need to provide both the horizontal (x) and vertical (y) dimensions for the image - Can be useful for distorting or correcting the image.   
 
-### Menu Options: *Debug Mode*
+### Menu Option: *Debug Mode*  
 **Default Value:** *NO*  
 If yes, provides more detailed (and possibly overwhelming) info during processing.
 
-## Menu Options: *Proceed with Processing*
+## Menu Option: *Proceed with Processing*  
 **Default Value:** *YES*  
 Last chance to cancel before spending time processing. Select *NO* if you would like to start over.
 
@@ -94,14 +94,14 @@ Attempts to convert image to Shmeppy fill tiles, using a palette of colors.
 - Many similar colors in a single image may return a poor result.
 - Terribly inefficient (dozens of seconds rather than seconds), but still a very effective timesaver when converting images to Shmeppy maps.
 
-###  Menu Option: *Sample Grid*
+###  Menu Option: *Sample Grid*  
 The palette is generated  by slicing the map image into smaller images, then fetching the most commonly used colors in those images.
 
 The sample grid is autoscaled from the image's largest dimension using the provided sample factor. For example, using a sample factor of 4 on a 1600x1200px image of would result in a 4x3 sample grid of  400x300px tiles.
 
 Setting the sample factor to 1 generates an overall palette of up to 8 colors (set at the next prompt) from the whole image.
 
-###  Menu Option: *Palette Colors*
+###  Menu Option: *Palette Colors*  
 The app selects the top [this number] of colors from each sample tile to be used in the overall palette of the final map output.
 
 Selecting `0` will only choose colors which occur more than 12.5% of the time on the sample tile. Works better with a larger sample grid (smaller sample tiles).
