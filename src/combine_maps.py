@@ -9,13 +9,13 @@ from datetime import datetime
 
 PADDING = 10
 BASE_PATH = Path(__file__).resolve().parent.parent
-SAME_PATH = Path(__file__).resolve().parent
+#SAME_PATH = Path(__file__).resolve().parent
 CELL_OPS = {'FillCells':['cellFills'], 'UpdateCellEdges':["top","left"]}
 OTHER_OPS = {'CreateToken':['color','position']}
 SHMEP_DICT = {"exportFormatVersion":1,"operations":[]}
 
 def get_map_bounding_box(map):
-    """returns bouding box of a map in squares x,y"""
+    """returns bounding box of a map in squares x,y"""
     print(f" --------------------")
     print(f" Getting Bounding Box")
     print(f" --------------------")
@@ -165,12 +165,12 @@ def main():
         map_list = []
         for p in sys.argv[1:]:
             print(f"Provide Map Path: {p}")
-            temp_p = SAME_PATH.joinpath(p)
+            temp_p = BASE_PATH.joinpath(p)
             print(f"Attempting to import map from: {temp_p}")
             map_list.append(import_map(temp_p))
     except Exception as e:
         print(e)
-        print(f"Looking for maps in: {SAME_PATH.resolve()}")
+        print(f"Looking for maps in: {BASE_PATH.resolve()}")
         print("If maps are in this folder, just list mapname including")
         print("file extension (.json) otherwise include the folder name")
         print("E.g. mymap.json or backup_maps/mymap.json")
@@ -180,18 +180,18 @@ def main():
         #import maps
         print("Loading Mapfiles:")
         try:
-            map_list = [import_map(SAME_PATH.joinpath(mpath1)), import_map(SAME_PATH.joinpath(mpath2))]
+            map_list = [import_map(BASE_PATH.joinpath(mpath1)), import_map(BASE_PATH.joinpath(mpath2))]
         except:
-            print(f"tried: {SAME_PATH.joinpath(mpath1)}\n{SAME_PATH.joinpath(mpath2)}")
+            print(f"tried: {BASE_PATH.joinpath(mpath1)}\n{BASE_PATH.joinpath(mpath2)}")
             print(f"\n\nERROR: File not found, let's try again (or press ctrl+c to quit)\n\n")
             return main()
 
     pad = input(f"Spacing between maps in squares (or press enter for default value of {PADDING}): ")
     pad = int(pad) if pad else PADDING
 
-    print(f"\nOutput destination currently set to:\n {SAME_PATH}")
+    print(f"\nOutput destination currently set to:\n {BASE_PATH}")
     outdest = input(f"Enter to continue, or enter full path to set output destination: ")
-    outdest = Path(outdest) if outdest else SAME_PATH
+    outdest = Path(outdest) if outdest else BASE_PATH
 
     new_map = combine_maps(map_list,padding=pad)
 
