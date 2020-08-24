@@ -31,39 +31,39 @@ For a stand-alone application (with less functionality) see the `/build/` folder
 
 See `build/README.md` for more info.
 
-### **Use**
-See `/docs/` for information on using these tools.
+### **Use**  
+See `/docs/` for information on using these tools.  
 
 #### Use: Image Converter Summary
-Navigate to main project directory. Run the script using:  
+1. Navigate to main project directory.  
+2. Run the script using:  
 
-`python ./src/shmeppify.py <*image_file_path>`  
-or
-`./Image_to_Shmeppy_JSON_v2.2.1.exe <*image_file_path>`
+`python ./src/shmeppify.py <*image_file_path>`
+or  
+`./Image_to_Shmeppy_JSON_v2.2.1.exe <*image_file_path>`  
 
-(depending on which file you have)
+(depending on which file you have)  
 
-* The image can also be specified later from an input prompt.
+* The image can also be specified later from an input prompt.  
 * Will likely need to install additional packages (see detailed instructions below)  
 
-After a possible prompt to provide an input file, you will see prompts to specify the processing method, and the map dimensions.
+3. After a possible prompt to provide an input file, you will see prompts to specify the processing method, and the map dimensions.
 
-The maximum map dimension sets the scale of the Shmeppy map - typically one 5x5 ft map square = one Shmeppy tile, but some players use a different scale (e.g. one map square equal to 2x2 Shmeppy tiles).
+4. The maximum map dimension sets the scale of the Shmeppy map - typically one 5x5 ft map square = one Shmeppy tile, but some players use a different scale (e.g. one map square equal to 2x2 Shmeppy tiles).
 
-Output map will be in the current working directory.  
+5. Locate the output map in the current working directory.  
 
-Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper left.
+6. Import the `.json` file into Shmeppy using the `Games >>` sidepanel in the upper left.
 
 **Note:** This script will only generate a map using 'fill' - not any 'edges'
 
-Navigate to main project directory. Run the converter script using:  
-
 #### Use: Map Combiner Summary
 
-Navigate to main project directory. Run the script using:
-`python ./src/combine_maps.py <map_path_1> <map_path_2>...<map_path_n>`
-or
-`./map_combiner_v0.2.3.exe <*image_file_path>`
+1. Navigate to main project directory.  
+2. Run the script using:
+`python ./src/combine_maps.py <map_path_1> <map_path_2>...<map_path_n>`  
+or  
+`./map_combiner_v0.2.3.exe <*image_file_path>`  
 
 (depending on which file you have)
 
@@ -183,10 +183,10 @@ haishoku (palette related functions)
 Pillow (also known as PIL, used for general image processing)  
 cutie (user input menu)  
 
-**For reference, build using these versions of the non-standard packages:**
-haishoku == 1.1.8
-cutie == 0.2.2
-Pillow == 7.2.0
+**For reference, build using these versions of the non-standard packages:**  
+haishoku == 1.1.8  
+cutie == 0.2.2  
+Pillow == 7.2.0  
 
 #### Versions:
 V1 basic BOX and NEAREST filter/resize processing  
