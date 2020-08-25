@@ -13,7 +13,7 @@ from copy import deepcopy
 import token
 
 BASE_PATH = Path(__file__).resolve().parent.parent
-#SAME_PATH = Path(__file__).resolve().parent
+#BASE_PATH = Path(__file__).resolve().parent
 CELL_OPS = {
     'FillCells': ['cellFills'],
     'UpdateCellEdges': ["top", "left"]
@@ -28,9 +28,12 @@ TOKEN_OPS = {
 SHMEP_DICT = {"exportFormatVersion": 1, "operations": []}
 
 
-def group_tokens_on_map(map):
-    tokens_dict = make_tokens(map[0])
-    tokens_dict = group_tokens(tokens_dict)
+def group_tokens_on_map(maplist, token_padding=0, group_padding=5):
+    maptokenslist = []
+    print(f"\nMAPLIST MAPLIST = {maplist}\n")
+    for map in maplist:
+        maptokenslist.append(make_tokens(map))
+    tokens_dict = group_tokens(maptokenslist, token_padding, group_padding)
     ops = tokens_to_ops(tokens_dict)
     outmap = deepcopy(SHMEP_DICT)
     outmap['operations'] = ops
@@ -62,23 +65,32 @@ def make_tokens(map):
             token_obj = token_dict[op['tokenId']]
             print(f"=== TOKEN {op['type']} ===")
             print(f'||=> TOKEN BEFORE: {token_obj.__dict__}')
+            print(f'     OP = {op}')
             token_obj.update(**op)
             print(f'||=> token properties AFTER: {token_obj.__dict__}')
     return token_dict
 
 
-def group_tokens(token_dict, align_bottom=True):
-    """adjust token positions to group them at the top of the map"""
+def group_tokens(maptokenslist, token_padding, group_padding, align_bottom=True):
+    """adjust token positions to group them at the top of the map
+
+    takes a list of token_dicts
+    returns a position padded combined token dict
+    """
     print("\nRELOCATING TOKENS")
+    combined_token_dict = {}
     x = 0
-    for t in token_dict.values():
-        if align_bottom:
-            tx, ty = x, -t.height-1
-        else:
-            tx, ty = x, -1
-        t.update(position=(tx, ty))
-        x += t.width
-    return token_dict
+    for token_dict in maptokenslist:
+        for id, t in token_dict.items():
+            if align_bottom:
+                tx, ty = x, -t.height-1
+            else:
+                tx, ty = x, -1
+            t.update(position=(tx, ty))
+            x += t.width+token_padding
+            combined_token_dict.update({id: t})
+        x += group_padding
+    return combined_token_dict
 
 def get_updated_ops(map, offset):
     """for map, offset all draw operations"""
@@ -127,21 +139,24 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("maps", help="Combine each map's tokens into a single output file.", nargs='*')
     parser.add_argument("-c", "--combine", help="Combine each map's tokens into a single output file.", action="store_true")
+    parser.add_argument("-p", "--padding", help="padding between tokens")
+    parser.add_argument("-mp", "--mappadding", help="padding between tokens from different maps")
     parser.add_argument("-d", "--destination", help="Output destination path for .json file.")
     args = parser.parse_args()
     print(f'args = {args}')
 
-    # maps from command line
+    # get maps from command line
     try:
         if not args.maps:
             raise Exception("Did not find maps. Please provide below.")
-        map_list = []
+        map_dict = {}
         for p in args.maps:
             print(f"Provided Map Path: {p}")
             temp_p = BASE_PATH.joinpath(p)
             print(f"Attempting to import map from: {temp_p}")
-            map_list.append(import_map(temp_p))
+            map_dict.update({temp_p.name: import_map(temp_p)})
 
+    # prompt for map if missing from args
     except Exception as e:
         print(e)
         print(f"Looking for maps in: {BASE_PATH.resolve()}")
@@ -153,24 +168,30 @@ def main():
         # import maps
         print("Loading Mapfiles:")
         try:
-            map_list = [import_map(BASE_PATH.joinpath(mpath))]
+            map_dict = [import_map(BASE_PATH.joinpath(mpath))]
         except Exception:
             print(f"tried: {BASE_PATH.joinpath(mpath)}")
             print("\n\nERROR: File not found, let's try again (or press ctrl+c to quit)\n\n")
             return main()
+
+    # set output destination
     outdest = Path(args.destination).resolve() if args.destination else BASE_PATH
     print(f"\nOutput destination currently set to:\n {outdest}")
     user_outdest = input("Enter to continue, or enter full path to set output destination: ")
     if user_outdest:
         outdest = Path(user_outdest)
 
+    # generate maps
     output_maps = {}
     if args.combine:
-        for map in map_list:
-            output_maps.update({map.name: group_tokens_on_map(map)})
+        maplist = map_dict.values()
+        output_maps.update({'tokens_map': group_tokens_on_map(maplist)})
     else:
-        output_maps.update({'tokens_map': group_tokens_on_map(map_list)})
+        # process maps separately
+        for mname, map in map_dict.items():
+            output_maps.update({mname: group_tokens_on_map([map])})
 
+    # save maps to disk
     for name, map in output_maps.items():
         ts = str(datetime.now())[:-7]
         ts = ts.replace(':', '').replace('-', '').replace(' ', '_')
