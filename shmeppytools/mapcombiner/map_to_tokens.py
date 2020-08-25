@@ -10,7 +10,7 @@ from pathlib import Path
 import argparse
 from datetime import datetime
 from copy import deepcopy
-import token
+from token import Token
 
 BASE_PATH = Path(__file__).resolve().parent.parent
 #BASE_PATH = Path(__file__).resolve().parent
@@ -57,7 +57,7 @@ def make_tokens(map):
     for op in map['operations']:
         if op['type'] == 'CreateToken':
             print("=== TOKEN CREATED ===")
-            token_dict.update({op['tokenId']: token.Token(**op)})
+            token_dict.update({op['tokenId']: Token(**op)})
         elif op['type'] == 'DeleteToken':
             token_dict.pop(op['tokenId'])
             print("=== TOKEN DELETED ===")
@@ -67,7 +67,6 @@ def make_tokens(map):
             print(f'||=> TOKEN BEFORE: {token_obj.__dict__}')
             print(f'     OP = {op}')
             token_obj.update(**op)
-            print(f'||=> token properties AFTER: {token_obj.__dict__}')
     return token_dict
 
 
@@ -142,6 +141,7 @@ def main():
     parser.add_argument("-p", "--padding", help="padding between tokens")
     parser.add_argument("-mp", "--mappadding", help="padding between tokens from different maps")
     parser.add_argument("-d", "--destination", help="Output destination path for .json file.")
+    parser.add_argument("-sc", "--skipconfirm", help="Skip confirmation prompt for output destination", action="store_true")
     args = parser.parse_args()
     print(f'args = {args}')
 
