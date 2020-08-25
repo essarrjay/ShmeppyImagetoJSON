@@ -30,7 +30,6 @@ SHMEP_DICT = {"exportFormatVersion": 1, "operations": []}
 
 def group_tokens_on_map(maplist, token_padding=0, group_padding=5):
     maptokenslist = []
-    print(f"\nMAPLIST MAPLIST = {maplist}\n")
     for map in maplist:
         maptokenslist.append(make_tokens(map))
     tokens_dict = group_tokens(maptokenslist, token_padding, group_padding)
@@ -48,7 +47,7 @@ def tokens_to_ops(token_dict):
     return outops
 
 
-def make_tokens(map):
+def make_tokens(map, debug=False):
     """returns a dict of {tokenId:token} from map
 
     Uses final position of token, and omits deleted tokens
@@ -56,21 +55,23 @@ def make_tokens(map):
     token_dict = {}
     for op in map['operations']:
         if op['type'] == 'CreateToken':
-            print("=== TOKEN CREATED ===")
+            print(f"+CREATED TOKEN {op['tokenId']}")
             token_dict.update({op['tokenId']: Token(**op)})
         elif op['type'] == 'DeleteToken':
             token_dict.pop(op['tokenId'])
-            print("=== TOKEN DELETED ===")
+            print(f"-DELETED TOKEN {op['tokenId']}")
         elif op['type'] in TOKEN_OPS.keys():
             token_obj = token_dict[op['tokenId']]
-            print(f"=== TOKEN {op['type']} ===")
-            print(f'||=> TOKEN BEFORE: {token_obj.__dict__}')
-            print(f'     OP = {op}')
+            print(f"=TOKEN OP {op['type']}")
+            if debug:
+                print(f'  Token properties before:\n      {token_obj.__dict__}')
+            print(f'  OP: {op}')
             token_obj.update(**op)
     return token_dict
 
 
-def group_tokens(maptokenslist, token_padding, group_padding, align_bottom=True):
+def group_tokens(
+        maptokenslist, token_padding, group_padding, align_bottom=True):
     """adjust token positions to group them at the top of the map
 
     takes a list of token_dicts
@@ -91,6 +92,7 @@ def group_tokens(maptokenslist, token_padding, group_padding, align_bottom=True)
         x += group_padding
     return combined_token_dict
 
+
 def get_updated_ops(map, offset):
     """for map, offset all draw operations"""
     outops = []
@@ -100,6 +102,7 @@ def get_updated_ops(map, offset):
         elif op['type'] in TOKEN_OPS.keys():
             pass
     return outops
+
 
 def import_map(inpath):
     """import json"""
@@ -143,7 +146,7 @@ def main():
     parser.add_argument("-d", "--destination", help="Output destination path for .json file.")
     parser.add_argument("-sc", "--skipconfirm", help="Skip confirmation prompt for output destination", action="store_true")
     args = parser.parse_args()
-    print(f'args = {args}')
+    print(f'Command Line Arguments, as parsed: {args}')
 
     # get maps from command line
     try:
@@ -153,7 +156,7 @@ def main():
         for p in args.maps:
             print(f"Provided Map Path: {p}")
             temp_p = BASE_PATH.joinpath(p)
-            print(f"Attempting to import map from: {temp_p}")
+            print(f"Attempting to import map from: {temp_p.resolve()}")
             map_dict.update({temp_p.name: import_map(temp_p)})
 
     # prompt for map if missing from args
