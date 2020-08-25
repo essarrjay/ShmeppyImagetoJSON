@@ -12,7 +12,6 @@ from datetime import datetime
 from copy import deepcopy
 from token import Token
 
-#BASE_PATH = Path(__file__).resolve().parent.parent
 BASE_PATH = Path(__file__).resolve().parent
 CELL_OPS = {
     'FillCells': ['cellFills'],
