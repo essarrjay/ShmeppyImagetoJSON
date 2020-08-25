@@ -28,7 +28,7 @@ TOKEN_OPS = {
 SHMEP_DICT = {"exportFormatVersion": 1, "operations": []}
 
 
-def group_tokens_on_map(maplist, token_padding=0, group_padding=5):
+def group_tokens_on_map(maplist, token_padding, group_padding):
     maptokenslist = []
     for map in maplist:
         maptokenslist.append(make_tokens(map))
@@ -139,12 +139,12 @@ def main():
 
     # maps from command line
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("maps", help="Combine each map's tokens into a single output file.", nargs='*')
+    parser.add_argument("maps", metavar="<map path>", help="Combine each map's tokens into a single output file.", nargs='*')
     parser.add_argument("-c", "--combine", help="Combine each map's tokens into a single output file.", action="store_true")
-    parser.add_argument("-p", "--padding", help="padding between tokens")
-    parser.add_argument("-mp", "--mappadding", help="padding between tokens from different maps")
-    parser.add_argument("-d", "--destination", help="Output destination path for .json file.")
     parser.add_argument("-sc", "--skipconfirm", help="Skip confirmation prompt for output destination", action="store_true")
+    parser.add_argument("-p", "--padding", type=int, default=0, metavar="<integer>", help="Padding between tokens")
+    parser.add_argument("-mp", "--mappadding", type=int, default=3, metavar="<integer>", help="Padding between tokens grouped from separate maps")
+    parser.add_argument("-d", "--destination", metavar="<path>", help="Output destination path for .json file.")
     args = parser.parse_args()
     print(f'Command Line Arguments, as parsed: {args}')
 
@@ -190,11 +190,12 @@ def main():
     output_maps = {}
     if args.combine:
         maplist = map_dict.values()
-        output_maps.update({'tokens_map': group_tokens_on_map(maplist)})
+        output_maps.update({'tokens_map': group_tokens_on_map(maplist, args.padding, args.mappadding)})
     else:
         # process maps separately
         for mname, map in map_dict.items():
-            output_maps.update({mname: group_tokens_on_map([map])})
+            outmap = group_tokens_on_map([map], args.padding, args.mappadding)
+            output_maps.update({mname: outmap})
 
     # save maps to disk
     for name, map in output_maps.items():
