@@ -1,7 +1,9 @@
 
 class Token:
     """represents a single shmeppy token"""
-    def __init__(self, id, type, tokenId, position=(0, 0), color="#FFF", label="", width=1, height=1):
+    def __init__(
+            self, id, type, tokenId, position=(0, 0), color="#FFF",
+            label="", width=1, height=1):
         self.id = tokenId
         self.tokenId = tokenId
         self.type = 'CreateToken'
@@ -11,9 +13,12 @@ class Token:
         self.width = width
         self.height = height
 
-    def update(self, id=None, type=None, tokenId=None, position=None, color=None, label="", width=None, height=None, x=None, y=None):
+    def update(
+            self, id=None, type=None, tokenId=None, position=None,
+            color=None, label="", width=None, height=None,
+            x=None, y=None):
         """updates token properties with any value present"""
-        print(f' UPDATE INFO = P:{position}, C:{color}, L:{label}, W:{width}, H:{height}, X:{x}, Y:{y}')
+        print(f'  UPDATE INFO = P:{position}, C:{color}, L:{label}, W:{width}, H:{height}, X:{x}, Y:{y}')
         if position:
             self.position = position
         if color:
