@@ -54,8 +54,8 @@ def get_new_corners(bb1, bb2):
     """returns tuple of corners describing box bounding two bounding boxes"""
     (ux1, uy1), (lx1, ly1) = bb1
     (ux2, uy2), (lx2, ly2) = bb2
-    ul_corner = min(ux1, ux2),min(uy1, uy2)
-    lr_corner = max(lx1, lx2),max(ly1, ly2)
+    ul_corner = min(ux1, ux2), min(uy1, uy2)
+    lr_corner = max(lx1, lx2), max(ly1, ly2)
     return ul_corner, lr_corner
 
 
@@ -76,7 +76,7 @@ def count_ops(map):
         print(f'{k} : {v}')
 
 
-def translate_op(op,offset,new_id):
+def translate_op(op, offset, new_id):
     """translate op by offset value"""
     for action in CELL_OPS[op['type']]:
         cell_list = []
@@ -89,7 +89,7 @@ def translate_op(op,offset,new_id):
     return op
 
 
-def get_updated_ops(map,offset):
+def get_updated_ops(map, offset):
     """for map, offset all draw operations"""
     outops = []
     for op in map['operations']:
