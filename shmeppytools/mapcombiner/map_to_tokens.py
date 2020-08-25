@@ -171,7 +171,8 @@ def main():
         # import maps
         print("Loading Mapfiles:")
         try:
-            map_dict = [import_map(BASE_PATH.joinpath(mpath))]
+            temp_p = BASE_PATH.joinpath(mpath)
+            map_dict = {temp_p.name: import_map(temp_p)}
         except Exception:
             print(f"tried: {BASE_PATH.joinpath(mpath)}")
             print("\n\nERROR: File not found, let's try again (or press ctrl+c to quit)\n\n")
