@@ -181,9 +181,10 @@ def main():
     # set output destination
     outdest = Path(args.destination).resolve() if args.destination else BASE_PATH
     print(f"\nOutput destination currently set to:\n {outdest}")
-    user_outdest = input("Enter to continue, or enter full path to set output destination: ")
-    if user_outdest:
-        outdest = Path(user_outdest)
+    if not args.skipconfirm:
+        user_outdest = input("Enter to continue, or enter full path to set output destination: ")
+        if user_outdest:
+            outdest = Path(user_outdest)
 
     # generate maps
     output_maps = {}
