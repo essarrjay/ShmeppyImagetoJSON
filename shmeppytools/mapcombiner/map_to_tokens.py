@@ -10,7 +10,7 @@ from pathlib import Path
 import argparse
 from datetime import datetime
 from copy import deepcopy
-from token import Token
+from shmobj import Token
 
 BASE_PATH = Path(__file__).resolve().parent
 CELL_OPS = {
