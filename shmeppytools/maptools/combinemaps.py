@@ -8,7 +8,7 @@ import sys
 from datetime import datetime
 
 # internal modules
-from .shmap import Shmap
+from shmap import Shmap
 
 PADDING = 10
 BASE_PATH = Path(__file__).resolve().parent

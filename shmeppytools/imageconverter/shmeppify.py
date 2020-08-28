@@ -9,7 +9,7 @@ import json
 # internal modules
 from game_map import Game_Map
 import menu
-from shmap import Shmap
+from maptools.shmap import Shmap
 
 # init globals
 BASE_DIR = Path(__file__).parent
