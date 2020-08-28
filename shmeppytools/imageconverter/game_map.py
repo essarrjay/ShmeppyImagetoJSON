@@ -8,10 +8,10 @@ from sys import exit
 import json
 
 #internal modules
-from palette import *
+import palette
 import shmops
 import progress_bar
-import shmobjs
+from maptools.shmobjs import Token
 
 #init globals
 BASE_DIR = Path(__file__).resolve().parent
@@ -55,7 +55,7 @@ class Game_Map:
                 self.img_size = im.size
             print(f"   Input File: {self.path.name}")
         except FileNotFoundError:
-            print(f"File \"{img_path}\" not found, be sure this includes the full or relative path - the folders containing the file, not just the file's name.\n")
+            print(f"File \"{self.path.resolve()}\" not found, be sure this includes the full or relative path - the folders containing the file, not just the file's name.\n")
             exit()
 
         self.name = name if name else self.path.stem
@@ -153,7 +153,7 @@ class Game_Map:
         for row in progress_bar.progress_bar(tiles, " Processing Image for Palette: ", " Samples Row: ",36):
             for tile in row:
                 tile.save(temp_path,"PNG")
-                pal = get_palette(temp_path, palette_size, freq_min=freq_min, debug=self.debug)
+                pal = palette.generate(temp_path, palette_size, freq_min=freq_min, debug=self.debug)
                 data += pal
                 temp_path.unlink()
 
@@ -176,7 +176,7 @@ class Game_Map:
 
         #get palette to be used in the process
         if sample_factor == 1:
-            palette = get_palette(self.path, palette_size, debug=self.debug)
+            palette = palette.generate(self.path, palette_size, debug=self.debug)
         else:
             #get combined palette by slicing map into sample tiles
             sampling_map_size = self.get_map_size(sample_factor)
@@ -191,9 +191,9 @@ class Game_Map:
                 #    temp_path = Path('./test_tiles/' + temp_path)
                 tile.save(temp_path,"PNG")
                 dominant = Haishoku.getDominant(str(temp_path))
-                tile_color = nearest_color_from_palette(palette,dominant)
+                tile_color = palette.nearest_color(palette, dominant)
                 #if self.debug: print(f'Tile Address: {x}, {y} | Tile Color: {tile_color} | Saved to:  {temp_path}')
-                fill_op.add_fill(x,y,rgb_to_hex(*tile_color))
+                fill_op.add_fill(x,y,palette.rgb_to_hex(*tile_color))
                 x += 1
             y += 1
             x = 0
@@ -212,7 +212,7 @@ class Game_Map:
             for x in progress_bar.progress_bar(range(map_img.width), "Processing: ",width=36):
                 for y in range(map_img.height):
                     r,g,b = pixels[x,y]
-                    fill_op.add_fill(x,y,rgb_to_hex(r,g,b))
+                    fill_op.add_fill(x,y,palette.rgb_to_hex(r,g,b))
         return fill_op
 
     def token_op(self, filter_option):
@@ -226,7 +226,7 @@ class Game_Map:
                 for y in range(map_img.height):
                     r,g,b = pixels[x,y]
                     id = str(x)+"."+str(y)
-                    t = shmobjs.Token(id=id, tokenId=id, position=(x,y), color=rgb_to_hex(r,g,b))
+                    t = Token(id=id, tokenId=id, position=(x,y), color=palette.rgb_to_hex(r,g,b))
                     token_ops.append(t.as_op())
         return token_ops
 
