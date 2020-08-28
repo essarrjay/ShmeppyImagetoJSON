@@ -5,11 +5,14 @@ map_to_tokens
 Fetches tokens from map, returns as compact .json map
 """
 
+# external modules
 import json
 from pathlib import Path
 import argparse
 from datetime import datetime
 from copy import deepcopy
+
+# internal modules
 from shmobjs import Token
 
 BASE_PATH = Path(__file__).resolve().parent
