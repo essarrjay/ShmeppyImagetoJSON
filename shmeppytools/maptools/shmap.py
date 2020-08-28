@@ -188,7 +188,7 @@ class Shmap:
 
         ts = str(datetime.now())[:-7]
         ts = ts.replace(':', '').replace('-', '').replace(' ', '_')
-        filename = f"{self.name}_{ts}.json"
+        filename = f"{self.stem}_{ts}.json"
 
         outpath = (outpath / filename).resolve()
         print(f"outpath = {outpath}")
