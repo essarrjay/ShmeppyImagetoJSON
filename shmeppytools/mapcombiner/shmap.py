@@ -1,5 +1,5 @@
 import json
-from pathlib import Path
+from datetime import datetime
 
 import shmobjs
 
@@ -185,7 +185,11 @@ class Shmap:
     def export_to(self, outpath):
         """exports map to outpath"""
         print(f"\nAttempting Export of:\n  {outpath}\n")
-        filename = f"{self.name}.json"
+
+        ts = str(datetime.now())[:-7]
+        ts = ts.replace(':', '').replace('-', '').replace(' ', '_')
+        filename = f"{self.name}_{ts}.json"
+
         outpath = (outpath / filename).resolve()
         print(f"outpath = {outpath}")
         print(self.json_format())
