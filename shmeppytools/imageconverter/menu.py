@@ -5,6 +5,7 @@ from PIL import Image
 
 # internal modules
 import maptools.combinemaps
+import maptools.collecttokens
 
 # set menu interface colors and look
 # select
@@ -28,40 +29,35 @@ def main_menu(img_path=None):
     print("    ==MENU OPTIONS==")
 
     # List of op_types to select from, including some captions
-    op_types = ['1. Convert Image to Shmeppy .json file using:',
-                'Palette - sharp tiles, slow',
-                'Filter resize - faster, blended tiles',
+    op_types = ['1. Image Converter',
+                '  -Turns an image into a Shmeppy map (.json) - Fills Only, No Edges',
+                'Palette Method - sharp tiles, slow',
+                'Filter Resize Method- faster, blended tiles',
                 '   --------',
-                '2. Merge',
-                'Shmeppy .json files',
+                '2. Map Tools',
+                '  -Work with Shmeppy map (.json) files',
+                'Merge .json files - Fills, Edges, Tokens',
+                'Fetch Tokens from .json',
                 '   --------',
                 '3. Other',
+                'Tokenize (Silly - convert image to field of tokens)',
                 'Help: Learn More',
-                'Exit',
-                'Tokenize (Silly)']
-    captions = [0, 3, 4, 6, 7]
+                'Exit'
+                ]
+
+    captions = [0, 1, 4, 5, 6, 9, 10]
 
     answers['op_type'] = op_types[cutie.select(op_types, caption_indices=captions, caption_prefix="", selected_prefix=SEL_P, deselected_prefix=DESEL_P)].lower()
 
     # check for early exits
-    if answers['op_type'].startswith('exit'):
-        exit()
-    elif answers['op_type'].startswith('help'):
-        base_dir = Path(__file__).resolve().parent
-        p = base_dir.joinpath("help.txt")
-        with open(p, encoding="utf8") as ht:
-            print(ht.read())
-        return main_menu()
-    elif answers['op_type'].startswith('shm'):
-        maptools.combinemaps.main()
-        exit()
+    check_early_exit(answers)
 
     # check for image path
     if not img_path:
         answers['img_path'] = input("-= Image File Path/Name: ")
 
-    print()
     # prompt process type questions
+    print()
     if answers['op_type'].startswith('fil'):
         answers.update(filter_menu())
 
@@ -74,14 +70,35 @@ def main_menu(img_path=None):
     print()
     answers['debug'] = cutie.prompt_yes_or_no('Debug Mode? ',   selected_prefix=CON_P, deselected_prefix=DECON_P)
 
-    print()
     # confirm to proceed
+    print()
     answers['confirm'] = cutie.prompt_yes_or_no('Proceed with Processing? ', default_is_yes=True,  selected_prefix=CON_P, deselected_prefix=DECON_P)
     if not answers['confirm']:
         print("Processing terminated, exiting program.")
-        exit()
+        exit(0)
 
     return answers
+
+
+def check_early_exit(answers):
+    """exits, shows help, merges maps, or fetches Tokens
+
+    skips image processing questions
+    """
+    if answers['op_type'].startswith('exit'):
+        exit(0)
+    elif answers['op_type'].startswith('help'):
+        base_dir = Path(__file__).resolve().parent
+        p = base_dir.joinpath("help.txt")
+        with open(p, encoding="utf8") as ht:
+            print(ht.read())
+        exit(0)
+    elif answers['op_type'].startswith('mer'):
+        maptools.combinemaps.main()
+        exit(0)
+    elif answers['op_type'].startswith('fet'):
+        maptools.collecttokens.main()
+        exit(0)
 
 
 def convert_shared_menu():
