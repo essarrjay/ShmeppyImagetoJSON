@@ -150,7 +150,7 @@ class Game_Map:
             freq_min = None
 
         #iterate through Image Objects, get palettes, combine
-        for row in progress_bar.progressbar(tiles, " Processing Image for Palette: ", " Samples Row: ",36):
+        for row in progress_bar.progress_bar(tiles, " Processing Image for Palette: ", " Samples Row: ",36):
             for tile in row:
                 tile.save(temp_path,"PNG")
                 pal = get_palette(temp_path, palette_size, freq_min=freq_min, debug=self.debug)
@@ -184,7 +184,7 @@ class Game_Map:
 
         temp_path = Path('temp_img.png')
         x, y = 0,0
-        for row in progress_bar.progressbar(tiles, "Processing Map: ", " Row: ",36):
+        for row in progress_bar.progress_bar(tiles, "Processing Map: ", " Row: ",36):
             for tile in row:
                 #if self.debug:
                 #    temp_path = f'{x}x{y}y_temp_img.png'
@@ -209,7 +209,7 @@ class Game_Map:
         with Image.open(self.path) as map_img:
             map_img.thumbnail((self.map_major_dim, self.map_major_dim),resample=filter_option)
             pixels = map_img.convert('RGB').load()
-            for x in progress_bar.progressbar(range(map_img.width), "Processing: ",width=36):
+            for x in progress_bar.progress_bar(range(map_img.width), "Processing: ",width=36):
                 for y in range(map_img.height):
                     r,g,b = pixels[x,y]
                     fill_op.add_fill(x,y,rgb_to_hex(r,g,b))
@@ -222,7 +222,7 @@ class Game_Map:
         with Image.open(self.path) as map_img:
             map_img.thumbnail((self.map_major_dim, self.map_major_dim), resample=filter_option)
             pixels = map_img.convert('RGB').load()
-            for x in progress_bar.progressbar(range(map_img.width), "Processing: ", width=36):
+            for x in progress_bar.progress_bar(range(map_img.width), "Processing: ", width=36):
                 for y in range(map_img.height):
                     r,g,b = pixels[x,y]
                     id = str(x)+"."+str(y)
