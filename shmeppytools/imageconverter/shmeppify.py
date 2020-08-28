@@ -39,6 +39,12 @@ def main(title=True):
         map_major_dim = answers['map_major_dim']
         map_size = (answers['map_major_dim'])
 
+    try:
+        in_path = Path(answers['img_path'])
+    except FileNotFoundError:
+        print(f"File \"{in_path.resolve()}\" not found, be sure this includes the full or relative path - the folders containing the file, not just the file's name.\n")
+        sys.exit(1)
+
     if answers['op_type'].startswith('pal'):
         # process palette operation
         if answers['palette_rescale']:
