@@ -1,7 +1,7 @@
 from haishoku.haishoku import Haishoku
 from sys import exit
 
-def get_palette(img_path, palette_size, freq_min=None, debug=False, show_palette=False):
+def generate(img_path, palette_size, freq_min=None, debug=False, show_palette=False):
     """returns a list of RGB tuples representing a palette of palette_size numbers of color, by maximum use"""
 
     try:
@@ -37,7 +37,7 @@ def get_palette(img_path, palette_size, freq_min=None, debug=False, show_palette
 
     return output
 
-def nearest_color_from_palette(palette, in_color):
+def nearest_color(palette, in_color):
     """returns nearest RGB color in palette"""
     out_color = min( palette, key = lambda palette_entry: sum((pe - c) ** 2 for pe, c in zip(palette_entry, in_color)))
     return out_color
