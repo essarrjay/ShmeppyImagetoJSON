@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 import shmobjs
 
 TOKEN_OPS = {
@@ -178,3 +181,22 @@ class Shmap:
                 for position, color in op['cellFills']:
                     cells_dict.update({tuple(position): color})
         return cells_dict
+
+    def export_to(self, outpath):
+        """exports map to outpath"""
+        print(f"\nAttempting Export of:\n  {outpath}\n")
+        filename = f"{self.name}.json"
+        outpath = (outpath / filename).resolve()
+        print(f"outpath = {outpath}")
+        print(self.json_format())
+        try:
+            with outpath.open(mode='w') as j_file:
+                json.dump(self.json_format(), j_file, indent=2)
+            result = f"Exported {outpath.name} to:\n  {outpath}"
+        except FileNotFoundError:
+            result = "Export failed, please enter a valid output destination."
+        except SyntaxError as e:
+            result = f"Export failed, check that you have entered a valid path name.\n {e}"
+        except PermissionError as e:
+            result = f"Export failed due to {e}. Usually this is because you did not specify a filename."
+        return result
