@@ -9,6 +9,7 @@ import json
 #internal modules
 from game_map import Game_Map
 import menu
+#from shmap import Shmap
 
 #init globals
 BASE_DIR = Path(__file__).parent
@@ -16,6 +17,7 @@ config_path = BASE_DIR.joinpath('config.json')
 with open(config_path) as f:
     config_dict = json.load(f)
 rescaling_factor = config_dict["rescaling_factor"]
+
 
 def main(title=True):
     """Converts an image into an import-ready shmeppy map."""
@@ -51,6 +53,7 @@ def main(title=True):
         #create Game_Map and Fill_Operation
         gm = Game_Map(answers['img_path'],map_size,answers['debug'])
         op = gm.palette_op(answers['palette_size'], sample_factor = answers['sample_factor'])
+        ops = [op.__dict__]
 
         #remove palette_rescale file if present
         if answers['palette_rescale']: temp_path.unlink(missing_ok=True)
@@ -58,12 +61,20 @@ def main(title=True):
     elif answers['op_type'].startswith('fil'):
         gm = Game_Map(answers['img_path'],map_size,answers['debug'])
         op = gm.filter_op(answers['filter_type'])
+        ops = [op.__dict__]
+
+    elif answers['op_type'].startswith('tok'):
+        gm = Game_Map(answers['img_path'],map_size,answers['debug'])
+        ops = gm.token_op(answers['filter_type'])
     else:
         print("Sorry, something went wrong.")
 
     #Export to Shmeppy map as a JSON file
     out_dir = Path.cwd()
-    result = gm.op_to_json(op,out_dir)
+    shmap = Shmap("export_map")
+    shmap.operations = ops
+    #result = gm.op_to_json(op,out_dir)
+    result = shmap.export_to(out_dir)
     print(result)
 
     #pause before exiting - necessary for pyinstaller
