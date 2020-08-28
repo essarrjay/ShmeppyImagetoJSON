@@ -5,5 +5,4 @@ PROJ_DIR = BASE_DIR.parent
 path.append(str(PROJ_DIR))
 path.append(str(BASE_DIR))
 
-print(path)
 import shmeppify
