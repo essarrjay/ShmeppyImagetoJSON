@@ -1,8 +1,3 @@
-from pathlib import Path
-
-export_obj = {"exportFormatVersion": 1, "operations": []}
-
-
 class Shm_Op:
     """A single Shmeppy Operation"""
     def __init__(self, id='', type=''):
