@@ -157,14 +157,14 @@ def main():
         map_dict = {}
         for p in args.maps:
             print(f"Provided Map Path: {p}")
-            temp_p = BASE_PATH.joinpath(p)
+            temp_p = Path.cwd().joinpath(p)
             print(f"Attempting to import map from: {temp_p.resolve()}")
             map_dict.update({temp_p.name: import_map(temp_p)})
 
     # prompt for map if missing from args
     except Exception as e:
         print(e)
-        print(f"Looking for maps in: {BASE_PATH.resolve()}")
+        print(f"Looking for maps in: {Path.cwd()}")
         print("If map is in this folder, just list mapname including")
         print("file extension (.json) otherwise include the folder name")
         print("E.g. mymap.json or backup_maps/mymap.json")
@@ -173,15 +173,15 @@ def main():
         # import maps
         print("Loading Mapfiles:")
         try:
-            temp_p = BASE_PATH.joinpath(mpath)
+            temp_p = Path.cwd().joinpath(mpath)
             map_dict = {temp_p.name: import_map(temp_p)}
         except Exception:
-            print(f"tried: {BASE_PATH.joinpath(mpath)}")
+            print(f"tried: {Path.cwd().joinpath(mpath)}")
             print("\n\nERROR: File not found, let's try again (or press ctrl+c to quit)\n\n")
             return main()
 
     # set output destination
-    outdest = Path(args.destination).resolve() if args.destination else BASE_PATH
+    outdest = Path(args.destination).resolve() if args.destination else Path.cwd()
     print(f"\nOutput destination currently set to:\n {outdest}")
     if not args.skipconfirm:
         user_outdest = input("Enter to continue, or enter full path to set output destination: ")
