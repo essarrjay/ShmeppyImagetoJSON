@@ -38,7 +38,7 @@ def main_menu(img_path=None):
                 '3. Other',
                 'Help: Learn More',
                 'Exit',
-                'Tokenize']
+                'Tokenize (Silly)']
     captions = [0, 3, 4, 6, 7]
 
     answers['op_type'] = op_types[cutie.select(op_types, caption_indices=captions, caption_prefix="", selected_prefix=SEL_P, deselected_prefix=DESEL_P)].lower()
