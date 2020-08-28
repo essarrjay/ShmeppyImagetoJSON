@@ -96,6 +96,7 @@ def convert_shared_menu():
 
 
 def map_size_menu(autoscale=True):
+    """prompts map dimensions"""
     response = {}
     if autoscale:
         response['map_major_dim'] = cutie.get_number(
@@ -119,6 +120,8 @@ def map_size_menu(autoscale=True):
 
 
 def filter_menu():
+    """prompts filter type"""
+
     response = convert_shared_menu()
     print('-= Which filter would you like to use? =-')
     choices = ['NEAREST - sharp tiles, some artifacts', 'BOX - idential weight', 'BILINEAR - linear interpolation', 'HAMMING - sharper than BILINEAR, less distortion than BOX', 'BICUBIC - cubic interpolation', 'LANCZOS - trucated sinc']
@@ -129,6 +132,7 @@ def filter_menu():
 
 
 def palette_menu():
+    """prompts for image converter palette method info"""
     response = convert_shared_menu()
 
     response['sample_factor'] = cutie.get_number(
@@ -151,6 +155,7 @@ def palette_menu():
 
 
 def lookup_filter(val):
+    """looks up the PIL.Image filter value given menu selection"""
     f = val.split()[0]
     filter_dict = {"bicubic":Image.BICUBIC, "bilinear":Image.BICUBIC, "box":Image.BOX, "hamming":Image.HAMMING, "lanczos":Image.LANCZOS, "nearest":Image.NEAREST}
     return filter_dict[f]
