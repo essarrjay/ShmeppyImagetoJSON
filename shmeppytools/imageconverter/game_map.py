@@ -220,9 +220,9 @@ class Game_Map:
         print("===||| Initiating Image to Token Operation |||===")
         token_ops = []
         with Image.open(self.path) as map_img:
-            map_img.thumbnail((self.map_major_dim, self.map_major_dim),resample=filter_option)
+            map_img.thumbnail((self.map_major_dim, self.map_major_dim), resample=filter_option)
             pixels = map_img.convert('RGB').load()
-            for x in progress_bar.progressbar(range(map_img.width), "Processing: ",width=36):
+            for x in progress_bar.progressbar(range(map_img.width), "Processing: ", width=36):
                 for y in range(map_img.height):
                     r,g,b = pixels[x,y]
                     id = str(x)+"."+str(y)
