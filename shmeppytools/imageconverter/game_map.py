@@ -11,6 +11,7 @@ import json
 from palette import *
 import shmops
 import progress_bar
+import shmobjs
 
 #init globals
 BASE_DIR = Path(__file__).resolve().parent
@@ -213,6 +214,21 @@ class Game_Map:
                     r,g,b = pixels[x,y]
                     fill_op.add_fill(x,y,rgb_to_hex(r,g,b))
         return fill_op
+
+    def token_op(self, filter_option):
+        """Returns a list of token ops using a resize/filter operation"""
+        print("===||| Initiating Image to Token Operation |||===")
+        token_ops = []
+        with Image.open(self.path) as map_img:
+            map_img.thumbnail((self.map_major_dim, self.map_major_dim),resample=filter_option)
+            pixels = map_img.convert('RGB').load()
+            for x in progress_bar.progressbar(range(map_img.width), "Processing: ",width=36):
+                for y in range(map_img.height):
+                    r,g,b = pixels[x,y]
+                    id = str(x)+"."+str(y)
+                    t = shmobjs.Token(id=id, tokenId=id, position=(x,y), color=rgb_to_hex(r,g,b))
+                    token_ops.append(t.as_op())
+        return token_ops
 
     def op_to_json(self, op, out_dir=r'./output_files/'):
         """Exports Fill_Operation as shmeppy compatible JSON"""
