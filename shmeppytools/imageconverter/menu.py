@@ -5,6 +5,7 @@ from PIL import Image
 
 #internal modules
 import combine_maps
+import maptools.combinemaps
 
 #set menu interface
 #select
@@ -53,7 +54,7 @@ def main_menu(img_path=None):
             print(ht.read())
         return main_menu()
     elif answers['op_type'].startswith('shm'):
-        combine_maps.main()
+        maptools.combinemaps.main()
         exit()
 
     #check for image path
