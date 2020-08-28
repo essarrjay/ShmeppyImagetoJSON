@@ -34,7 +34,7 @@ class Shmap:
         print("Fills Loaded")
         self.ops_lists = [self.tokens, self.edges_l, self.edges_t, self.fills]
 
-    def get_json(self):
+    def json_format(self):
         return {"exportFormatVersion": self.exportFormatVersion, "operations": self.operations}
 
     def get_bb_dimensions(self):

@@ -169,7 +169,7 @@ def main():
     filename = f"combined_map_{ts}.json"
 
     # export and print result
-    print(export_map(new_map.get_json(), outdest.joinpath(filename)))
+    print(export_map(new_map.json_format(), outdest.joinpath(filename)))
 
     # pause before exiting - necessary for pyinstaller
     input("Press Enter to Exit...")
