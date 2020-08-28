@@ -36,7 +36,8 @@ def main_menu(img_path=None):
         '   --------',
         '3. Other',
         'Help: Learn More',
-        'Exit']
+        'Exit',
+        'Tokenize']
     captions = [0,3,4,6,7]
 
     answers['op_type'] = op_types[
@@ -62,6 +63,9 @@ def main_menu(img_path=None):
     print()
     #prompt process type questions
     if answers['op_type'].startswith('fil'):
+        answers.update(filter_menu())
+
+    elif answers['op_type'].startswith('tok'):
         answers.update(filter_menu())
 
     elif answers['op_type'].startswith('pal'):
