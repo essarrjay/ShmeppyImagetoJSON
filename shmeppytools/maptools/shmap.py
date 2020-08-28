@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 
-import shmobjs
+from . import shmobjs
 
 TOKEN_OPS = {
     'CreateToken': ['color', 'position', 'tokenId'],
