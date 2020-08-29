@@ -106,8 +106,7 @@ class Shmap:
         """offset positions of all operations by offset (x,y)"""
         x, y = offset
         for id, token in self.tokens.items():
-            new_token = token.update(x=x, y=y)
-            token.update({id: new_token})
+            token.update(x=x, y=y)
 
         new_dict = {}
         for pos in self.edges_l:
