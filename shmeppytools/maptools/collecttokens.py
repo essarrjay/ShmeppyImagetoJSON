@@ -30,22 +30,32 @@ TOKEN_OPS = {
 SHMEP_DICT = {"exportFormatVersion": 1, "operations": []}
 
 
-def group_tokens_on_map(maplist, token_padding, group_padding):
+def group_tokens_on_map(maplist, token_padding, group_padding, fillunder=False):
     maptokenslist = []
     for map in maplist:
         maptokenslist.append(make_tokens(map))
     tokens_dict = group_tokens(maptokenslist, token_padding, group_padding)
-    ops = tokens_to_ops(tokens_dict)
+    ops = tokens_to_ops(tokens_dict, fillunder)
     outmap = deepcopy(SHMEP_DICT)
     outmap['operations'] = ops
     return outmap
 
 
-def tokens_to_ops(token_dict):
-    """returns a list of ops from a {tokenId:token_obj} dict"""
+def tokens_to_ops(token_dict, fillunder=False):
+    """returns a list of ops from a {tokenId:token_obj} dict
+
+    if fillunder == True, drawsfilled cells underneath tokens"""
     outops = []
     for t in token_dict.values():
         outops.append(t.as_op())
+
+        if fillunder:
+            fillunder_op = {"id":"underfill", "type":"FillCells", "cellFills":[]}
+            x, y = t.position
+            for h in range(t.height):
+                for w in range(t.width):
+                    fillunder_op['cellFills'].append([[x+w, y+h], "#EEE"])
+            outops.append(fillunder_op)
     return outops
 
 
@@ -146,6 +156,7 @@ def main():
     parser.add_argument("-sc", "--skipconfirm", help="Skip confirmation prompt for output destination", action="store_true")
     parser.add_argument("-p", "--padding", type=int, default=0, metavar="<integer>", help="Padding between tokens")
     parser.add_argument("-mp", "--mappadding", type=int, default=3, metavar="<integer>", help="Padding between tokens grouped from separate maps")
+    parser.add_argument("-fu", "--fillunder", help="Place a filled cell under each token", action="store_true")
     parser.add_argument("-d", "--destination", metavar="<path>", help="Output destination path for .json file.")
     args = parser.parse_args()
     print(f'Command Line Arguments, as parsed: {args}')
@@ -192,11 +203,11 @@ def main():
     output_maps = {}
     if args.combine:
         maplist = map_dict.values()
-        output_maps.update({'tokens_map': group_tokens_on_map(maplist, args.padding, args.mappadding)})
+        output_maps.update({'tokens_map': group_tokens_on_map(maplist, args.padding, args.mappadding, args.fillunder)})
     else:
         # process maps separately
         for mname, map in map_dict.items():
-            outmap = group_tokens_on_map([map], args.padding, args.mappadding)
+            outmap = group_tokens_on_map([map], args.padding, args.mappadding, args.fillunder)
             output_maps.update({mname: outmap})
 
     # save maps to disk
