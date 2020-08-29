@@ -2,7 +2,7 @@ pyinstaller ^
 --onefile ^
 --console ^
 --noconfirm ^
---name token_getter_v0.1.0 ^
+--name token_getter_v0.1.1 ^
 --distpath ../build ^
 --workpath ../pyinstaller_workfiles ^
 --specpath ../pyinstaller_workfiles ^
