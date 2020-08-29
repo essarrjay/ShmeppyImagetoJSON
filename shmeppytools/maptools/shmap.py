@@ -18,13 +18,12 @@ class Shmap:
     does not include fog of war
     """
 
-    def __init__(self, name, map_dict=None):
+    def __init__(self, name, map_dict=None, operations=None):
         if map_dict:
             self.__dict__ = map_dict
         else:
             self.exportFormatVersion = 1
-            self.operations = []
-        print(f" ops = {self.operations}")
+            self.operations = operations if operations else []
         self.name = name
         self.tokens = self.make_tokens(self.operations)
         print("Tokens Loaded")
