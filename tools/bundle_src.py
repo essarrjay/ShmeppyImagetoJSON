@@ -5,8 +5,8 @@ from os import remove
 
 ERSION = input("Version Number: ")
 BASE_DIR = Path(__file__).resolve().parent.parent
-out_path = BASE_DIR.joinpath('build', f'img_to_json_python_bundle_v{ERSION}.tar')
-in_path = BASE_DIR.joinpath('src')
+out_path = BASE_DIR.joinpath('build', f'shmeppytools_python_bundle_v{ERSION}.tar')
+in_path = BASE_DIR.joinpath('shmeppytools')
 
 print(f'Base Dir: {BASE_DIR}')
 print(f'Out_path: {out_path}')
