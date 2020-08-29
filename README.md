@@ -22,9 +22,11 @@ The `combine_maps.py` script creates a single Shmeppy `.json` map file from two 
 To use, you have two options:
 #### **Python** (Windows, Mac, Linux)
   Download as a zip (or clone with Git), extract and run from a command line:  
-  `python ./src/shmeppify.py <*image_file_path>`  
-  * The image can also be specified later from an input prompt.
+  `python ./shmeppytools <*file_path(s)>`  
+  * The images or mapfiles (`.json`) can also be specified later from an input prompt.
+  * Multiple map files (`.json`) can be specified via command line if using the merge maps or fetch tokens features.
   * Will likely need to install additional packages (see detailed instructions below)  
+
 
 #### Alternative to Python:
 For a stand-alone application (with less functionality) see the `/build/` folder. The `.zip` and `.exe` files should work by themselves without installing Python. The `.exe` files are self-contained, whereas the `.zip` contains a `.exe` but contains multiple separate files which some users may find confusing. The `.zip` packages will run more quickly and contains bundled README files.
@@ -38,7 +40,7 @@ See `/docs/` for information on using these tools.
 1. Navigate to main project directory.  
 2. Run the script using:  
 
-`python ./src/shmeppify.py <*image_file_path>`
+`python ./shmeppytools <*image_file_path>`
 or  
 `./Image_to_Shmeppy_JSON_v2.2.1.exe <*image_file_path>`  
 
@@ -58,10 +60,9 @@ or
 **Note:** This script will only generate a map using 'fill' - not any 'edges'
 
 #### Use: Map Combiner Summary
-
 1. Navigate to main project directory.  
 2. Run the script using:
-`python ./src/combine_maps.py <map_path_1> <map_path_2>...<map_path_n>`  
+`python ./shmeppytools/maptools <map_path_1> <map_path_2>...<map_path_n>`  
 or  
 `./map_combiner_v0.2.3.exe <*image_file_path>`  
 
@@ -70,6 +71,7 @@ or
 * The maps can also be specified later from an input prompt.
 * Uses standard python packages
 * Minimum spacing between maps can be specified through a prompt.
+* This function can also be accessed via the main menu (`python ./shmeppytools/maptools`) but may require installation of additional python packages if done so.
 
 -----
 
@@ -149,7 +151,7 @@ In the terminal window, navigate to the folder where you saved both the script a
 `cd C:\users\<your_username>\desktop\ShmeppyImagetoJSON`
 
 Call the script by entering the following command:  
-`.\src\python shmeppify.py`
+`python shmeppytools`
 
 You will be prompted to enter the path for the image file. If it's in the `\ShmeppyImagetoJSON\` folder, just enter the file name, including the file extension. (e.g. `example_file.jpg`)
 
@@ -192,4 +194,4 @@ Pillow == 7.2.0
 V1 basic BOX and NEAREST filter/resize processing  
 V2 Palette processing and additional filters  
 V2.2 Palette sampling introduced
-V2.3 Map combiner included
+V2.3 Map combiner and Fetch Tokens integrated
