@@ -176,14 +176,15 @@ class Shmap:
                     cells_dict.update({tuple(position): color})
         return cells_dict
 
-    def export_to(self, outpath, filename=None):
+    def export_to(self, outpath, filename=None, filenamestem=None):
         """exports map to outpath"""
         print(f"\nAttempting Export to:\n  {outpath}\n")
 
         if not filename:
+            stem = filenamestem if filenamestem else self.name
             ts = str(datetime.now())[:-7]
             ts = ts.replace(':', '').replace('-', '').replace(' ', '_')
-            filename = f"{self.name}_{ts}.json"
+            filename = f"{stem}_{ts}.json"
 
         outpath = (outpath / filename).resolve()
         print(f"Full Export Path:\n  {outpath}")

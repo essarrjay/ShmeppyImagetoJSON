@@ -35,7 +35,7 @@ def group_tokens_on_map(shmaplist, token_padding, group_padding, align='bottom',
         maptokenslist.append(shmap.tokens)
     tokens_dict = group_tokens(maptokenslist, token_padding, group_padding, align)
     ops = tokens_to_ops(tokens_dict, fillunder)
-    outshmap = Shmap('outmap', operations=ops)
+    outshmap = Shmap('tokens_map', operations=ops)
     return outshmap
 
 
@@ -163,7 +163,7 @@ def main():
 
     # save maps to disk
     for name, shmap in output_maps.items():
-        print(shmap.export_to(outdest))
+        print(shmap.export_to(outdest, filenamestem=name))
 
     if not args.noexitpause:
         # pause before exiting - necessary for pyinstaller
