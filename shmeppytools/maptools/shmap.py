@@ -25,6 +25,7 @@ class Shmap:
             self.exportFormatVersion = 1
             self.operations = operations if operations else []
         self.name = name
+        print(f"New Map: {self.name}")
         self.tokens = self.make_tokens(self.operations)
         print("Tokens Loaded")
         self.edges_l, self.edges_t = self.make_edges(self.operations)
@@ -32,6 +33,7 @@ class Shmap:
         self.fills = self.make_fills(self.operations)
         print("Fills Loaded")
         self.ops_lists = [self.tokens, self.edges_l, self.edges_t, self.fills]
+
 
     def json_format(self):
         return {"exportFormatVersion": self.exportFormatVersion, "operations": self.operations}
@@ -60,9 +62,7 @@ class Shmap:
             xs, ys = token.get_xys()
             x_list += xs
             y_list += ys
-        print(f'xlist = {x_list}')
         ul_corner = min(x_list), min(y_list)
-        print(f'ul_corner = {ul_corner}')
         lr_corner = max(x_list), max(y_list)
         self.bb = ul_corner, lr_corner
         return self.bb
@@ -111,8 +111,6 @@ class Shmap:
 
         new_dict = {}
         for pos in self.edges_l:
-            print(f'edges l= {self.edges_l}')
-            print(f'pos= {pos}')
             new_pos = pos[0]+x, pos[1]+y
             new_dict.update({new_pos: self.edges_l[pos]})
         self.edges_l = new_dict
@@ -137,17 +135,16 @@ class Shmap:
         token_dict = {}
         for op in op_list:
             if op['type'] == 'CreateToken':
-                print(f"+CREATED TOKEN {op['tokenId']}")
+                if debug: print(f"+CREATED TOKEN {op['tokenId']}")
                 token_dict.update({op['tokenId']: shmobjs.Token(**op)})
             elif op['type'] == 'DeleteToken':
                 token_dict.pop(op['tokenId'])
-                print(f"-DELETED TOKEN {op['tokenId']}")
+                if debug: print(f"-DELETED TOKEN {op['tokenId']}")
             elif op['type'] in TOKEN_OPS.keys():
                 token_obj = token_dict[op['tokenId']]
-                print(f"=TOKEN OP {op['type']}")
+                if debug: print(f"=TOKEN OP {op['type']}")
                 if debug:
                     print(f'  Token properties before:\n      {token_obj.__dict__}')
-                print(f'  OP: {op}')
                 token_obj.update(**op)
         return token_dict
 
@@ -160,7 +157,6 @@ class Shmap:
         top_edge_dict = {}
         for op in op_list:
             if op['type'] == 'UpdateCellEdges':
-                print("Edges found")
                 if op['left'] != []:
                     for position, color in op['left']:
                         left_edge_dict.update({tuple(position): color})
@@ -183,19 +179,18 @@ class Shmap:
 
     def export_to(self, outpath):
         """exports map to outpath"""
-        print(f"\nAttempting Export of:\n  {outpath}\n")
+        print(f"\nAttempting Export to:\n  {outpath}\n")
 
         ts = str(datetime.now())[:-7]
         ts = ts.replace(':', '').replace('-', '').replace(' ', '_')
         filename = f"{self.stem}_{ts}.json"
 
         outpath = (outpath / filename).resolve()
-        print(f"outpath = {outpath}")
-        print(self.json_format())
+        print(f"Full Export Path:\n  {outpath}")
         try:
             with outpath.open(mode='w') as j_file:
                 json.dump(self.json_format(), j_file, indent=2)
-            result = f"Exported {outpath.name} to:\n  {outpath}"
+            result = f"SUCCESS, exported {outpath.name} to:\n  {outpath}"
         except FileNotFoundError:
             result = "Export failed, please enter a valid output destination."
         except SyntaxError as e:
