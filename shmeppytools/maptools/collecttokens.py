@@ -1,6 +1,5 @@
 #! usr/bin/env python3
-"""
-collecttokens.py
+"""collecttokens.py
 
 Fetches tokens from map, returns as compact .json map
 """
@@ -9,11 +8,11 @@ Fetches tokens from map, returns as compact .json map
 import json
 from pathlib import Path
 import argparse
-from datetime import datetime
-from copy import deepcopy
 
 # internal modules
 from shmobjs import Token
+import uihelper
+from shmap import Shmap
 
 BASE_PATH = Path(__file__).resolve().parent
 CELL_OPS = {
@@ -30,15 +29,14 @@ TOKEN_OPS = {
 SHMEP_DICT = {"exportFormatVersion": 1, "operations": []}
 
 
-def group_tokens_on_map(maplist, token_padding, group_padding, align='bottom', fillunder=False):
+def group_tokens_on_map(shmaplist, token_padding, group_padding, align='bottom', fillunder=False):
     maptokenslist = []
-    for map in maplist:
-        maptokenslist.append(make_tokens(map))
+    for shmap in shmaplist:
+        maptokenslist.append(shmap.tokens)
     tokens_dict = group_tokens(maptokenslist, token_padding, group_padding, align)
     ops = tokens_to_ops(tokens_dict, fillunder)
-    outmap = deepcopy(SHMEP_DICT)
-    outmap['operations'] = ops
-    return outmap
+    outshmap = Shmap('outmap', operations=ops)
+    return outshmap
 
 
 def tokens_to_ops(token_dict, fillunder=False):
@@ -67,17 +65,17 @@ def make_tokens(map, debug=False):
     token_dict = {}
     for op in map['operations']:
         if op['type'] == 'CreateToken':
-            print(f"+CREATED TOKEN {op['tokenId']}")
+            if debug: print(f"+CREATED TOKEN {op['tokenId']}")
             token_dict.update({op['tokenId']: Token(**op)})
         elif op['type'] == 'DeleteToken':
             token_dict.pop(op['tokenId'])
-            print(f"-DELETED TOKEN {op['tokenId']}")
+            if debug: print(f"-DELETED TOKEN {op['tokenId']}")
         elif op['type'] in TOKEN_OPS.keys():
             token_obj = token_dict[op['tokenId']]
-            print(f"=TOKEN OP {op['type']}")
+            if debug: print(f"=TOKEN OP {op['type']}")
             if debug:
                 print(f'  Token properties before:\n      {token_obj.__dict__}')
-            print(f'  OP: {op}')
+            if debug: print(f'  OP: {op}')
             token_obj.update(**op)
     return token_dict
 
@@ -127,14 +125,6 @@ def get_updated_ops(map, offset):
     return outops
 
 
-def import_map(inpath):
-    """import json, returns map as dict_obj"""
-    with open(inpath) as j_file:
-        map_dict = json.load(j_file)
-    print(f"Successful Import of Map: {inpath}")
-    return map_dict
-
-
 def export_map(map, outpath):
     """exports map (as dict obj) to outpath"""
     print(f"\nAttempting Export of:\n  {outpath}\n")
@@ -148,38 +138,6 @@ def export_map(map, outpath):
         result = f"Export failed, check that you have entered a valid path name.\n {e}"
     return result
 
-def get_maps(args):
-    """returns a dict of {map_name: imported_json}"""
-    try:
-        if not args.maps:
-            raise Exception("Did not find maps. Please provide below.")
-        maps_dict = {}
-        for p in args.maps:
-            print(f"Provided Map Path: {p}")
-            temp_p = Path.cwd().joinpath(p)
-            print(f"Attempting to import map from: {temp_p.resolve()}")
-            maps_dict.update({temp_p.stem: import_map(temp_p)})
-
-    # prompt for map if missing from args
-    except Exception as e:
-        print(e)
-        print(f"Looking for maps in: {Path.cwd()}")
-        print("If map is in this folder, just list mapname including")
-        print("file extension (.json) otherwise include the folder name")
-        print("E.g. mymap.json or backup_maps/mymap.json")
-        mpath = input("Please provide relative path to map: ")
-
-        # import maps
-        print("Loading Mapfiles:")
-        try:
-            temp_p = Path.cwd().joinpath(mpath)
-            maps_dict = {temp_p.stem: import_map(temp_p)}
-        except Exception:
-            print(f"tried: {Path.cwd().joinpath(mpath)}")
-            print("\n\nERROR: File not found, let's try again (or press ctrl+c to quit)\n\n")
-            return main()
-    return maps_dict
-
 def main():
     """Fetches tokens from map, returns as compact .json map"""
     print(" ===================")
@@ -191,7 +149,7 @@ def main():
     print("    OR")
     print(" > python map_to_tokens.py <map-1 path> <map-2 path>...<map-n path>\n")
 
-    # maps from command line
+    # add arguments to parser
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("maps", metavar="<map path>", help="Combine each map's tokens into a single output file.", nargs='*')
     parser.add_argument("-c", "--combine", help="Combine each map's tokens into a single output file.", action="store_true")
@@ -201,11 +159,12 @@ def main():
     parser.add_argument("-fu", "--fillunder", help="Place a colored (filled) cell under each token", action="store_true")
     parser.add_argument("-a", "--align", help="Align along which edge of the tokens (when handling tokens larger than 1x1).", choices=['top', 'bottom', 'left', 'right'], default='bottom')
     parser.add_argument("-d", "--destination", metavar="<path>", help="Output destination path for .json file.")
+    parser.add_argument("-nep", "--noexitpause", help='Skip "Press Enter to Exit..."', action="store_true")
     args = parser.parse_args()
     print(f'Command Line Arguments, as parsed:\n   {vars(args)}\n')
 
     # get maps from command line
-    maps_dict = get_maps(args)
+    shmaps_list = uihelper.get_shmaps(args.maps)
 
     # set output destination
     outdest = Path(args.destination).resolve() if args.destination else Path.cwd()
@@ -218,23 +177,20 @@ def main():
     # generate maps
     output_maps = {}
     if args.combine:
-        maplist = maps_dict.values()
-        output_maps.update({'tokens_map': group_tokens_on_map(maplist, args.padding, args.mappadding, args.align, args.fillunder)})
+        output_maps.update({'tokens_map': group_tokens_on_map(shmaps_list, args.padding, args.mappadding, args.align, args.fillunder)})
     else:
         # process maps separately
-        for mname, map in maps_dict.items():
-            outmap = group_tokens_on_map([map], args.padding, args.mappadding, args.align, args.fillunder)
-            output_maps.update({mname: outmap})
+        for shmap in shmaps_list:
+            outmap = group_tokens_on_map([shmap], args.padding, args.mappadding, args.align, args.fillunder)
+            output_maps.update({shmap.name: outmap})
 
     # save maps to disk
-    for name, map in output_maps.items():
-        ts = str(datetime.now())[:-7]
-        ts = ts.replace(':', '').replace('-', '').replace(' ', '_')
-        filename = f"{name}_{ts}.json"
-        print(export_map(map, outdest.joinpath(filename)))
+    for name, shmap in output_maps.items():
+        print(shmap.export_to(outdest))
 
-    # pause before exiting - necessary for pyinstaller
-    input("Press Enter to Exit...")
+    if not args.noexitpause:
+        # pause before exiting - necessary for pyinstaller
+        input("Press Enter to Exit...")
 
 
 if __name__ == '__main__':
