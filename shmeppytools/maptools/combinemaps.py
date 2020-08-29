@@ -1,14 +1,19 @@
 #! usr/bin/env python3
+"""combinemaps.py
+
+Merges 2 or more maps into a single .json shmeppy map file.
+"""
 
 # external modules
 import json
 from pathlib import Path
 from collections import Counter
-import sys
 from datetime import datetime
+import argparse
 
 # internal modules
 from shmap import Shmap
+import uihelper
 
 PADDING = 10
 BASE_PATH = Path(__file__).resolve().parent
@@ -49,12 +54,12 @@ def count_ops(map):
         print(f'{k} : {v}')
 
 
-def combine_maps(map_list, layout=(0, 1), padding=0):
+def combine_maps(shmaps_list, layout=(0, 1), padding=0):
     """combine maps in map_list with padding"""
     total_x, total_y = 0, 0
     h, v = layout
     layout = {}
-    for map in map_list:
+    for map in shmaps_list:
         bb = map.set_bounding_box()
         print(f"bounding boxes = {bb}")
         mapdim = map.get_bb_dimensions()
@@ -75,25 +80,12 @@ def combine_maps(map_list, layout=(0, 1), padding=0):
     print(" +++++++++++++++++++++++++++++++")
 
     # offset maps
-    outmap = Shmap('outmap')
-    print(f"shmap ops: {outmap.operations}")
+    outmap = Shmap('combined_map')
     for offset, (map, mapdim) in layout.items():
-        print(f"Map {map.name} of size {mapdim[0]}x{mapdim[1]} being offset by x,y={offset}.")
+        print(f"\nMap {map.name} of size {mapdim[0]}x{mapdim[1]} being offset by x,y={offset}.")
         map.offset_ops(offset)
         outmap.operations += map.as_ops()
     return outmap
-
-
-def path_to_Shmap(inpath):
-    return Shmap(inpath.name, import_map(inpath))
-
-
-def import_map(inpath):
-    """import json"""
-    with open(inpath) as j_file:
-        map_dict = json.load(j_file)
-    print(f"Successful Import of Map: {inpath}")
-    return map_dict
 
 
 def export_map(map, outpath):
@@ -121,58 +113,43 @@ def main():
     print("    OR")
     print(" > python combine_maps.py <map-1 path> <map-2 path>...<map-n path>\n")
 
-    try:
-        # getting maps from command line
-        if len(sys.argv) == 1:
-            raise Exception("Did not find maps. Please provide below.")
-        map_list = []
-        for p in sys.argv[1:]:
-            print(f"Provide Map Path: {p}")
-            temp_p = Path.cwd().joinpath(p)
-            print(f"Attempting to import map from: {temp_p.resolve()}")
-            map_list.append(path_to_Shmap(temp_p))
-    except Exception as e:
-        # prompt for maps instead
-        print(e)
-        print(f"Looking for maps in: {Path.cwd().resolve()}")
-        print("If maps are in this folder, just list mapname including")
-        print("file extension (.json) otherwise include the folder name")
-        print("E.g. mymap.json or backup_maps/mymap.json")
-        mapstr1 = input("Please provide relative path to map #1: ")
-        mapstr2 = input("Please provide relative path to map #2: ")
-        mpath1 = Path.cwd().joinpath(mapstr1)
-        mpath2 = Path.cwd().joinpath(mapstr2)
+    # add arguments to parser
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("maps", metavar="<map path>", help="Combine each map's tokens into a single output file.", nargs='*')
+    parser.add_argument("-sc", "--skipconfirm", help="Skip confirmation prompt for output destination", action="store_true", default=False)
+    parser.add_argument("-p", "--padding", type=int, default=PADDING, metavar="<integer>", help="Padding between maps")
+    parser.add_argument("-d", "--destination", metavar="<path>", help="Output destination path for .json file.")
+    parser.add_argument("-nep", "--noexitpause", help='Skip "Press Enter to Exit..."', action="store_true")
+    args = parser.parse_args()
+    print(f'Command Line Arguments, as parsed:\n   {vars(args)}\n')
 
-        # try importing maps
-        print("Loading Mapfiles:")
-        try:
-            map_list = [path_to_Shmap(mpath1), path_to_Shmap(mpath2)]
-        except Exception:
-            # try again
-            print(f"tried: {mpath1}\n{mpath2}")
-            print("\n\nERROR: File not found, let's try again (or press ctrl+c to quit)\n\n")
-            return main()
+    # get maps from command line
+    shmaps_list = uihelper.get_shmaps(args.maps, min_num=2)
 
-    pad = input(f"Minimum PADDING between maps (in squares). Or press enter for default value of {PADDING}: ")
-    pad = int(pad) if pad else PADDING
+    # check for padding
+    if args.padding or args.padding == 0:
+        pad = args.padding
+    else:
+        pad = input(f"Minimum PADDING between maps (in squares). Or press enter for default value of {PADDING}: ")
+        pad = int(pad) if pad else PADDING
 
-    print(f"\nOutput destination currently set to:\n {Path.cwd()}")
-    outdest = input("Enter to continue, or enter full path to set output destination: ")
-    outdest = Path(outdest) if outdest else Path.cwd()
+    # prompt output destination or skip confirmation
+    if args.skipconfirm:
+        outdest = Path(args.destination) if args.destination else Path.cwd()
+    else:
+        print(f"\nOutput destination currently set to:\n {Path.cwd()}")
+        outdest = input("Enter to continue, or enter full path to set output destination: ")
+        outdest = Path(outdest) if outdest else Path.cwd()
 
     # make new map
-    new_map = combine_maps(map_list, padding=pad)
-
-    # make filename
-    ts = str(datetime.now())[:-7]
-    ts = ts.replace(':', '').replace('-', '').replace(' ', '_')
-    filename = f"combined_map_{ts}.json"
+    new_map = combine_maps(shmaps_list, padding=pad)
 
     # export and print result
-    print(export_map(new_map.json_format(), outdest.joinpath(filename)))
+    print(new_map.export_to(outdest))
 
-    # pause before exiting - necessary for pyinstaller
-    input("Press Enter to Exit...")
+    if not args.noexitpause:
+        # pause before exiting - necessary for pyinstaller
+        input("Press Enter to Exit...")
 
 
 if __name__ == '__main__':
