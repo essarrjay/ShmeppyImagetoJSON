@@ -1,11 +1,13 @@
 
-# **Simple Shmeppy Mapfile (JSON) Generator**
+# **Shmeppy Tools**
 
-For the most excellent [shmeppy.com](https://shmeppy.com/) minimalist virtual tabletop application.
+Unaffilliated with, but built for the most excellent [shmeppy.com](https://shmeppy.com/) minimalist virtual tabletop application.
 
 Many thanks to John Sullivan for their awesome, thoughfully designed and currently free!?! product.
 
 More info on Shmeppy here: https://shmeppy.com/about
+
+Please don't pester John with any questions on this tool, they didn't ask for, make or maintain it.
 
 # **Overview of Tools**
 ## Image Converter
