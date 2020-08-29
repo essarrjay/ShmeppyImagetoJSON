@@ -15,7 +15,7 @@ def import_map(inpath):
 
 def path_to_Shmap(inpath):
     """returns a shmap.Shmap obj from pathlib.Path"""
-    return Shmap(inpath.name, import_map(inpath))
+    return Shmap(inpath.stem, import_map(inpath))
 
 
 def get_shmaps(maps_list, min_num=1):
