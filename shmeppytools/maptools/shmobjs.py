@@ -22,9 +22,10 @@ class Token:
     def update(
             self, id=None, type=None, tokenId=None, position=None,
             color=None, label="", width=None, height=None,
-            x=None, y=None):
+            x=None, y=None, debug=False):
         """updates token properties with any value present"""
-        print(f'  UPDATE INFO = P:{position}, C:{color}, L:{label}, W:{width}, H:{height}, X:{x}, Y:{y}')
+        if debug:
+            print(f'  UPDATE INFO = P:{position}, C:{color}, L:{label}, W:{width}, H:{height}, X:{x}, Y:{y}')
         if position:
             self.position = position
         if color:
