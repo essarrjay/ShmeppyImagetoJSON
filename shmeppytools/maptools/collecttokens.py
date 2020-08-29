@@ -57,29 +57,6 @@ def tokens_to_ops(token_dict, fillunder=False):
     return outops
 
 
-def make_tokens(map, debug=False):
-    """returns a dict of {tokenId:token} from map
-
-    Uses final position of token, and omits deleted tokens
-    """
-    token_dict = {}
-    for op in map['operations']:
-        if op['type'] == 'CreateToken':
-            if debug: print(f"+CREATED TOKEN {op['tokenId']}")
-            token_dict.update({op['tokenId']: Token(**op)})
-        elif op['type'] == 'DeleteToken':
-            token_dict.pop(op['tokenId'])
-            if debug: print(f"-DELETED TOKEN {op['tokenId']}")
-        elif op['type'] in TOKEN_OPS.keys():
-            token_obj = token_dict[op['tokenId']]
-            if debug: print(f"=TOKEN OP {op['type']}")
-            if debug:
-                print(f'  Token properties before:\n      {token_obj.__dict__}')
-            if debug: print(f'  OP: {op}')
-            token_obj.update(**op)
-    return token_dict
-
-
 def group_tokens(
         maptokenslist, token_padding, group_padding, align='bottom'):
     """adjust token positions to group them at the top of the map
