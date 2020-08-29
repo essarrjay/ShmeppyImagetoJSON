@@ -159,7 +159,7 @@ def main():
             print(f"Provided Map Path: {p}")
             temp_p = Path.cwd().joinpath(p)
             print(f"Attempting to import map from: {temp_p.resolve()}")
-            map_dict.update({temp_p.name: import_map(temp_p)})
+            map_dict.update({temp_p.stem: import_map(temp_p)})
 
     # prompt for map if missing from args
     except Exception as e:
@@ -174,7 +174,7 @@ def main():
         print("Loading Mapfiles:")
         try:
             temp_p = Path.cwd().joinpath(mpath)
-            map_dict = {temp_p.name: import_map(temp_p)}
+            map_dict = {temp_p.stem: import_map(temp_p)}
         except Exception:
             print(f"tried: {Path.cwd().joinpath(mpath)}")
             print("\n\nERROR: File not found, let's try again (or press ctrl+c to quit)\n\n")
