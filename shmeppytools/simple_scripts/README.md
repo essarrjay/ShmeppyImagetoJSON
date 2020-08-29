@@ -15,7 +15,12 @@ More info on Shmeppy here: https://shmeppy.com/about
 This script takes an image (`.jpeg`, `.png` or probably plenty others) and converts it into a form recognized by Shemppy's new import function.
 
 ### simple_combine_maps.py
+(called combinemaps.py in maptools)
 This script takes 2 or more `.json` map files and combines them into a single map file. This can be useful to avoid players having to join a different shmeppy 'game' when changing scenes. Also saves the need to recreate many tokens.
+
+### simple_map_to_tokens.py
+(called collecttokens.py in maptools)
+This script creates a new map using all tokens from the input map(s). Tokens are grouped. Takes 1 or more `.json` map files. This can be useful to move tokens from one map to another. If run from the command line, using the `-c` flag combines tokens from multiple maps into one map. Omitting will process each map separately.  Type `python simple_map_to_tokens.py -h` for more options.
 
 To use, you have two options:
 1. **Windows:**  
