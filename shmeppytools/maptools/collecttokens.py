@@ -1,6 +1,6 @@
 #! usr/bin/env python3
 """
-map_to_tokens
+collecttokens.py
 
 Fetches tokens from map, returns as compact .json map
 """
@@ -30,11 +30,11 @@ TOKEN_OPS = {
 SHMEP_DICT = {"exportFormatVersion": 1, "operations": []}
 
 
-def group_tokens_on_map(maplist, token_padding, group_padding, fillunder=False):
+def group_tokens_on_map(maplist, token_padding, group_padding, align='bottom', fillunder=False):
     maptokenslist = []
     for map in maplist:
         maptokenslist.append(make_tokens(map))
-    tokens_dict = group_tokens(maptokenslist, token_padding, group_padding)
+    tokens_dict = group_tokens(maptokenslist, token_padding, group_padding, align)
     ops = tokens_to_ops(tokens_dict, fillunder)
     outmap = deepcopy(SHMEP_DICT)
     outmap['operations'] = ops
@@ -83,25 +83,36 @@ def make_tokens(map, debug=False):
 
 
 def group_tokens(
-        maptokenslist, token_padding, group_padding, align_bottom=True):
+        maptokenslist, token_padding, group_padding, align='bottom'):
     """adjust token positions to group them at the top of the map
 
     takes a list of token_dicts
     returns a position padded combined token dict
     """
     print("\nRELOCATING TOKENS")
+
+    def get_aligned_pos(alignment, index, token, offset=5):
+        """returns updated token position, pos index, based on alignment"""
+        i = index
+        t = token
+        a_dict = {
+                'top': (i, -offset, t.width),
+                'bottom': (i, -offset-t.height, t.width),
+                'left': (-offset, i, t.height),
+                'right': (-offset-t.width, i, t.height)
+                }
+        x, y, delta_i = a_dict[alignment]
+        return x, y, i + delta_i
+
     combined_token_dict = {}
-    x = 0
+    i = 0
     for token_dict in maptokenslist:
         for id, t in token_dict.items():
-            if align_bottom:
-                tx, ty = x, -t.height-1
-            else:
-                tx, ty = x, -1
+            tx, ty, i = get_aligned_pos(align, i, t)
             t.update(position=(tx, ty))
-            x += t.width+token_padding
+            i += token_padding
             combined_token_dict.update({id: t})
-        x += group_padding
+        i += group_padding
     return combined_token_dict
 
 
@@ -117,7 +128,7 @@ def get_updated_ops(map, offset):
 
 
 def import_map(inpath):
-    """import json"""
+    """import json, returns map as dict_obj"""
     with open(inpath) as j_file:
         map_dict = json.load(j_file)
     print(f"Successful Import of Map: {inpath}")
@@ -125,7 +136,7 @@ def import_map(inpath):
 
 
 def export_map(map, outpath):
-    """exports map to outpath"""
+    """exports map (as dict obj) to outpath"""
     print(f"\nAttempting Export of:\n  {outpath}\n")
     try:
         with outpath.open(mode='w') as j_file:
@@ -137,6 +148,37 @@ def export_map(map, outpath):
         result = f"Export failed, check that you have entered a valid path name.\n {e}"
     return result
 
+def get_maps(args):
+    """returns a dict of {map_name: imported_json}"""
+    try:
+        if not args.maps:
+            raise Exception("Did not find maps. Please provide below.")
+        maps_dict = {}
+        for p in args.maps:
+            print(f"Provided Map Path: {p}")
+            temp_p = Path.cwd().joinpath(p)
+            print(f"Attempting to import map from: {temp_p.resolve()}")
+            maps_dict.update({temp_p.stem: import_map(temp_p)})
+
+    # prompt for map if missing from args
+    except Exception as e:
+        print(e)
+        print(f"Looking for maps in: {Path.cwd()}")
+        print("If map is in this folder, just list mapname including")
+        print("file extension (.json) otherwise include the folder name")
+        print("E.g. mymap.json or backup_maps/mymap.json")
+        mpath = input("Please provide relative path to map: ")
+
+        # import maps
+        print("Loading Mapfiles:")
+        try:
+            temp_p = Path.cwd().joinpath(mpath)
+            maps_dict = {temp_p.stem: import_map(temp_p)}
+        except Exception:
+            print(f"tried: {Path.cwd().joinpath(mpath)}")
+            print("\n\nERROR: File not found, let's try again (or press ctrl+c to quit)\n\n")
+            return main()
+    return maps_dict
 
 def main():
     """Fetches tokens from map, returns as compact .json map"""
@@ -156,40 +198,14 @@ def main():
     parser.add_argument("-sc", "--skipconfirm", help="Skip confirmation prompt for output destination", action="store_true")
     parser.add_argument("-p", "--padding", type=int, default=0, metavar="<integer>", help="Padding between tokens")
     parser.add_argument("-mp", "--mappadding", type=int, default=3, metavar="<integer>", help="Padding between tokens grouped from separate maps")
-    parser.add_argument("-fu", "--fillunder", help="Place a filled cell under each token", action="store_true")
+    parser.add_argument("-fu", "--fillunder", help="Place a colored (filled) cell under each token", action="store_true")
+    parser.add_argument("-a", "--align", help="Align along which edge of the tokens (when handling tokens larger than 1x1).", choices=['top', 'bottom', 'left', 'right'], default='bottom')
     parser.add_argument("-d", "--destination", metavar="<path>", help="Output destination path for .json file.")
     args = parser.parse_args()
-    print(f'Command Line Arguments, as parsed: {args}')
+    print(f'Command Line Arguments, as parsed:\n   {vars(args)}\n')
 
     # get maps from command line
-    try:
-        if not args.maps:
-            raise Exception("Did not find maps. Please provide below.")
-        map_dict = {}
-        for p in args.maps:
-            print(f"Provided Map Path: {p}")
-            temp_p = Path.cwd().joinpath(p)
-            print(f"Attempting to import map from: {temp_p.resolve()}")
-            map_dict.update({temp_p.stem: import_map(temp_p)})
-
-    # prompt for map if missing from args
-    except Exception as e:
-        print(e)
-        print(f"Looking for maps in: {Path.cwd()}")
-        print("If map is in this folder, just list mapname including")
-        print("file extension (.json) otherwise include the folder name")
-        print("E.g. mymap.json or backup_maps/mymap.json")
-        mpath = input("Please provide relative path to map: ")
-
-        # import maps
-        print("Loading Mapfiles:")
-        try:
-            temp_p = Path.cwd().joinpath(mpath)
-            map_dict = {temp_p.stem: import_map(temp_p)}
-        except Exception:
-            print(f"tried: {Path.cwd().joinpath(mpath)}")
-            print("\n\nERROR: File not found, let's try again (or press ctrl+c to quit)\n\n")
-            return main()
+    maps_dict = get_maps(args)
 
     # set output destination
     outdest = Path(args.destination).resolve() if args.destination else Path.cwd()
@@ -202,12 +218,12 @@ def main():
     # generate maps
     output_maps = {}
     if args.combine:
-        maplist = map_dict.values()
-        output_maps.update({'tokens_map': group_tokens_on_map(maplist, args.padding, args.mappadding, args.fillunder)})
+        maplist = maps_dict.values()
+        output_maps.update({'tokens_map': group_tokens_on_map(maplist, args.padding, args.mappadding, args.align, args.fillunder)})
     else:
         # process maps separately
-        for mname, map in map_dict.items():
-            outmap = group_tokens_on_map([map], args.padding, args.mappadding, args.fillunder)
+        for mname, map in maps_dict.items():
+            outmap = group_tokens_on_map([map], args.padding, args.mappadding, args.align, args.fillunder)
             output_maps.update({mname: outmap})
 
     # save maps to disk
