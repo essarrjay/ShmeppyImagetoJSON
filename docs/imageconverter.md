@@ -19,7 +19,7 @@ Generates a palette of colors from the source image, then assigns a color to a S
 
 Navigate to main project directory. Run the converter script using:
 
-`python ./src/shmeppify.py <*image_file_path>`  
+`python ./shmeppytools <*image_file_path>`  
 
 After a possible prompt to provide an input file, you will see prompts to specify the processing method, and the map dimensions.
 
