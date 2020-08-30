@@ -7,8 +7,6 @@ Merges 2 or more maps into a single .json shmeppy map file.
 # external modules
 import json
 from pathlib import Path
-from collections import Counter
-from datetime import datetime
 import argparse
 
 # internal modules
@@ -16,42 +14,6 @@ from shmap import Shmap
 import uihelper
 
 PADDING = 10
-BASE_PATH = Path(__file__).resolve().parent
-CELL_OPS = {'FillCells': ['cellFills'], 'UpdateCellEdges': ["top", "left"]}
-OTHER_OPS = {'CreateToken': ['color', 'position']}
-SHMEP_DICT = {"exportFormatVersion": 1, "operations": []}
-
-
-def fillcells_xys(action):
-    """returns lists of x,y coords"""
-
-    x_list = []
-    y_list = []
-    for cell in action:
-        x, y = cell[0]
-        x_list.append(x)
-        y_list.append(y)
-    return x_list, y_list
-
-
-def get_new_corners(bb1, bb2):
-    """returns tuple of corners describing box bounding two bounding boxes"""
-    (ux1, uy1), (lx1, ly1) = bb1
-    (ux2, uy2), (lx2, ly2) = bb2
-    ul_corner = min(ux1, ux2), min(uy1, uy2)
-    lr_corner = max(lx1, lx2), max(ly1, ly2)
-    return ul_corner, lr_corner
-
-
-def count_ops(map):
-    print("................")
-    print("Operations Count")
-    print("................")
-    op_list = []
-    for op in map['operations']:
-        op_list.append(op['type'])
-    for k, v in Counter(op_list).most_common():
-        print(f'{k} : {v}')
 
 
 def combine_maps(shmaps_list, layout=(0, 1), padding=0):
