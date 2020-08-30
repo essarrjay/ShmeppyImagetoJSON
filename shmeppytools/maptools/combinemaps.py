@@ -50,18 +50,6 @@ def combine_maps(shmaps_list, layout=(0, 1), padding=0):
     return outmap
 
 
-def export_map(map, outpath):
-    """exports map to outpath"""
-    print(f"\nAttempting Export of:\n  {outpath}\n")
-    try:
-        with outpath.open(mode='w') as j_file:
-            json.dump(map, j_file, indent=2)
-        result = f"Exported {outpath.name} to:\n  {outpath}"
-    except FileNotFoundError:
-        result = "Export failed, please enter a valid output destination."
-    except SyntaxError as e:
-        result = f"Export failed, check that you have entered a valid path name.\n {e}"
-    return result
 
 
 def main():
