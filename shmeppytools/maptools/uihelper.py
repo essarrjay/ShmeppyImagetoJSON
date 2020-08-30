@@ -1,3 +1,8 @@
+"""uihelper.py
+
+Contains functions used to import maps or prompt for paths to maps.
+"""
+
 import json
 from pathlib import Path
 import sys

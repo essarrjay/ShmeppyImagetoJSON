@@ -1,3 +1,7 @@
+"""shmap.py
+
+A class for working with imported shmeppy .json maps
+"""
 import json
 from datetime import datetime
 

@@ -1,3 +1,9 @@
+"""shmobjs.py
+
+Objects representing various features of a Shmeppy map
+"""
+
+
 class Shm_Op:
     """A single Shmeppy Operation"""
     def __init__(self, id='', type=''):
