@@ -5,7 +5,6 @@ Merges 2 or more maps into a single .json shmeppy map file.
 """
 
 # external modules
-import json
 from pathlib import Path
 import argparse
 from math import ceil
