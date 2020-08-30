@@ -5,28 +5,12 @@ Fetches tokens from map, returns as compact .json map
 """
 
 # external modules
-import json
 from pathlib import Path
 import argparse
 
 # internal modules
-from shmobjs import Token
 import uihelper
 from shmap import Shmap
-
-BASE_PATH = Path(__file__).resolve().parent
-CELL_OPS = {
-    'FillCells': ['cellFills'],
-    'UpdateCellEdges': ["top", "left"]
-    }
-TOKEN_OPS = {
-    'CreateToken': ['color', 'position', 'tokenId'],
-    'MoveToken': ['position', 'tokenId'],
-    'UpdateTokenLabel': ['label', 'tokenId'],
-    'DeleteToken': ['tokenId'],
-    'ResizeToken': ['width', 'height', 'tokenId']
-    }
-SHMEP_DICT = {"exportFormatVersion": 1, "operations": []}
 
 
 def group_tokens_on_map(shmaplist, token_padding, group_padding, align='bottom', fillunder=False):
@@ -90,30 +74,6 @@ def group_tokens(
         i += group_padding
     return combined_token_dict
 
-
-def get_updated_ops(map, offset):
-    """for map, offset all draw operations"""
-    outops = []
-    for op in map['operations']:
-        if op['type'] in CELL_OPS.keys():
-            pass
-        elif op['type'] in TOKEN_OPS.keys():
-            pass
-    return outops
-
-
-def export_map(map, outpath):
-    """exports map (as dict obj) to outpath"""
-    print(f"\nAttempting Export of:\n  {outpath}\n")
-    try:
-        with outpath.open(mode='w') as j_file:
-            json.dump(map, j_file, indent=2)
-        result = f"Exported {outpath.name} to:\n  {outpath}"
-    except FileNotFoundError:
-        result = "Export failed, please enter a valid output destination."
-    except SyntaxError as e:
-        result = f"Export failed, check that you have entered a valid path name.\n {e}"
-    return result
 
 def main():
     """Fetches tokens from map, returns as compact .json map"""
