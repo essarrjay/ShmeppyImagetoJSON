@@ -1,5 +1,5 @@
 
-# **Simple Shmeppy Mapfile (JSON) Generator**
+# **Simple Shmeppy Tools**
 
 **These files are maintained (less regularly) for those interested in the simplicity of single file.**
 
@@ -27,7 +27,14 @@ To use, you have two options:
   Run `simple_shmeppify.exe`
 
 1. **Python:**  
-  Call from a command line: `python shmeppify.py <*image_file_path>`  
+  Call from a command line:  
+  `python <script_name> <*extra_files>`
+
+  Examples:  
+  `python simple_shmeppify.py <*image_file_path>`  
+  `python simple_combine_maps.py <*json_file_path(s)>`  
+  `python simple_map_to_tokens.py <*json_file_path(s)>`
+
   * The image can also be specified later from an input prompt.
   * If you're comfortable or interested in learning to use the Python version, the main branch of this project has more functionality.
 
