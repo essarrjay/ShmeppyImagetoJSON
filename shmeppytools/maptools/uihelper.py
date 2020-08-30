@@ -45,11 +45,11 @@ def get_shmaps(maps_list, min_num=1):
         print("Loading Mapfiles:")
         try:
             for m in maps_list:
-                temp_p = Path.cwd().joinpath(mp)
+                temp_p = Path.cwd().joinpath(m)
                 shmap_list.append(path_to_Shmap(temp_p))
         except Exception:
             # try again
-            tstring = '\n'.join(map_paths)
+            tstring = '\n'.join(maps_list)
             print(f"tried: {tstring}")
             print("\n\nERROR: File(s) not found, exiting program)\n\n")
             sys.exit(0)
