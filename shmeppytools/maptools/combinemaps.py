@@ -16,6 +16,7 @@ import uihelper
 PADDING = 10
 SHORTCUT_DICT = {'v':'vertical', 'h':'horizontal', 'g':'gridv', 'gv':'gridv', 'gh':'gridh'}
 
+
 def combine_maps(shmaps_list, max_col=1, padding=0):
     """combine maps in map_list with padding"""
     total_x, total_y = 0, 0
@@ -27,8 +28,8 @@ def combine_maps(shmaps_list, max_col=1, padding=0):
     print(f"Maps to be arranged in a grid of {max_col}x{max_row}.")
 
     for map in shmaps_list:
-        bb = map.set_bounding_box()
         print(f"Map: {map.name}")
+        bb = map.set_bounding_box()
         print(f"bounding box = {bb}")
         mapdim = map.get_bb_dimensions()
         print(f"map dimensions = {mapdim}")
@@ -126,7 +127,7 @@ def main():
         outdest = Path(outdest) if outdest else Path.cwd()
 
     # layout and make new map
-    maps_per_row = get_maps_per_row(args.arrange,len(shmaps_list))
+    maps_per_row = get_maps_per_row(args.arrange, len(shmaps_list))
     new_map = combine_maps(shmaps_list, maps_per_row, padding=pad)
 
     # export and print result
