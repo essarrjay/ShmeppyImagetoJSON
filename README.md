@@ -1,22 +1,35 @@
 
-# **Shmeppy Tools**
+# **Unofficial Shmeppy Tools**
 
-Unaffilliated with, but built for the most excellent [shmeppy.com](https://shmeppy.com/) minimalist virtual tabletop application.
+This is a set of 100% unnecessary advanced user tools for [Shmeppy.com](https://shmeppy.com/). There's no need to mess with these if you're just starting with the platform.
 
-Many thanks to John Sullivan for their awesome, thoughfully designed and currently free!?! product.
+Completely unaffilliated with the [Shmeppy](https://shmeppy.com/) minimalist virtual tabletop application - Just built by a user for personal use and other users.
+
+Many thanks to John Sullivan for their awesome, thoughtfully designed and (currently) free!?! product.
 
 More info on Shmeppy here: https://shmeppy.com/about
 
-Please don't pester John with any questions on this tool, they didn't ask for, make or maintain it.
+Please don't pester John with any questions on this tool, they didn't ask for, make or maintain it. 
 
 # **Overview of Tools**
 ## Image Converter
-**Main documentation:** `docs/image_converter.md`
-The `shmeppify.py` script (in conjunction with others) takes an image  and converts it into a form recognized by Shemppy's new import function.
+**Main documentation:** `docs/imageconverter.md`  
+*Images -> Maps*   
+Works with image files to convert to `.json` files suitable for import into Shmeppy or use with the maptools module (below).  
 
-## Map Combiner
-**Main documentation:** docs/map_combiner.md
-The `combine_maps.py` script creates a single Shmeppy `.json` map file from two (or more) other Shmeppy `.json` map files. Good for combining
+Three main methods for processing image, see `/docs/` for details.
+
+
+## Map Tools
+**Main documentation:** docs/maptools.md
+
+#### Merge Maps
+*Map(s) -> Map*  
+Creates a single Shmeppy `.json` map file from two (or more) other Shmeppy `.json` map files.
+
+#### Fetch Tokens
+*Map(s) -> Map(s)*  
+Fetches all tokens from a `.json` map file, and creates an output `.json` map file with all tokens grouped together (excludes the edges/fills).
 
 # Quickstart
 
