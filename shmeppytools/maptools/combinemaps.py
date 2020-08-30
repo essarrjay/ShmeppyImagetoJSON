@@ -8,21 +8,24 @@ Merges 2 or more maps into a single .json shmeppy map file.
 import json
 from pathlib import Path
 import argparse
+from math import ceil
 
 # internal modules
 from shmap import Shmap
 import uihelper
 
 PADDING = 10
-
+SHORTCUT_DICT = {'v':'vertical', 'h':'horizontal', 'g':'gridv', 'gv':'gridv', 'gh':'gridh'}
 
 def combine_maps(shmaps_list, max_col=1, padding=0):
     """combine maps in map_list with padding"""
     total_x, total_y = 0, 0
     layout = {}
-    c, r = 1, 1
-    map_heights = {i: [] for i in range(1, len(shmaps_list)-max_col)}
+    col, row = 1, 1
+    max_row = ceil(len(shmaps_list)/max_col)
+    map_heights = {i: [] for i in range(1, max_row+1)}
     map_widths = {i: [] for i in range(1, max_col+1)}
+    print(f"Maps to be arranged in a grid of {max_col}x{max_row}.")
 
     for map in shmaps_list:
         bb = map.set_bounding_box()
@@ -32,20 +35,20 @@ def combine_maps(shmaps_list, max_col=1, padding=0):
         print(f"map dimensions = {mapdim}")
 
         # store layout info
-        layout.update({(c,r): (map, bb, mapdim)})
-        print(f"map grid address = {c},{r}")
+        layout.update({(col, row): (map, bb, mapdim)})
+        print(f"map grid address = {col},{row}")
 
         # collect widths/heights to set grid size
         mw, mh = mapdim
-        map_heights[r].append(mh)
-        map_widths[c].append(mw)
+        map_heights[row].append(mh)
+        map_widths[col].append(mw)
 
         # set next map's grid coordinates
-        if c != max_col:
-            c += 1
+        if col != max_col:
+            col += 1
         else:
-            c = 1
-            r += 1
+            col = 1
+            row += 1
 
     print(" +++++++++++++++++++++++++++++")
     print("  Writing New Draw Operations")
@@ -76,7 +79,9 @@ def combine_maps(shmaps_list, max_col=1, padding=0):
 
 def get_maps_per_row(arrange, map_quant):
     """returns # of columns given arrangement and # of maps"""
-    max_col_dict = {'vertical':1, 'v':1, 'horizontal':0, 'h':0, 'grid':round(map_quant**0.5), 'g':round(map_quant**0.5)}
+    max_col_dict = {'vertical':1, 'horizontal':map_quant, 'gridv':round(map_quant**0.5), 'gridh':ceil(map_quant**0.5)}
+    if arrange not in max_col_dict.keys():
+        arrange = SHORTCUT_DICT[arrange]
     print(f"max cols = {max_col_dict[arrange]}")
     return max_col_dict[arrange]
 
@@ -97,7 +102,7 @@ def main():
     parser.add_argument("maps", metavar="<map path>", help="Combine each map's tokens into a single output file.", nargs='*')
     parser.add_argument("-sc", "--skipconfirm", help="Skip confirmation prompt for output destination", action="store_true", default=False)
     parser.add_argument("-p", "--padding", type=int, default=PADDING, metavar="<integer>", help="Padding between maps")
-    parser.add_argument("-a", "--arrange", help="Arrange maps vertically, horitzontally or in a grid pattern.", choices=['v', 'vertical', 'h', 'horizontal', 'g', 'grid'], default='vertical')
+    parser.add_argument("-a", "--arrange", help="Arrange maps vertically, horitzontally or in a grid pattern.", choices=['vertical', 'horizontal', 'gridv', 'gridh']+list(SHORTCUT_DICT.keys()), default='vertical')
     parser.add_argument("-d", "--destination", metavar="<path>", help="Output destination path for .json file.")
     parser.add_argument("-nep", "--noexitpause", help='Skip "Press Enter to Exit..."', action="store_true")
     args = parser.parse_args()
